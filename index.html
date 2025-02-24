@@ -64,28 +64,27 @@
 
     <script>
         const ranks = [
-            { name: "Soldado", img: "soldado.png" },
-            { name: "Cabo", img: "cabo.png" },
-            { name: "Cabo Primero", img: "cabo_primero.png" },
-            { name: "Cabo Mayor", img: "cabo_mayor.png" },
-            { name: "Sargento", img: "sargento.png" },
-            { name: "Sargento Primero", img: "sargento_primero.png" },
-            { name: "Brigada", img: "brigada.png" },
-            { name: "Subteniente", img: "subteniente.png" },
-            { name: "Suboficial Mayor", img: "suboficial_mayor.png" },
-            { name: "Alférez", img: "alferez.png" },
-            { name: "Teniente", img: "teniente.png" },
-            { name: "Capitán", img: "capitan.png" },
-            { name: "Comandante", img: "comandante.png" },
-            { name: "Teniente Coronel", img: "teniente_coronel.png" },
-            { name: "Coronel", img: "coronel.png" },
-            { name: "General de Brigada", img: "general_brigada.png" },
-            { name: "General de División", img: "general_division.png" },
-            { name: "Teniente General", img: "teniente_general.png" },
-            { name: "General de Ejército", img: "general_ejercito.png" }
+            { name: "Soldado", img: "img/soldado.png" },
+            { name: "Cabo", img: "img/cabo.png" },
+            { name: "Cabo Primero", img: "img/cabo_primero.png" },
+            { name: "Cabo Mayor", img: "img/cabo_mayor.png" },
+            { name: "Sargento", img: "img/sargento.png" },
+            { name: "Sargento Primero", img: "img/sargento_primero.png" },
+            { name: "Brigada", img: "img/brigada.png" },
+            { name: "Subteniente", img: "img/subteniente.png" },
+            { name: "Suboficial Mayor", img: "img/suboficial_mayor.png" },
+            { name: "Alférez", img: "img/alferez.png" },
+            { name: "Teniente", img: "img/teniente.png" },
+            { name: "Capitán", img: "img/capitan.png" },
+            { name: "Comandante", img: "img/comandante.png" },
+            { name: "Teniente Coronel", img: "img/teniente_coronel.png" },
+            { name: "Coronel", img: "img/coronel.png" },
+            { name: "General de Brigada", img: "img/general_brigada.png" },
+            { name: "General de División", img: "img/general_division.png" },
+            { name: "Teniente General", img: "img/teniente_general.png" },
+            { name: "General de Ejército", img: "img/general_ejercito.png" }
         ];
 
-        let remainingRanks = [...ranks];
         let score = 0;
         let highScore = 0;
 
@@ -101,14 +100,8 @@
         }
 
         function loadQuestion() {
-            if (remainingRanks.length === 0) {
-                remainingRanks = [...ranks];
-                score = 0;
-                document.getElementById("score").textContent = score;
-            }
-
-            let randomIndex = Math.floor(Math.random() * remainingRanks.length);
-            let rank = remainingRanks.splice(randomIndex, 1)[0];
+            let randomIndex = Math.floor(Math.random() * ranks.length);
+            let rank = ranks[randomIndex];
 
             document.getElementById("rankImage").src = rank.img;
             document.getElementById("rankImage").alt = `Insignia de ${rank.name}`;
@@ -127,16 +120,14 @@
         }
 
         function checkAnswer(button, selected, correct) {
-            // Restablecer el color de todos los botones
             let allButtons = document.querySelectorAll(".options button");
             allButtons.forEach(btn => btn.classList.remove("correct", "incorrect"));
 
-            // Verificar respuesta
             if (selected.name === correct.name) {
                 document.getElementById("result").textContent = "¡Correcto!";
                 document.getElementById("result").style.color = "green";
                 score += 10;
-                button.classList.add("correct"); // Cambia el color del botón a verde
+                button.classList.add("correct");
                 if (score > highScore) {
                     highScore = score;
                     document.getElementById("highScore").classList.add("high-score");
@@ -145,9 +136,21 @@
             } else {
                 document.getElementById("result").textContent = "Incorrecto. Inténtalo de nuevo.";
                 document.getElementById("result").style.color = "red";
-                score = Math.max(0, score - 5);
-                button.classList.add("incorrect"); // Cambia el color del botón a rojo
+
+                let puntosARestar = score > 10 ? 5 : 1;
+                score = Math.max(0, score - puntosARestar);
+
+                button.classList.add("incorrect");
+
+                if (score === 0 && highScore > 20) {
+                    setTimeout(() => {
+                        alert("¡Game Over! Has perdido.");
+                        location.reload();
+                    }, 500);
+                    return;
+                }
             }
+
             document.getElementById("score").textContent = score;
             document.getElementById("highScore").textContent = highScore;
             saveHighScore();
