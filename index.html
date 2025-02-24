@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Rangos Militares</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        img {
+            max-width: 100px;
+            margin-bottom: 10px;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            justify-content: center;
+        }
+        button {
+            padding: 10px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            background-color: #4CAF50;
+        }
+        button.correct {
+            background-color: #8BC34A; /* Correcto, verde */
+        }
+        button.incorrect {
+            background-color: #F44336; /* Incorrecto, rojo */
+        }
+        .score {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .high-score {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Aprende los Rangos Militares</h1>
+        <p>Puntos: <span id="score" class="score">0</span></p>
+        <p>Récord: <span id="highScore" class="score">0</span></p>
+        <img id="rankImage" src="" alt="Insignia del rango">
+        <div class="options" id="optionsContainer"></div>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        const ranks = [
+            { name: "Soldado", img: "soldado.png" },
+            { name: "Cabo", img: "cabo.png" },
+            { name: "Cabo Primero", img: "cabo_primero.png" },
+            { name: "Cabo Mayor", img: "cabo_mayor.png" },
+            { name: "Sargento", img: "sargento.png" },
+            { name: "Sargento Primero", img: "sargento_primero.png" },
+            { name: "Brigada", img: "brigada.png" },
+            { name: "Subteniente", img: "subteniente.png" },
+            { name: "Suboficial Mayor", img: "suboficial_mayor.png" },
+            { name: "Alférez", img: "alferez.png" },
+            { name: "Teniente", img: "teniente.png" },
+            { name: "Capitán", img: "capitan.png" },
+            { name: "Comandante", img: "comandante.png" },
+            { name: "Teniente Coronel", img: "teniente_coronel.png" },
+            { name: "Coronel", img: "coronel.png" },
+            { name: "General de Brigada", img: "general_brigada.png" },
+            { name: "General de División", img: "general_division.png" },
+            { name: "Teniente General", img: "teniente_general.png" },
+            { name: "General de Ejército", img: "general_ejercito.png" }
+        ];
+
+        let remainingRanks = [...ranks];
+        let score = 0;
+        let highScore = 0;
+
+        function loadHighScore() {
+            score = 0;
+            highScore = parseInt(localStorage.getItem("highScore")) || 0;
+            document.getElementById("score").textContent = score;
+            document.getElementById("highScore").textContent = highScore;
+        }
+
+        function saveHighScore() {
+            localStorage.setItem("highScore", Math.max(score, highScore));
+        }
+
+        function loadQuestion() {
+            if (remainingRanks.length === 0) {
+                remainingRanks = [...ranks];
+                score = 0;
+                document.getElementById("score").textContent = score;
+            }
+
+            let randomIndex = Math.floor(Math.random() * remainingRanks.length);
+            let rank = remainingRanks.splice(randomIndex, 1)[0];
+
+            document.getElementById("rankImage").src = rank.img;
+            document.getElementById("rankImage").alt = `Insignia de ${rank.name}`;
+            document.getElementById("result").textContent = "";
+
+            const optionsContainer = document.getElementById("optionsContainer");
+            optionsContainer.innerHTML = "";
+
+            let options = [...ranks];
+            options.forEach(option => {
+                let button = document.createElement("button");
+                button.textContent = option.name;
+                button.onclick = () => checkAnswer(button, option, rank);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(button, selected, correct) {
+            // Restablecer el color de todos los botones
+            let allButtons = document.querySelectorAll(".options button");
+            allButtons.forEach(btn => btn.classList.remove("correct", "incorrect"));
+
+            // Verificar respuesta
+            if (selected.name === correct.name) {
+                document.getElementById("result").textContent = "¡Correcto!";
+                document.getElementById("result").style.color = "green";
+                score += 10;
+                button.classList.add("correct"); // Cambia el color del botón a verde
+                if (score > highScore) {
+                    highScore = score;
+                    document.getElementById("highScore").classList.add("high-score");
+                }
+                setTimeout(() => loadQuestion(), 1000);
+            } else {
+                document.getElementById("result").textContent = "Incorrecto. Inténtalo de nuevo.";
+                document.getElementById("result").style.color = "red";
+                score = Math.max(0, score - 5);
+                button.classList.add("incorrect"); // Cambia el color del botón a rojo
+            }
+            document.getElementById("score").textContent = score;
+            document.getElementById("highScore").textContent = highScore;
+            saveHighScore();
+        }
+
+        window.onload = () => {
+            loadHighScore();
+            loadQuestion();
+        };
+    </script>
+</body>
+</html>
