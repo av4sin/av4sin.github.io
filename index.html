@@ -96,6 +96,7 @@
         let highScore = 0;
         let currentRank = ranks[0]; // Comienza como Soldado
         let currentQuestion = null; // Para guardar la pregunta actual y evitar cambios durante la partida
+        let optionsOrder = []; // Esto contendrá el orden fijo de las opciones
 
         function loadHighScore() {
             highScore = parseInt(localStorage.getItem("highScore")) || 0;
@@ -109,14 +110,15 @@
         }
 
         function updateRankDisplay() {
-            // La imagen del rango que aparece solo en la pantalla inicial
-            currentRank = ranks.find(r => score >= r.points) || ranks[0]; // Encuentra el rango correspondiente
+            // Encontramos el rango correspondiente según los puntos
+            currentRank = ranks.reverse().find(r => score >= r.points) || ranks[0]; // Buscar rango según puntos
             document.getElementById("rankDisplay").textContent = `Rango: ${currentRank.name}`;
             document.getElementById("rankImage").src = currentRank.img;
             document.getElementById("rankImage").alt = `Insignia de ${currentRank.name}`;
         }
 
         function loadQuestion() {
+            // Establecer una pregunta al azar, pero las opciones están ordenadas de menor a mayor rango
             let randomIndex = Math.floor(Math.random() * ranks.length);
             let rank = ranks[randomIndex];
 
@@ -126,8 +128,13 @@
             const optionsContainer = document.getElementById("optionsContainer");
             optionsContainer.innerHTML = ""; // Limpiar botones anteriores
 
-            let options = [...ranks];
-            options.forEach(option => {
+            // Si las opciones no han sido generadas aún, las fijamos en orden creciente de puntos
+            if (optionsOrder.length === 0) {
+                optionsOrder = [...ranks].sort((a, b) => a.points - b.points); // Ordenamos de menor a mayor
+            }
+
+            // Generamos los botones con un orden fijo basado en `optionsOrder`
+            optionsOrder.forEach(option => {
                 let button = document.createElement("button");
                 button.textContent = option.name;
                 button.onclick = () => checkAnswer(button, option, rank);
@@ -174,6 +181,7 @@
 
         function startGame() {
             score = 0;
+            optionsOrder = []; // Resetear el orden de las opciones para el nuevo juego
             document.getElementById("score").textContent = score;
             document.getElementById("startButton").style.display = 'none'; // Ocultar botón de iniciar
             loadQuestion();
