@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego de Rangos Militares</title>
-    <link rel="icon" type="image/jpeg" href="img/favicon.jpg">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,29 +17,16 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            position: relative;
         }
         img {
             max-width: 100px;
             margin-bottom: 10px;
         }
-        .info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1.2em;
-            font-weight: bold;
-        }
         .options {
             display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 10px;
             justify-content: center;
-        }
-        @media (orientation: landscape) {
-            .options { grid-template-columns: repeat(3, 1fr); }
-        }
-        @media (orientation: portrait) {
-            .options { grid-template-columns: repeat(2, 1fr); }
         }
         button {
             padding: 10px;
@@ -51,90 +37,94 @@
             font-weight: bold;
             background-color: #4CAF50;
         }
-        button.correct { background-color: #8BC34A; }
-        button.incorrect { background-color: #F44336; }
-        .score { font-size: 1.2em; font-weight: bold; }
-        .high-score { color: red; }
-        .timer {
+        button.correct {
+            background-color: #8BC34A; /* Correcto, verde */
+        }
+        button.incorrect {
+            background-color: #F44336; /* Incorrecto, rojo */
+        }
+        .score {
             font-size: 1.2em;
-            color: blue;
+            font-weight: bold;
+        }
+        .high-score {
+            color: red;
+        }
+        #rankDisplay {
+            font-size: 1.4em;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Aprende los Rangos Militares</h1>
-        <div class="info">
-            <p>Puntos: <span id="score" class="score">0</span></p>
-            <p>Tiempo: <span id="timer" class="timer">60</span>s</p>
-            <p>Récord: <span id="highScore" class="score">0</span></p>
-        </div>
+        <p>Puntos: <span id="score" class="score">0</span></p>
+        <p>Récord: <span id="highScore" class="score">0</span></p>
+        <p id="rankDisplay">Rango: Soldado</p>
+        <!-- Esta imagen es la que muestra el rango de puntos -->
         <img id="rankImage" src="" alt="Insignia del rango">
         <div class="options" id="optionsContainer"></div>
         <p id="result"></p>
+        <button id="startButton" onclick="startGame()">Iniciar Partida</button>
     </div>
 
     <script>
         const ranks = [
-            { name: "Soldado", img: "img/soldado.png" },
-            { name: "Cabo", img: "img/cabo.png" },
-            { name: "Cabo Primero", img: "img/cabo_primero.png" },
-            { name: "Cabo Mayor", img: "img/cabo_mayor.png" },
-            { name: "Sargento", img: "img/sargento.png" },
-            { name: "Sargento Primero", img: "img/sargento_primero.png" },
-            { name: "Brigada", img: "img/brigada.png" },
-            { name: "Subteniente", img: "img/subteniente.png" },
-            { name: "Suboficial Mayor", img: "img/suboficial_mayor.png" },
-            { name: "Alférez", img: "img/alferez.png" },
-            { name: "Teniente", img: "img/teniente.png" },
-            { name: "Capitán", img: "img/capitan.png" },
-            { name: "Comandante", img: "img/comandante.png" },
-            { name: "Teniente Coronel", img: "img/teniente_coronel.png" },
-            { name: "Coronel", img: "img/coronel.png" },
-            { name: "General de Brigada", img: "img/general_brigada.png" },
-            { name: "General de División", img: "img/general_division.png" },
-            { name: "Teniente General", img: "img/teniente_general.png" },
-            { name: "General de Ejército", img: "img/general_ejercito.png" }
+            { name: "Soldado", img: "img/soldado.png", points: 0 },
+            { name: "Cabo", img: "img/cabo.png", points: 100 },
+            { name: "Cabo Primero", img: "img/cabo_primero.png", points: 200 },
+            { name: "Cabo Mayor", img: "img/cabo_mayor.png", points: 400 },
+            { name: "Sargento", img: "img/sargento.png", points: 800 },
+            { name: "Sargento Primero", img: "img/sargento_primero.png", points: 1600 },
+            { name: "Brigada", img: "img/brigada.png", points: 3200 },
+            { name: "Subteniente", img: "img/subteniente.png", points: 6400 },
+            { name: "Suboficial Mayor", img: "img/suboficial_mayor.png", points: 12800 },
+            { name: "Alférez", img: "img/alferez.png", points: 25600 },
+            { name: "Teniente", img: "img/teniente.png", points: 51200 },
+            { name: "Capitán", img: "img/capitan.png", points: 102400 },
+            { name: "Comandante", img: "img/comandante.png", points: 204800 },
+            { name: "Teniente Coronel", img: "img/teniente_coronel.png", points: 409600 },
+            { name: "Coronel", img: "img/coronel.png", points: 819200 },
+            { name: "General de Brigada", img: "img/general_brigada.png", points: 1638400 },
+            { name: "General de División", img: "img/general_division.png", points: 3276800 },
+            { name: "Teniente General", img: "img/teniente_general.png", points: 6553600 },
+            { name: "General de Ejército", img: "img/general_ejercito.png", points: 13107200 }
         ];
 
         let score = 0;
         let highScore = 0;
-        let timeLeft = 60;
-        let timer;
+        let currentRank = ranks[0]; // Comienza como Soldado
+        let currentQuestion = null; // Para guardar la pregunta actual y evitar cambios durante la partida
 
         function loadHighScore() {
-            score = 0;
             highScore = parseInt(localStorage.getItem("highScore")) || 0;
             document.getElementById("score").textContent = score;
             document.getElementById("highScore").textContent = highScore;
+            updateRankDisplay();
         }
 
         function saveHighScore() {
             localStorage.setItem("highScore", Math.max(score, highScore));
         }
 
-        function startTimer() {
-            timer = setInterval(() => {
-                timeLeft--;
-                document.getElementById("timer").textContent = timeLeft;
-                if (timeLeft === 0) {
-                    clearInterval(timer);
-                    alert("¡Tiempo agotado! Fin de la partida.");
-                    location.reload();
-                }
-            }, 1000);
+        function updateRankDisplay() {
+            // La imagen del rango que aparece solo en la pantalla inicial
+            currentRank = ranks.find(r => score >= r.points) || ranks[0]; // Encuentra el rango correspondiente
+            document.getElementById("rankDisplay").textContent = `Rango: ${currentRank.name}`;
+            document.getElementById("rankImage").src = currentRank.img;
+            document.getElementById("rankImage").alt = `Insignia de ${currentRank.name}`;
         }
 
         function loadQuestion() {
             let randomIndex = Math.floor(Math.random() * ranks.length);
             let rank = ranks[randomIndex];
 
-            document.getElementById("rankImage").src = rank.img;
-            document.getElementById("rankImage").alt = `Insignia de ${rank.name}`;
-            document.getElementById("result").textContent = "";
+            document.getElementById("result").textContent = ""; // Limpiar mensaje anterior
+            currentQuestion = rank; // Establecer la pregunta actual
 
             const optionsContainer = document.getElementById("optionsContainer");
-            optionsContainer.innerHTML = "";
+            optionsContainer.innerHTML = ""; // Limpiar botones anteriores
 
             let options = [...ranks];
             options.forEach(option => {
@@ -143,46 +133,54 @@
                 button.onclick = () => checkAnswer(button, option, rank);
                 optionsContainer.appendChild(button);
             });
+
+            // Mostrar la imagen correspondiente a la pregunta actual
+            document.getElementById("rankImage").src = currentQuestion.img;
         }
 
         function checkAnswer(button, selected, correct) {
             let allButtons = document.querySelectorAll(".options button");
-            allButtons.forEach(btn => btn.classList.remove("correct", "incorrect"));
 
+            // Si ya se presionó un botón, no hacer nada
+            if (button.classList.contains('correct') || button.classList.contains('incorrect')) return;
+
+            // Si la respuesta es correcta
             if (selected.name === correct.name) {
                 document.getElementById("result").textContent = "¡Correcto!";
                 document.getElementById("result").style.color = "green";
                 score += 10;
                 button.classList.add("correct");
-                if (score > highScore) {
-                    highScore = score;
-                    document.getElementById("highScore").classList.add("high-score");
-                }
-                setTimeout(() => loadQuestion(), 1000);
+
+                // Cambiar a la siguiente pregunta con un tiempo reducido
+                setTimeout(() => {
+                    updateRankDisplay(); // Solo actualizar la imagen del rango después de acertar
+                    document.getElementById("score").textContent = score;
+                    document.getElementById("highScore").textContent = highScore;
+                    saveHighScore();
+                    loadQuestion();
+                }, 500); // Tiempo reducido a 500ms (0.5 segundos) después de una respuesta correcta
             } else {
                 document.getElementById("result").textContent = "Incorrecto. Inténtalo de nuevo.";
                 document.getElementById("result").style.color = "red";
-
-                let puntosARestar = score > 10 ? 5 : 1;
-                score = Math.max(0, score - puntosARestar);
-
+                score = Math.max(0, score - 1);
                 button.classList.add("incorrect");
 
-                if (score === 0 && highScore > 20) {
-                    alert("¡Game Over! Has perdido.");
-                    location.reload();
-                }
+                // No cambiamos la imagen ni la pregunta, solo se muestra la opción de intentar nuevamente
+                document.getElementById("score").textContent = score;
+                document.getElementById("highScore").textContent = highScore;
+                saveHighScore();
             }
+        }
 
+        function startGame() {
+            score = 0;
             document.getElementById("score").textContent = score;
-            document.getElementById("highScore").textContent = highScore;
-            saveHighScore();
+            document.getElementById("startButton").style.display = 'none'; // Ocultar botón de iniciar
+            loadQuestion();
         }
 
         window.onload = () => {
             loadHighScore();
-            loadQuestion();
-            startTimer();
         };
     </script>
 </body>
