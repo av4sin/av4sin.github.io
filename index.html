@@ -102,7 +102,12 @@
             highScore = parseInt(localStorage.getItem("highScore")) || 0;
             document.getElementById("score").textContent = score;
             document.getElementById("highScore").textContent = highScore;
-            updateRankDisplay();
+
+            // Aquí cargamos el rango correspondiente al récord (highScore)
+            currentRank = ranks.reverse().find(r => highScore >= r.points) || ranks[0]; // Buscar rango según puntos
+            document.getElementById("rankDisplay").textContent = `Rango: ${currentRank.name}`;
+            document.getElementById("rankImage").src = currentRank.img;
+            document.getElementById("rankImage").alt = `Insignia de ${currentRank.name}`;
         }
 
         function saveHighScore() {
@@ -110,8 +115,8 @@
         }
 
         function updateRankDisplay() {
-            // Encontramos el rango correspondiente según los puntos
-            currentRank = ranks.reverse().find(r => score >= r.points) || ranks[0]; // Buscar rango según puntos
+            // Actualizamos el rango según la puntuación actual
+            currentRank = ranks.reverse().find(r => score >= r.points) || ranks[0];
             document.getElementById("rankDisplay").textContent = `Rango: ${currentRank.name}`;
             document.getElementById("rankImage").src = currentRank.img;
             document.getElementById("rankImage").alt = `Insignia de ${currentRank.name}`;
