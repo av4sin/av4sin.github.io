@@ -158,9 +158,11 @@
                 score += 10;
                 button.classList.add("correct");
 
+                // Actualizamos el rango con la nueva puntuación
+                updateRankDisplay();
+
                 // Cambiar a la siguiente pregunta con un tiempo reducido
                 setTimeout(() => {
-                    updateRankDisplay(); // Solo actualizar la imagen del rango después de acertar
                     document.getElementById("score").textContent = score;
                     document.getElementById("highScore").textContent = highScore;
                     saveHighScore();
