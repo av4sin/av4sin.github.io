@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego de Rangos Militares</title>
+    <link rel="icon" type="image/jpeg" href="img/favicon.jpg">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,16 +18,29 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
         img {
             max-width: 100px;
             margin-bottom: 10px;
         }
+        .info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
         .options {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 10px;
             justify-content: center;
+        }
+        @media (orientation: landscape) {
+            .options { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (orientation: portrait) {
+            .options { grid-template-columns: repeat(2, 1fr); }
         }
         button {
             padding: 10px;
@@ -37,26 +51,24 @@
             font-weight: bold;
             background-color: #4CAF50;
         }
-        button.correct {
-            background-color: #8BC34A; /* Correcto, verde */
-        }
-        button.incorrect {
-            background-color: #F44336; /* Incorrecto, rojo */
-        }
-        .score {
+        button.correct { background-color: #8BC34A; }
+        button.incorrect { background-color: #F44336; }
+        .score { font-size: 1.2em; font-weight: bold; }
+        .high-score { color: red; }
+        .timer {
             font-size: 1.2em;
-            font-weight: bold;
-        }
-        .high-score {
-            color: red;
+            color: blue;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Aprende los Rangos Militares</h1>
-        <p>Puntos: <span id="score" class="score">0</span></p>
-        <p>Récord: <span id="highScore" class="score">0</span></p>
+        <div class="info">
+            <p>Puntos: <span id="score" class="score">0</span></p>
+            <p>Tiempo: <span id="timer" class="timer">60</span>s</p>
+            <p>Récord: <span id="highScore" class="score">0</span></p>
+        </div>
         <img id="rankImage" src="" alt="Insignia del rango">
         <div class="options" id="optionsContainer"></div>
         <p id="result"></p>
@@ -87,6 +99,8 @@
 
         let score = 0;
         let highScore = 0;
+        let timeLeft = 60;
+        let timer;
 
         function loadHighScore() {
             score = 0;
@@ -97,6 +111,18 @@
 
         function saveHighScore() {
             localStorage.setItem("highScore", Math.max(score, highScore));
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById("timer").textContent = timeLeft;
+                if (timeLeft === 0) {
+                    clearInterval(timer);
+                    alert("¡Tiempo agotado! Fin de la partida.");
+                    location.reload();
+                }
+            }, 1000);
         }
 
         function loadQuestion() {
@@ -143,11 +169,8 @@
                 button.classList.add("incorrect");
 
                 if (score === 0 && highScore > 20) {
-                    setTimeout(() => {
-                        alert("¡Game Over! Has perdido.");
-                        location.reload();
-                    }, 500);
-                    return;
+                    alert("¡Game Over! Has perdido.");
+                    location.reload();
                 }
             }
 
@@ -159,6 +182,7 @@
         window.onload = () => {
             loadHighScore();
             loadQuestion();
+            startTimer();
         };
     </script>
 </body>
