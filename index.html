@@ -271,6 +271,39 @@
                     console.log('Service Worker registration failed:', error);
                 });
         }
+
+        // Prompt to install the app
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const installButton = document.createElement('button');
+            installButton.innerText = 'Añadir a la pantalla de inicio';
+            installButton.style.position = 'fixed';
+            installButton.style.bottom = '10px';
+            installButton.style.left = '50%';
+            installButton.style.transform = 'translateX(-50%)';
+            installButton.style.padding = '10px 20px';
+            installButton.style.backgroundColor = '#4CAF50';
+            installButton.style.color = 'white';
+            installButton.style.border = 'none';
+            installButton.style.borderRadius = '5px';
+            installButton.style.cursor = 'pointer';
+            document.body.appendChild(installButton);
+
+            installButton.addEventListener('click', () => {
+                installButton.style.display = 'none';
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the A2HS prompt');
+                    } else {
+                        console.log('User dismissed the A2HS prompt');
+                    }
+                    deferredPrompt = null;
+                });
+            });
+        });
     </script>
 </body>
 </html>
