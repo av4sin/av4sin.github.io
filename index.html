@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Juego de Rangos Militares</title>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
         }
         .container {
             max-width: 800px;
@@ -19,7 +22,8 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
         img {
-            max-width: 100px;
+            max-width: 100%;
+            height: auto;
             margin-bottom: 10px;
         }
         .options {
@@ -86,6 +90,28 @@
             display: inline-block;
             vertical-align: middle; /* Alineación vertical */
         }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+                margin: 20px auto;
+            }
+            button {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+            .score {
+                font-size: 1em;
+            }
+            #rankDisplay {
+                font-size: 1.2em;
+            }
+            #currentRankImage {
+                max-width: 30px;
+            }
+            #questionImage {
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -103,7 +129,6 @@
 
     <div id="gameContainer" class="container">
         <div id="gameContent">
-            <p id="gameMessage">¡Estás en medio del juego! Sigue las instrucciones.</p>
             <p>Puntos: <span id="gameScore" class="score">0</span></p>
             <p>Récord: <span id="gameHighScore" class="score">0</span></p>
             <div id="rankDisplayGame">
@@ -226,6 +251,7 @@
             document.getElementById("mainContainer").style.display = "none";
             document.getElementById("gameContainer").style.display = "block";
             loadHighScore();
+            document.getElementById("gameHighScore").textContent = highScore; // Display high score at the start
             updateRankDisplay(); // Ensure rank and insignia are displayed correctly at the start
             loadQuestion();
         }
