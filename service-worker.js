@@ -4,6 +4,8 @@ const urlsToCache = [
     '/index.html',
     '/manifest.json',
     '/img/favicon.ico',
+    '/img/icon-192.png',
+    '/img/icon-512.png',
     // Add other assets to cache as needed
 ];
 
