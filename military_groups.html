@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Grupos Militares</title>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #F5F5DC; /* Beige background */
+            color: #4B5320; /* Dark olive green text */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: #D2B48C; /* Tan background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card {
+            display: inline-block;
+            width: 45%;
+            padding: 20px;
+            margin: 10px;
+            background-color: #FFF;
+            border: 2px solid #4B5320;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .card.selected {
+            background-color: #8FBC8F; /* Dark sea green */
+        }
+        button {
+            padding: 10px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            background-color: #6B8E23; /* Olive drab button */
+        }
+        .score {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .high-score {
+            color: #FFD700; /* Gold color for high score */
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+                margin: 20px auto;
+            }
+            button {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+            .score {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContainer">
+        <h1>Ordena los Grupos Militares</h1>
+        <p>Récord: <span id="highScore" class="score">0</span></p>
+        <div id="gameContent">
+            <p>Puntos: <span id="gameScore" class="score">0</span></p>
+            <div id="cardsContainer">
+                <div class="card" id="leftCard" onclick="selectCard('left')"></div>
+                <div class="card" id="rightCard" onclick="selectCard('right')"></div>
+            </div>
+            <p id="result"></p>
+            <button id="confirmButton" onclick="confirmOrder()">Confirmar</button>
+        </div>
+    </div>
+
+    <script>
+        const groups = [
+            { name: "Binomio", order: 1 },
+            { name: "Escuadra", order: 2 },
+            { name: "Pelotón", order: 3 },
+            { name: "Sección", order: 4 },
+            { name: "Compañía", order: 5 },
+            { name: "Batallón", order: 6 },
+            { name: "Regimiento", order: 7 },
+            { name: "Brigada", order: 8 },
+            { name: "División", order: 9 },
+            { name: "Cuerpo de Ejército", order: 10 },
+            { name: "Ejército", order: 11 }
+        ];
+
+        let score = 0;
+        let highScore = 0;
+        let selectedCard = null;
+        let currentPair = [];
+
+        function loadHighScore() {
+            highScore = parseInt(localStorage.getItem("highScoreGroups")) || 0;
+            document.getElementById("highScore").textContent = highScore;
+        }
+
+        function saveHighScore() {
+            highScore = Math.max(score, highScore);
+            localStorage.setItem("highScoreGroups", highScore);
+        }
+
+        function loadPair() {
+            currentPair = groups.sort(() => 0.5 - Math.random()).slice(0, 2);
+            document.getElementById("leftCard").textContent = currentPair[0].name;
+            document.getElementById("rightCard").textContent = currentPair[1].name;
+            document.getElementById("result").textContent = ""; // Clear previous result
+            selectedCard = null;
+            document.getElementById("leftCard").classList.remove("selected");
+            document.getElementById("rightCard").classList.remove("selected");
+        }
+
+        function selectCard(side) {
+            selectedCard = side;
+            document.getElementById("leftCard").classList.toggle("selected", side === "left");
+            document.getElementById("rightCard").classList.toggle("selected", side === "right");
+        }
+
+        function confirmOrder() {
+            if (!selectedCard) {
+                document.getElementById("result").textContent = "Selecciona una carta.";
+                document.getElementById("result").style.color = "red";
+                return;
+            }
+
+            const leftGroup = currentPair[0];
+            const rightGroup = currentPair[1];
+            const isCorrect = (selectedCard === "left" && leftGroup.order < rightGroup.order) ||
+                              (selectedCard === "right" && rightGroup.order < leftGroup.order);
+
+            if (isCorrect) {
+                document.getElementById("result").textContent = "¡Correcto!";
+                document.getElementById("result").style.color = "green";
+                score += 10;
+                document.getElementById("gameScore").textContent = score;
+                saveHighScore();
+                setTimeout(loadPair, 500);
+            } else {
+                document.getElementById("result").textContent = "Incorrecto. Inténtalo de nuevo.";
+                document.getElementById("result").style.color = "red";
+            }
+        }
+
+        function startGame() {
+            loadHighScore();
+            document.getElementById("gameScore").textContent = score;
+            loadPair();
+        }
+
+        // Load high score and start game on page load
+        document.addEventListener("DOMContentLoaded", startGame);
+    </script>
+</body>
+</html>
