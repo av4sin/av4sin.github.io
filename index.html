@@ -70,6 +70,7 @@
             max-width: 40px;
             margin-top: 10px;
             display: inline-block;
+            vertical-align: middle; /* Alineación vertical */
         }
         #questionImage {
             max-width: 300px; /* Imagen grande de la pregunta */
@@ -81,6 +82,10 @@
             vertical-align: top;
             margin-top: 10px;
         }
+        #currentRankText {
+            display: inline-block;
+            vertical-align: middle; /* Alineación vertical */
+        }
     </style>
 </head>
 <body>
@@ -91,6 +96,10 @@
         <div id="rankDisplay">
             <span id="rankName">Rango: Soldado</span>
             <img id="rankImage" src="" alt="Insignia del rango">
+        </div>
+        <div id="recordRankDisplay">
+            <span id="recordRankName">Rango por Récord: Soldado</span>
+            <img id="recordRankImage" src="" alt="Insignia del rango por récord">
         </div>
         <div class="options" id="optionsContainer"></div>
         <p id="result"></p>
@@ -149,18 +158,25 @@
             document.getElementById("highScore").textContent = highScore;
 
             // Aquí cargamos el rango correspondiente al récord
-            currentRank = ranks.reverse().find(r => highScore >= r.points) || ranks[0]; // Buscar rango según puntos
+            currentRank = ranks.slice().reverse().find(r => highScore >= r.points) || ranks[0]; // Buscar rango según puntos
             document.getElementById("rankName").textContent = `Rango: ${currentRank.name}`;
             document.getElementById("rankImage").src = currentRank.img;
             document.getElementById("rankImage").alt = `Insignia de ${currentRank.name}`;
+
+            // Mostrar rango por récord
+            const recordRank = ranks.slice().reverse().find(r => highScore >= r.points) || ranks[0];
+            document.getElementById("recordRankName").textContent = `Rango por Récord: ${recordRank.name}`;
+            document.getElementById("recordRankImage").src = recordRank.img;
+            document.getElementById("recordRankImage").alt = `Insignia de ${recordRank.name}`;
         }
 
         function saveHighScore() {
-            localStorage.setItem("highScore", Math.max(score, highScore));
+            highScore = Math.max(score, highScore);
+            localStorage.setItem("highScore", highScore);
         }
 
         function updateRankDisplay() {
-            currentRank = ranks.reverse().find(r => score >= r.points) || ranks[0];
+            currentRank = ranks.slice().reverse().find(r => score >= r.points) || ranks[0];
             document.getElementById("currentRank").textContent = currentRank.name;
             document.getElementById("currentRankImage").src = currentRank.img;
         }
@@ -213,7 +229,7 @@
                 document.getElementById("result").textContent = "Incorrecto. Inténtalo de nuevo.";
                 document.getElementById("result").style.color = "red";
                 button.classList.add("incorrect");
-                score -= 5;
+                score = Math.max(0, score - 5); // Ensure score does not go below zero
                 document.getElementById("gameScore").textContent = score;
             }
         }
