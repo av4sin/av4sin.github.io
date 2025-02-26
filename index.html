@@ -91,7 +91,6 @@
 <body>
     <div class="container" id="mainContainer">
         <h1>Aprende los Rangos Militares</h1>
-        <p>Puntos: <span id="score" class="score">0</span></p>
         <p>Récord: <span id="highScore" class="score">0</span></p>
         <div id="rankDisplay">
             <span id="rankName">Rango: Soldado</span>
@@ -107,10 +106,9 @@
             <p id="gameMessage">¡Estás en medio del juego! Sigue las instrucciones.</p>
             <p>Puntos: <span id="gameScore" class="score">0</span></p>
             <p>Récord: <span id="gameHighScore" class="score">0</span></p>
-            <div id="currentRankName">Rango Actual: <span id="currentRank"></span></div>
-            <div id="rankBox">
-                <span id="currentRankText">Rango Actual: </span>
-                <img id="currentRankImage" src="" alt="Insignia pequeña del rango actual" />
+            <div id="rankDisplayGame">
+                <span id="currentRank">Rango: Soldado</span>
+                <img id="currentRankImage" src="img/soldado.png" alt="Insignia del rango actual">
             </div>
             <div id="questionBox">
                 <img id="questionImage" src="" alt="Insignia de la pregunta actual" />
@@ -150,7 +148,6 @@
 
         function loadHighScore() {
             highScore = parseInt(localStorage.getItem("highScore")) || 0;
-            document.getElementById("score").textContent = score;
             document.getElementById("highScore").textContent = highScore;
 
             // Aquí cargamos el rango correspondiente al récord
@@ -167,8 +164,9 @@
 
         function updateRankDisplay() {
             currentRank = ranks.slice().reverse().find(r => score >= r.points) || ranks[0];
-            document.getElementById("currentRank").textContent = currentRank.name;
+            document.getElementById("currentRank").textContent = `Rango: ${currentRank.name}`;
             document.getElementById("currentRankImage").src = currentRank.img;
+            document.getElementById("currentRankImage").alt = `Insignia de ${currentRank.name}`;
         }
 
         function loadQuestion() {
@@ -228,6 +226,7 @@
             document.getElementById("mainContainer").style.display = "none";
             document.getElementById("gameContainer").style.display = "block";
             loadHighScore();
+            updateRankDisplay(); // Ensure rank and insignia are displayed correctly at the start
             loadQuestion();
         }
 
