@@ -2,7 +2,7 @@
     "name": "Juego de Rangos Militares",
     "short_name": "Rangos Militares",
     "start_url": "/index.html",
-    "display": "standalone",
+    "display": "fullscreen",
     "background_color": "#f4f4f4",
     "theme_color": "#4CAF50",
     "icons": [
