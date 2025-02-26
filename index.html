@@ -97,10 +97,6 @@
             <span id="rankName">Rango: Soldado</span>
             <img id="rankImage" src="" alt="Insignia del rango">
         </div>
-        <div id="recordRankDisplay">
-            <span id="recordRankName">Rango por Récord: Soldado</span>
-            <img id="recordRankImage" src="" alt="Insignia del rango por récord">
-        </div>
         <div class="options" id="optionsContainer"></div>
         <p id="result"></p>
         <button id="startButton" onclick="startGame()">Iniciar Partida</button>
@@ -162,12 +158,6 @@
             document.getElementById("rankName").textContent = `Rango: ${currentRank.name}`;
             document.getElementById("rankImage").src = currentRank.img;
             document.getElementById("rankImage").alt = `Insignia de ${currentRank.name}`;
-
-            // Mostrar rango por récord
-            const recordRank = ranks.slice().reverse().find(r => highScore >= r.points) || ranks[0];
-            document.getElementById("recordRankName").textContent = `Rango por Récord: ${recordRank.name}`;
-            document.getElementById("recordRankImage").src = recordRank.img;
-            document.getElementById("recordRankImage").alt = `Insignia de ${recordRank.name}`;
         }
 
         function saveHighScore() {
@@ -240,6 +230,9 @@
             loadHighScore();
             loadQuestion();
         }
+
+        // Load high score and rank on page load
+        document.addEventListener("DOMContentLoaded", loadHighScore);
     </script>
 </body>
 </html>
