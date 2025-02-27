@@ -1,0 +1,7 @@
+{
+  "name": "av4sin.github.io",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo 'Building site...' && mkdir -p dist && cp -r * dist"
+  }
+}
