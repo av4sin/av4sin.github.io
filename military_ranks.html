@@ -10,15 +10,27 @@
     <style>
         .options {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Slightly increased min width */
+            row-gap: 5px; /* Reduced row gap */
+            column-gap: 10px; /* Match the style */
             justify-items: center;
         }
         .options button {
-            padding: 15px;
-            margin: 5px;
-            font-size: 1em;
+            padding: 12px; /* Slightly increased padding */
+            margin: 5px; /* Match the style */
+            font-size: 0.9em; /* Slightly reduced font size */
             width: 100%;
+            height: auto; /* Ensure height adjusts to content */
+            box-sizing: border-box; /* Ensure padding and border are included in the height */
+            background-color: #6B8E23; /* Olive drab button */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .options button:hover {
+            background-color: #556B2F; /* Dark olive green on hover */
         }
         .back-button {
             position: absolute;
