@@ -24,6 +24,10 @@
                 padding: 10px;
             }
         }
+        .rank-display {
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -41,9 +45,9 @@
                     <span id="pointsToNextRank">50</span>
                 </div>
             </div>
-            <div id="rankDisplay">
-                <span id="rankName">Rango: Soldado</span>
+            <div id="rankDisplay" class="rank-display">
                 <img id="rankImage" src="img/soldado.png" alt="Insignia del rango">
+                <span id="rankName">Soldado</span>
             </div>
         </div>
         <button onclick="location.href='military_groups.html'">Juego de Organización</button>
@@ -83,7 +87,7 @@
             document.getElementById("highScore").textContent = highScore;
 
             const currentRank = ranks.slice().reverse().find(r => highScore >= r.points) || ranks[0];
-            document.getElementById("rankName").textContent = `Rango: ${currentRank.name}`;
+            document.getElementById("rankName").textContent = currentRank.name;
             document.getElementById("rankImage").src = currentRank.img;
             document.getElementById("rankImage").alt = `Insignia de ${currentRank.name}`;
             document.getElementById("pointsToNextRank").textContent = getNextRankPoints(highScore);
