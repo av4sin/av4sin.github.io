@@ -11,7 +11,7 @@
         .options {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Slightly increased min width */
-            row-gap: 1px; /* Reduced row gap */
+            row-gap: 0px; /* Minimum row gap */
             column-gap: 10px; /* Match the style */
             justify-items: center;
         }
@@ -45,7 +45,7 @@
         @media (max-width: 600px) {
             .options {
                 grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Adjust grid for smaller screens */
-                gap: 5px; /* Adjust gap for smaller screens */
+                gap: 0px; /* Minimum gap for smaller screens */
             }
             .options button {
                 padding: 8px; /* Adjust padding for smaller screens */
