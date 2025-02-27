@@ -38,6 +38,9 @@
                 padding: 10px; /* Adjust card padding for smaller screens */
             }
         }
+        .card.incorrect {
+            background-color: #CD5C5C; /* Indian red */
+        }
     </style>
 </head>
 <body>
@@ -101,16 +104,35 @@
             const isCorrect = (side === "left" && leftGroup.order > rightGroup.order) ||
                               (side === "right" && rightGroup.order > leftGroup.order);
 
+            const leftCard = document.getElementById("leftCard");
+            const rightCard = document.getElementById("rightCard");
+
             if (isCorrect) {
                 document.getElementById("result").textContent = "¡Correcto!";
                 document.getElementById("result").style.color = "green";
-                score += 10;
+                if (leftGroup.order >= 8 || rightGroup.order >= 8) { // Officer ranks start from "Brigada"
+                    score += 2;
+                } else {
+                    score += 1;
+                }
+
+                // Reset all cards to original color
+                leftCard.classList.remove("incorrect");
+                rightCard.classList.remove("incorrect");
+
                 document.getElementById("gameScore").textContent = score;
                 saveHighScore();
                 setTimeout(loadPair, 500);
             } else {
                 document.getElementById("result").textContent = "Incorrecto. Inténtalo de nuevo.";
                 document.getElementById("result").style.color = "red";
+                if (side === "left") {
+                    leftCard.classList.add("incorrect");
+                } else {
+                    rightCard.classList.add("incorrect");
+                }
+                score = Math.max(0, score - 0.5); // Reduce score by 0.5 for incorrect answers
+                document.getElementById("gameScore").textContent = score;
             }
         }
 
