@@ -42,6 +42,16 @@
             color: #6B8E23; /* Olive drab */
             cursor: pointer;
         }
+        @media (max-width: 600px) {
+            .options {
+                grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Adjust grid for smaller screens */
+                gap: 5px; /* Adjust gap for smaller screens */
+            }
+            .options button {
+                padding: 8px; /* Adjust padding for smaller screens */
+                font-size: 0.8em; /* Adjust font size for smaller screens */
+            }
+        }
     </style>
 </head>
 <body>
