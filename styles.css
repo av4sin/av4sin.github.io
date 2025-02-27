@@ -124,6 +124,12 @@ button.incorrect {
     height: 24px;
     margin-right: 10px;
 }
+.rank-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
 @media (max-width: 600px) {
     .container {
         padding: 10px;

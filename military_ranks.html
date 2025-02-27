@@ -77,9 +77,9 @@
                     <span id="pointsToNextRank">50</span>
                 </div>
             </div>
-            <div id="rankDisplay">
-                <span id="rankName">Rango: Soldado</span>
+            <div id="rankDisplay" class="rank-display">
                 <img id="rankImage" src="img/soldado.png" alt="Insignia del rango">
+                <span id="rankName">Soldado</span>
             </div>
         </div>
         <div class="options" id="optionsContainer"></div>
@@ -105,9 +105,9 @@
                         <span id="pointsToNextRankGame">50</span>
                     </div>
                 </div>
-                <div id="rankDisplayGame">
-                    <span id="currentRank">Rango: Soldado</span>
+                <div id="rankDisplayGame" class="rank-display">
                     <img id="currentRankImage" src="img/soldado.png" alt="Insignia del rango actual">
+                    <span id="currentRank">Soldado</span>
                 </div>
             </div>
             <div id="questionBox">
@@ -158,7 +158,7 @@
 
             // Aquí cargamos el rango correspondiente al récord
             currentRank = ranks.slice().reverse().find(r => highScore >= r.points) || ranks[0]; // Buscar rango según puntos
-            document.getElementById("rankName").textContent = `Rango: ${currentRank.name}`;
+            document.getElementById("rankName").textContent = currentRank.name;
             document.getElementById("rankImage").src = currentRank.img;
             document.getElementById("rankImage").alt = `Insignia de ${currentRank.name}`;
             document.getElementById("pointsToNextRank").textContent = getNextRankPoints(highScore);
@@ -171,7 +171,7 @@
 
         function updateRankDisplay() {
             currentRank = ranks.slice().reverse().find(r => score >= r.points) || ranks[0];
-            document.getElementById("currentRank").textContent = `Rango: ${currentRank.name}`;
+            document.getElementById("currentRank").textContent = currentRank.name;
             document.getElementById("currentRankImage").src = currentRank.img;
             document.getElementById("currentRankImage").alt = `Insignia de ${currentRank.name}`;
             document.getElementById("pointsToNextRankGame").textContent = getNextRankPoints(score);
