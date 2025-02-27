@@ -10,19 +10,19 @@
     <style>
         .options {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Slightly increased min width */
-            row-gap: 0px; /* Minimum row gap */
-            column-gap: 10px; /* Match the style */
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            row-gap: 1px;
+            column-gap: 10px;
             justify-items: center;
         }
         .options button {
-            padding: 12px; /* Slightly increased padding */
-            margin: 5px; /* Match the style */
-            font-size: 0.9em; /* Slightly reduced font size */
+            padding: 12px;
+            margin: 5px;
+            font-size: 0.9em;
             width: 100%;
-            height: auto; /* Ensure height adjusts to content */
-            box-sizing: border-box; /* Ensure padding and border are included in the height */
-            background-color: #6B8E23; /* Olive drab button */
+            height: auto;
+            box-sizing: border-box;
+            background-color: #6B8E23;
             color: white;
             border: none;
             border-radius: 5px;
@@ -30,7 +30,7 @@
             font-weight: bold;
         }
         .options button:hover {
-            background-color: #556B2F; /* Dark olive green on hover */
+            background-color: #556B2F;
         }
         .back-button {
             position: absolute;
@@ -39,21 +39,21 @@
             background: none;
             border: none;
             font-size: 1.5em;
-            color: #6B8E23; /* Olive drab */
+            color: #6B8E23;
             cursor: pointer;
         }
         @media (max-width: 600px) {
             .options {
-                grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Adjust grid for smaller screens */
-                gap: 0px; /* Minimum gap for smaller screens */
+                grid-template-columns: repeat(2, 1fr); /* Two columns on mobile */
+                gap: px;
             }
             .options button {
-                padding: 8px; /* Adjust padding for smaller screens */
-                font-size: 0.8em; /* Adjust font size for smaller screens */
+                padding: 5px;
+                font-size: 0.8em;
             }
             #questionImage {
-                max-width: 100%; /* Ensure the insignia image fits within the screen */
-                height: auto; /* Maintain aspect ratio */
+                max-width: 100%;
+                height: auto;
             }
         }
     </style>
