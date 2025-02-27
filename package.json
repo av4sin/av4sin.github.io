@@ -2,6 +2,6 @@
   "name": "av4sin.github.io",
   "version": "1.0.0",
   "scripts": {
-    "build": "echo 'Building site...' && mkdir -p dist && cp -r * dist"
+    "build": "echo 'Building site...' && mkdir -p dist && find . -maxdepth 1 ! -name dist ! -name . -exec cp -r {} dist/ \\;"
   }
 }
