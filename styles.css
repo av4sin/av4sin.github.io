@@ -1,0 +1,110 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #F5F5DC; /* Beige background */
+    color: #4B5320; /* Dark olive green text */
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    background: #D2B48C; /* Tan background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+.card {
+    display: block;
+    width: 80%;
+    padding: 20px;
+    margin: 10px auto;
+    background-color: #FFF;
+    border: 2px solid #4B5320;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+.card.selected {
+    background-color: #8FBC8F; /* Dark sea green */
+}
+button {
+    padding: 10px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    background-color: #6B8E23; /* Olive drab button */
+}
+button.correct {
+    background-color: #8FBC8F; /* Dark sea green */
+}
+button.incorrect {
+    background-color: #CD5C5C; /* Indian red */
+}
+.score {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+.high-score {
+    color: #FFD700; /* Gold color for high score */
+}
+#rankDisplay {
+    font-size: 1.4em;
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+}
+#rankImage {
+    max-width: 30px;
+    margin-left: 10px;
+}
+#gameContainer {
+    display: none;
+}
+#mainContainer {
+    display: block;
+}
+#currentRankImage {
+    max-width: 40px;
+    margin-top: 10px;
+    display: inline-block;
+    vertical-align: middle; /* Vertical alignment */
+}
+#questionImage {
+    max-width: 300px; /* Large question image */
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#rankBox {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 10px;
+}
+#currentRankText {
+    display: inline-block;
+    vertical-align: middle; /* Vertical alignment */
+}
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+        margin: 20px auto;
+    }
+    button {
+        padding: 8px;
+        font-size: 0.9em;
+    }
+    .score {
+        font-size: 1em;
+    }
+    #rankDisplay {
+        font-size: 1.2em;
+    }
+    #currentRankImage {
+        max-width: 30px;
+    }
+    #questionImage {
+        max-width: 100%;
+    }
+}

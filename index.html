@@ -3,145 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego de Rangos Militares</title>
+    <title>Página Principal</title>
     <link rel="icon" href="img/favicon.ico" type="image/x-icon">
     <link rel="manifest" href="manifest.json">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #F5F5DC; /* Beige background */
-            color: #4B5320; /* Dark olive green text */
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            background: #D2B48C; /* Tan background */
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 10px;
-        }
-        .options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-            justify-content: center;
-        }
-        button {
-            padding: 10px;
-            border: none;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-            font-weight: bold;
-            background-color: #6B8E23; /* Olive drab button */
-        }
-        button.correct {
-            background-color: #8FBC8F; /* Dark sea green */
-        }
-        button.incorrect {
-            background-color: #CD5C5C; /* Indian red */
-        }
-        .score {
-            font-size: 1.2em;
-            font-weight: bold;
-        }
-        .high-score {
-            color: #FFD700; /* Gold color for high score */
-        }
-        #rankDisplay {
-            font-size: 1.4em;
-            margin-top: 10px;
-            display: inline-flex;
-            align-items: center;
-        }
-        #rankImage {
-            max-width: 30px;
-            margin-left: 10px;
-        }
-        #gameContainer {
-            display: none;
-        }
-        #mainContainer {
-            display: block;
-        }
-        #currentRankImage {
-            max-width: 40px;
-            margin-top: 10px;
-            display: inline-block;
-            vertical-align: middle; /* Vertical alignment */
-        }
-        #questionImage {
-            max-width: 300px; /* Large question image */
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-        #rankBox {
-            display: inline-block;
-            vertical-align: top;
-            margin-top: 10px;
-        }
-        #currentRankText {
-            display: inline-block;
-            vertical-align: middle; /* Vertical alignment */
-        }
-        @media (max-width: 600px) {
-            .container {
-                padding: 10px;
-                margin: 20px auto;
-            }
-            button {
-                padding: 8px;
-                font-size: 0.9em;
-            }
-            .score {
-                font-size: 1em;
-            }
-            #rankDisplay {
-                font-size: 1.2em;
-            }
-            #currentRankImage {
-                max-width: 30px;
-            }
-            #questionImage {
-                max-width: 100%;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container" id="mainContainer">
-        <h1>Aprende los Rangos Militares</h1>
+    <div class="container">
+        <h1>Bienvenido a los Juegos Militares</h1>
         <p>Récord: <span id="highScore" class="score">0</span></p>
         <div id="rankDisplay">
             <span id="rankName">Rango: Soldado</span>
-            <img id="rankImage" src="" alt="Insignia del rango">
+            <img id="rankImage" src="img/soldado.png" alt="Insignia del rango">
         </div>
-        <div class="options" id="optionsContainer"></div>
-        <p id="result"></p>
-        <button id="startButton" onclick="startGame()">Iniciar Partida</button>
-    </div>
-
-    <div id="gameContainer" class="container">
-        <div id="gameContent">
-            <p>Puntos: <span id="gameScore" class="score">0</span></p>
-            <p>Récord: <span id="gameHighScore" class="score">0</span></p>
-            <div id="rankDisplayGame">
-                <span id="currentRank">Rango: Soldado</span>
-                <img id="currentRankImage" src="img/soldado.png" alt="Insignia del rango actual">
-            </div>
-            <div id="questionBox">
-                <img id="questionImage" src="" alt="Insignia de la pregunta actual" />
-            </div>
-            <div class="options" id="optionsContainerGame"></div>
-        </div>
+        <button onclick="location.href='military_groups.html'">Juego de Organización</button>
+        <button onclick="location.href='military_ranks.html'">Juego de Rangos</button>
     </div>
 
     <script>
@@ -167,143 +43,17 @@
             { name: "General de Ejército", img: "img/general_ejercito.png", points: 13107200 }
         ];
 
-        let score = 0;
-        let highScore = 0;
-        let currentRank = ranks[0]; // Comienza como Soldado
-        let currentQuestion = null;
-        let optionsOrder = [];
-
         function loadHighScore() {
-            highScore = parseInt(localStorage.getItem("highScore")) || 0;
+            const highScore = parseInt(localStorage.getItem("highScore")) || 0;
             document.getElementById("highScore").textContent = highScore;
 
-            // Aquí cargamos el rango correspondiente al récord
-            currentRank = ranks.slice().reverse().find(r => highScore >= r.points) || ranks[0]; // Buscar rango según puntos
+            const currentRank = ranks.slice().reverse().find(r => highScore >= r.points) || ranks[0];
             document.getElementById("rankName").textContent = `Rango: ${currentRank.name}`;
             document.getElementById("rankImage").src = currentRank.img;
             document.getElementById("rankImage").alt = `Insignia de ${currentRank.name}`;
         }
 
-        function saveHighScore() {
-            highScore = Math.max(score, highScore);
-            localStorage.setItem("highScore", highScore);
-        }
-
-        function updateRankDisplay() {
-            currentRank = ranks.slice().reverse().find(r => score >= r.points) || ranks[0];
-            document.getElementById("currentRank").textContent = `Rango: ${currentRank.name}`;
-            document.getElementById("currentRankImage").src = currentRank.img;
-            document.getElementById("currentRankImage").alt = `Insignia de ${currentRank.name}`;
-        }
-
-        function loadQuestion() {
-            let randomIndex = Math.floor(Math.random() * ranks.length);
-            let rank = ranks[randomIndex];
-
-            document.getElementById("result").textContent = ""; // Limpiar mensaje anterior
-            currentQuestion = rank;
-
-            const optionsContainer = document.getElementById("optionsContainerGame");
-            optionsContainer.innerHTML = ""; // Limpiar botones anteriores
-
-            if (optionsOrder.length === 0) {
-                optionsOrder = [...ranks].sort((a, b) => a.points - b.points); // Ordenar de menor a mayor
-            }
-
-            optionsOrder.forEach(option => {
-                let button = document.createElement("button");
-                button.textContent = option.name;
-                button.onclick = () => checkAnswer(button, option, rank);
-                optionsContainer.appendChild(button);
-            });
-
-            // Mostrar imagen de la pregunta
-            document.getElementById("questionImage").src = currentQuestion.img;
-        }
-
-        function checkAnswer(button, selected, correct) {
-            let allButtons = document.querySelectorAll(".options button");
-
-            if (button.classList.contains('correct') || button.classList.contains('incorrect')) return;
-
-            if (selected.name === correct.name) {
-                document.getElementById("result").textContent = "¡Correcto!";
-                document.getElementById("result").style.color = "green";
-                score += 10;
-                button.classList.add("correct");
-
-                updateRankDisplay();
-
-                setTimeout(() => {
-                    document.getElementById("gameScore").textContent = score;
-                    document.getElementById("gameHighScore").textContent = highScore;
-                    saveHighScore();
-                    loadQuestion();
-                }, 500);
-            } else {
-                document.getElementById("result").textContent = "Incorrecto. Inténtalo de nuevo.";
-                document.getElementById("result").style.color = "red";
-                button.classList.add("incorrect");
-                score = Math.max(0, score - 5); // Ensure score does not go below zero
-                document.getElementById("gameScore").textContent = score;
-            }
-        }
-
-        function startGame() {
-            document.getElementById("mainContainer").style.display = "none";
-            document.getElementById("gameContainer").style.display = "block";
-            loadHighScore();
-            document.getElementById("gameHighScore").textContent = highScore; // Display high score at the start
-            updateRankDisplay(); // Ensure rank and insignia are displayed correctly at the start
-            loadQuestion();
-        }
-
-        // Load high score and rank on page load
         document.addEventListener("DOMContentLoaded", loadHighScore);
-
-        // Register the service worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js')
-                .then(registration => {
-                    console.log('Service Worker registered with scope:', registration.scope);
-                })
-                .catch(error => {
-                    console.log('Service Worker registration failed:', error);
-                });
-        }
-
-        // Prompt to install the app
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            const installButton = document.createElement('button');
-            installButton.innerText = 'Añadir a la pantalla de inicio';
-            installButton.style.position = 'fixed';
-            installButton.style.bottom = '10px';
-            installButton.style.left = '50%';
-            installButton.style.transform = 'translateX(-50%)';
-            installButton.style.padding = '10px 20px';
-            installButton.style.backgroundColor = '#4CAF50';
-            installButton.style.color = 'white';
-            installButton.style.border = 'none';
-            installButton.style.borderRadius = '5px';
-            installButton.style.cursor = 'pointer';
-            document.body.appendChild(installButton);
-
-            installButton.addEventListener('click', () => {
-                installButton.style.display = 'none';
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the A2HS prompt');
-                    } else {
-                        console.log('User dismissed the A2HS prompt');
-                    }
-                    deferredPrompt = null;
-                });
-            });
-        });
     </script>
 </body>
 </html>
