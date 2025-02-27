@@ -36,10 +36,13 @@
     <button class="back-button" onclick="location.href='index.html'">&larr;</button>
     <div class="container" id="mainContainer">
         <h1>Aprende los Rangos Militares</h1>
-        <p>Récord: <span id="highScore" class="score">0</span></p>
-        <div id="rankDisplay">
-            <span id="rankName">Rango: Soldado</span>
-            <img id="rankImage" src="img/soldado.png" alt="Insignia del rango">
+        <div class="score-container">
+            <h2>Información de Puntuación</h2>
+            <p>Récord: <span id="highScore" class="score">0</span></p>
+            <div id="rankDisplay">
+                <span id="rankName">Rango: Soldado</span>
+                <img id="rankImage" src="img/soldado.png" alt="Insignia del rango">
+            </div>
         </div>
         <div class="options" id="optionsContainer"></div>
         <p id="result"></p>
@@ -48,11 +51,14 @@
 
     <div id="gameContainer" class="container" style="display: none;">
         <div id="gameContent">
-            <p>Puntos: <span id="gameScore" class="score">0</span></p>
-            <p>Récord: <span id="gameHighScore" class="score">0</span></p>
-            <div id="rankDisplayGame">
-                <span id="currentRank">Rango: Soldado</span>
-                <img id="currentRankImage" src="img/soldado.png" alt="Insignia del rango actual">
+            <div class="score-container">
+                <h2>Información de Puntuación</h2>
+                <p>Puntos: <span id="gameScore" class="score">0</span></p>
+                <p>Récord: <span id="gameHighScore" class="score">0</span></p>
+                <div id="rankDisplayGame">
+                    <span id="currentRank">Rango: Soldado</span>
+                    <img id="currentRankImage" src="img/soldado.png" alt="Insignia del rango actual">
+                </div>
             </div>
             <div id="questionBox">
                 <img id="questionImage" src="" alt="Insignia de la pregunta actual" />

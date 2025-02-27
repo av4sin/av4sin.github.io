@@ -25,9 +25,12 @@
     <div class="container" id="mainContainer">
         <h1>Ordena los Grupos Militares</h1>
         <p>Selecciona la carta que esté por encima en la jerarquía.</p>
-        <p>Récord: <span id="highScore" class="score">0</span></p>
-        <div id="gameContent">
+        <div class="score-container">
+            <h2>Información de Puntuación</h2>
+            <p>Récord: <span id="highScore" class="score">0</span></p>
             <p>Puntos: <span id="gameScore" class="score">0</span></p>
+        </div>
+        <div id="gameContent">
             <div id="cardsContainer">
                 <div class="card" id="leftCard" onclick="selectCard('left')"></div>
                 <div class="card" id="rightCard" onclick="selectCard('right')"></div>
