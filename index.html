@@ -31,7 +31,16 @@
         <h1>Bienvenido a los Juegos Militares</h1>
         <div class="score-container">
             <h2>Información de Puntuación</h2>
-            <p>Récord: <span id="highScore" class="score">0</span></p>
+            <div class="score-details">
+                <div class="score-item">
+                    <img src="img/high_score_icon.png" alt="High Score Icon" class="score-icon">
+                    <span id="highScore" class="score">0</span>
+                </div>
+                <div class="score-item">
+                    <img src="img/next_rank_icon.png" alt="Next Rank Icon" class="score-icon">
+                    <span id="pointsToNextRank">50</span>
+                </div>
+            </div>
             <div id="rankDisplay">
                 <span id="rankName">Rango: Soldado</span>
                 <img id="rankImage" src="img/soldado.png" alt="Insignia del rango">
@@ -64,6 +73,11 @@
             { name: "General de Ejército", img: "img/general_ejercito.png", points: 1638400 }
         ];
 
+        function getNextRankPoints(currentPoints) {
+            const nextRank = ranks.find(rank => rank.points > currentPoints);
+            return nextRank ? nextRank.points - currentPoints : 0;
+        }
+
         function loadHighScore() {
             const highScore = parseInt(localStorage.getItem("highScore")) || 0;
             document.getElementById("highScore").textContent = highScore;
@@ -72,6 +86,7 @@
             document.getElementById("rankName").textContent = `Rango: ${currentRank.name}`;
             document.getElementById("rankImage").src = currentRank.img;
             document.getElementById("rankImage").alt = `Insignia de ${currentRank.name}`;
+            document.getElementById("pointsToNextRank").textContent = getNextRankPoints(highScore);
         }
 
         document.addEventListener("DOMContentLoaded", loadHighScore);
