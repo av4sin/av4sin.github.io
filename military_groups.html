@@ -66,17 +66,17 @@
 
     <script>
         const groups = [
-            { name: "Binomio", order: 1 },
-            { name: "Escuadra", order: 2 },
-            { name: "Pelotón", order: 3 },
-            { name: "Sección", order: 4 },
-            { name: "Compañía", order: 5 },
-            { name: "Batallón", order: 6 },
-            { name: "Regimiento", order: 7 },
-            { name: "Brigada", order: 8 },
-            { name: "División", order: 9 },
-            { name: "Cuerpo de Ejército", order: 10 },
-            { name: "Ejército", order: 11 }
+            { name: "Binomio", order: 0.25 },
+            { name: "Escuadra", order: 0.5 },
+            { name: "Pelotón", order: 0.75 },
+            { name: "Sección", order: 1 },
+            { name: "Compañía", order: 1.25 },
+            { name: "Batallón", order: 1.5 },
+            { name: "Regimiento", order: 1.75 },
+            { name: "Brigada", order: 2 },
+            { name: "División", order: 2.25 },
+            { name: "Cuerpo de Ejército", order: 2.5 },
+            { name: "Ejército", order: 2.75 }
         ];
 
         let score = 0;
@@ -112,7 +112,7 @@
             if (isCorrect) {
                 document.getElementById("result").textContent = "¡Correcto!";
                 document.getElementById("result").style.color = "green";
-                if (leftGroup.order >= 8 || rightGroup.order >= 8) { // Officer ranks start from "Brigada"
+                if (leftGroup.order >= 2 || rightGroup.order >= 2) { // Officer ranks start from "Brigada"
                     score += 2;
                 } else {
                     score += 1;
