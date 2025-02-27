@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Grupos Militares</title>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            color: #6B8E23; /* Olive drab */
+            cursor: pointer;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+                margin: 20px auto;
+            }
+            button {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+            .score {
+                font-size: 1em;
+            }
+            .score-container {
+                padding: 10px;
+            }
+            .card {
+                width: 100%; /* Adjust card width for smaller screens */
+                padding: 10px; /* Adjust card padding for smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="location.href='index.html'">&larr;</button>
+    <div class="container" id="mainContainer">
+        <h1>Ordena los Grupos Militares</h1>
+        <p>Selecciona la carta que esté por encima en la jerarquía.</p>
+        <div class="score-container">
+            <h2>Información de Puntuación</h2>
+            <p>Récord: <span id="highScore" class="score">0</span></p>
+            <p>Puntos: <span id="gameScore" class="score">0</span></p>
+        </div>
+        <div id="gameContent">
+            <div id="cardsContainer">
+                <div class="card" id="leftCard" onclick="selectCard('left')"></div>
+                <div class="card" id="rightCard" onclick="selectCard('right')"></div>
+            </div>
+            <p id="result"></p>
+        </div>
+    </div>
+
+    <script>
+        const groups = [
+            { name: "Binomio", order: 1 },
+            { name: "Escuadra", order: 2 },
+            { name: "Pelotón", order: 3 },
+            { name: "Sección", order: 4 },
+            { name: "Compañía", order: 5 },
+            { name: "Batallón", order: 6 },
+            { name: "Regimiento", order: 7 },
+            { name: "Brigada", order: 8 },
+            { name: "División", order: 9 },
+            { name: "Cuerpo de Ejército", order: 10 },
+            { name: "Ejército", order: 11 }
+        ];
+
+        let score = 0;
+        let highScore = 0;
+        let currentPair = [];
+
+        function loadHighScore() {
+            highScore = parseInt(localStorage.getItem("highScore")) || 0;
+            document.getElementById("highScore").textContent = highScore;
+        }
+
+        function saveHighScore() {
+            highScore = Math.max(score, highScore);
+            localStorage.setItem("highScore", highScore);
+        }
+
+        function loadPair() {
+            currentPair = groups.sort(() => 0.5 - Math.random()).slice(0, 2);
+            document.getElementById("leftCard").textContent = currentPair[0].name;
+            document.getElementById("rightCard").textContent = currentPair[1].name;
+            document.getElementById("result").textContent = ""; // Clear previous result
+        }
+
+        function selectCard(side) {
+            const leftGroup = currentPair[0];
+            const rightGroup = currentPair[1];
+            const isCorrect = (side === "left" && leftGroup.order > rightGroup.order) ||
+                              (side === "right" && rightGroup.order > leftGroup.order);
+
+            if (isCorrect) {
+                document.getElementById("result").textContent = "¡Correcto!";
+                document.getElementById("result").style.color = "green";
+                score += 10;
+                document.getElementById("gameScore").textContent = score;
+                saveHighScore();
+                setTimeout(loadPair, 500);
+            } else {
+                document.getElementById("result").textContent = "Incorrecto. Inténtalo de nuevo.";
+                document.getElementById("result").style.color = "red";
+            }
+        }
+
+        function startGame() {
+            loadHighScore();
+            document.getElementById("gameScore").textContent = score;
+            loadPair();
+        }
+
+        // Load high score and start game on page load
+        document.addEventListener("DOMContentLoaded", startGame);
+    </script>
+</body>
+</html>
