@@ -108,6 +108,22 @@ button.incorrect {
 .score-container p {
     margin: 5px 0;
 }
+.score-details {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.score-item {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+}
+.score-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
 @media (max-width: 600px) {
     .container {
         padding: 10px;
