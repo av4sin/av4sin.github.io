@@ -32,6 +32,9 @@
         .options button:hover {
             background-color: #556B2F;
         }
+        .options button.incorrect {
+            background-color: #CD5C5C; /* Indian red */
+        }
         .back-button {
             position: absolute;
             top: 10px;
@@ -97,24 +100,24 @@
     <script>
         const ranks = [
             { name: "Soldado", img: "img/soldado.png", points: 0 },
-            { name: "Cabo", img: "img/cabo.png", points: 100 },
-            { name: "Cabo Primero", img: "img/cabo_primero.png", points: 200 },
-            { name: "Cabo Mayor", img: "img/cabo_mayor.png", points: 400 },
-            { name: "Sargento", img: "img/sargento.png", points: 800 },
-            { name: "Sargento Primero", img: "img/sargento_primero.png", points: 1600 },
-            { name: "Brigada", img: "img/brigada.png", points: 3200 },
-            { name: "Subteniente", img: "img/subteniente.png", points: 6400 },
-            { name: "Suboficial Mayor", img: "img/suboficial_mayor.png", points: 12800 },
-            { name: "Alférez", img: "img/alferez.png", points: 25600 },
-            { name: "Teniente", img: "img/teniente.png", points: 51200 },
-            { name: "Capitán", img: "img/capitan.png", points: 102400 },
-            { name: "Comandante", img: "img/comandante.png", points: 204800 },
-            { name: "Teniente Coronel", img: "img/teniente_coronel.png", points: 409600 },
-            { name: "Coronel", img: "img/coronel.png", points: 819200 },
-            { name: "General de Brigada", img: "img/general_brigada.png", points: 1638400 },
-            { name: "General de División", img: "img/general_division.png", points: 3276800 },
-            { name: "Teniente General", img: "img/teniente_general.png", points: 6553600 },
-            { name: "General de Ejército", img: "img/general_ejercito.png", points: 13107200 }
+            { name: "Cabo", img: "img/cabo.png", points: 50 },
+            { name: "Cabo Primero", img: "img/cabo_primero.png", points: 100 },
+            { name: "Cabo Mayor", img: "img/cabo_mayor.png", points: 200 },
+            { name: "Sargento", img: "img/sargento.png", points: 400 },
+            { name: "Sargento Primero", img: "img/sargento_primero.png", points: 800 },
+            { name: "Brigada", img: "img/brigada.png", points: 1600 },
+            { name: "Subteniente", img: "img/subteniente.png", points: 3200 },
+            { name: "Suboficial Mayor", img: "img/suboficial_mayor.png", points: 6400 },
+            { name: "Alférez", img: "img/alferez.png", points: 12800 },
+            { name: "Teniente", img: "img/teniente.png", points: 25600 },
+            { name: "Capitán", img: "img/capitan.png", points: 51200 },
+            { name: "Comandante", img: "img/comandante.png", points: 102400 },
+            { name: "Teniente Coronel", img: "img/teniente_coronel.png", points: 204800 },
+            { name: "Coronel", img: "img/coronel.png", points: 409600 },
+            { name: "General de Brigada", img: "img/general_brigada.png", points: 819200 },
+            { name: "General de División", img: "img/general_division.png", points: 1638400 },
+            { name: "Teniente General", img: "img/teniente_general.png", points: 3276800 },
+            { name: "General de Ejército", img: "img/general_ejercito.png", points: 6553600 }
         ];
 
         let score = 0;
@@ -179,8 +182,15 @@
             if (selected.name === correct.name) {
                 document.getElementById("result").textContent = "¡Correcto!";
                 document.getElementById("result").style.color = "green";
-                score += 10;
+                if (selected.points >= 25600) { // Officer ranks start from "Alférez"
+                    score += 2;
+                } else {
+                    score += 1;
+                }
                 button.classList.add("correct");
+
+                // Reset all buttons to original color
+                allButtons.forEach(btn => btn.classList.remove("incorrect"));
 
                 updateRankDisplay();
 
@@ -194,7 +204,7 @@
                 document.getElementById("result").textContent = "Incorrecto. Inténtalo de nuevo.";
                 document.getElementById("result").style.color = "red";
                 button.classList.add("incorrect");
-                score = Math.max(0, score - 5); // Ensure score does not go below zero
+                score = Math.max(0, score - 0.5); // Reduce score by 0.5 for incorrect answers
                 document.getElementById("gameScore").textContent = score;
             }
         }

@@ -28,6 +28,9 @@ body {
 .card.selected {
     background-color: #8FBC8F; /* Dark sea green */
 }
+.card.incorrect {
+    background-color: #CD5C5C; /* Indian red */
+}
 button {
     padding: 10px;
     border: none;
@@ -36,6 +39,9 @@ button {
     border-radius: 5px;
     font-weight: bold;
     background-color: #6B8E23; /* Olive drab button */
+}
+button:hover {
+    background-color: #556B2F; /* Olive drab hover */
 }
 button.correct {
     background-color: #8FBC8F; /* Dark sea green */
