@@ -1,6 +1,7 @@
 class Points {
     constructor() {
         this.points = 0;
+        this.cumulativePoints = parseInt(localStorage.getItem("cumulativePoints")) || 0;
     }
 
     addPoints(value) {
@@ -8,6 +9,8 @@ class Points {
             throw new Error("Los puntos no pueden ser negativos");
         }
         this.points += value;
+        this.cumulativePoints += value;
+        localStorage.setItem("cumulativePoints", this.cumulativePoints);
     }
 
     removePoints(value) {
@@ -26,5 +29,9 @@ class Points {
             throw new Error("Los puntos no pueden ser negativos");
         }
         this.points = value;
+    }
+
+    getCumulativePoints() {
+        return this.cumulativePoints;
     }
 }

@@ -142,7 +142,7 @@
         ];
 
         let score = 0;
-        let highScore = 0;
+        let points = new Points();
         let currentRank = ranks[0]; // Comienza como Soldado
         let currentQuestion = null;
         let optionsOrder = [];
@@ -152,21 +152,14 @@
             return nextRank ? nextRank.points - currentPoints : 0;
         }
 
-        function loadHighScore() {
-            highScore = parseInt(localStorage.getItem("highScore")) || 0;
-            document.getElementById("highScore").textContent = highScore;
+        function loadCumulativePoints() {
+            document.getElementById("highScore").textContent = points.getCumulativePoints();
 
-            // Aquí cargamos el rango correspondiente al récord
-            currentRank = ranks.slice().reverse().find(r => highScore >= r.points) || ranks[0]; // Buscar rango según puntos
+            currentRank = ranks.slice().reverse().find(r => points.getCumulativePoints() >= r.points) || ranks[0];
             document.getElementById("rankName").textContent = currentRank.name;
             document.getElementById("rankImage").src = currentRank.img;
             document.getElementById("rankImage").alt = `Insignia de ${currentRank.name}`;
-            document.getElementById("pointsToNextRank").textContent = getNextRankPoints(highScore);
-        }
-
-        function saveHighScore() {
-            highScore = Math.max(score, highScore);
-            localStorage.setItem("highScore", highScore);
+            document.getElementById("pointsToNextRank").textContent = getNextRankPoints(points.getCumulativePoints());
         }
 
         function updateRankDisplay() {
@@ -220,12 +213,13 @@
                 // Reset all buttons to original color
                 allButtons.forEach(btn => btn.classList.remove("incorrect"));
 
+                points.addPoints(selected.points >= 25600 ? 2 : 1);
+
                 updateRankDisplay();
 
                 setTimeout(() => {
                     document.getElementById("gameScore").textContent = score;
                     document.getElementById("gameHighScore").textContent = highScore;
-                    saveHighScore();
                     loadQuestion();
                 }, 500);
             } else {
@@ -240,14 +234,14 @@
         function startGame() {
             document.getElementById("mainContainer").style.display = "none";
             document.getElementById("gameContainer").style.display = "block";
-            loadHighScore();
-            document.getElementById("gameHighScore").textContent = highScore; // Display high score at the start
-            updateRankDisplay(); // Ensure rank and insignia are displayed correctly at the start
+            loadCumulativePoints();
+            document.getElementById("gameHighScore").textContent = points.getCumulativePoints();
+            updateRankDisplay();
             loadQuestion();
         }
 
         // Load high score and rank on page load
-        document.addEventListener("DOMContentLoaded", loadHighScore);
+        document.addEventListener("DOMContentLoaded", loadCumulativePoints);
     </script>
 </body>
 </html>
