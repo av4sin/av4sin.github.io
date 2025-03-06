@@ -6,6 +6,10 @@ const urlsToCache = [
     '/img/favicon.ico',
     '/img/icon-192.png',
     '/img/icon-512.png',
+    '/Points.js',
+    '/military_ranks.html',
+    '/military_groups.html',
+    '/styles.css'
     // Add other assets to cache as needed
 ];
 
