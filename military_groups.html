@@ -80,6 +80,7 @@
         </div>
     </div>
 
+    <script src="Points.js"></script>
     <script>
         const groups = [
             { name: "Binomio", order: 0.25 },
@@ -95,46 +96,25 @@
             { name: "Ejército", order: 2.75 }
         ];
 
-        const ranks = [
-            { name: "Soldado", img: "img/soldado.png", points: 0 },
-            { name: "Cabo", img: "img/cabo.png", points: 12.5 },
-            { name: "Cabo Primero", img: "img/cabo_primero.png", points: 25 },
-            { name: "Cabo Mayor", img: "img/cabo_mayor.png", points: 50 },
-            { name: "Sargento", img: "img/sargento.png", points: 100 },
-            { name: "Sargento Primero", img: "img/sargento_primero.png", points: 200 },
-            { name: "Brigada", img: "img/brigada.png", points: 400 },
-            { name: "Subteniente", img: "img/subteniente.png", points: 800 },
-            { name: "Suboficial Mayor", img: "img/suboficial_mayor.png", points: 1600 },
-            { name: "Alférez", img: "img/alferez.png", points: 3200 },
-            { name: "Teniente", img: "img/teniente.png", points: 6400 },
-            { name: "Capitán", img: "img/capitan.png", points: 12800 },
-            { name: "Comandante", img: "img/comandante.png", points: 25600 },
-            { name: "Teniente Coronel", img: "img/teniente_coronel.png", points: 51200 },
-            { name: "Coronel", img: "img/coronel.png", points: 102400 },
-            { name: "General de Brigada", img: "img/general_brigada.png", points: 204800 },
-            { name: "General de División", img: "img/general_division.png", points: 409600 },
-            { name: "Teniente General", img: "img/teniente_general.png", points: 819200 },
-            { name: "General de Ejército", img: "img/general_ejercito.png", points: 1638400 }
-        ];
-
         let score = 0;
-        let points = new Points();
+        let highScore = 0;
         let currentPair = [];
-        let currentRank = ranks[0];
+        let points = new Points();
 
         function getNextRankPoints(currentPoints) {
-            const nextRank = ranks.find(rank => rank.points > currentPoints);
-            return nextRank ? nextRank.points - currentPoints : 0;
+            const nextRank = groups.find(group => group.order > currentPoints);
+            return nextRank ? nextRank.order - currentPoints : 0;
         }
 
-        function loadCumulativePoints() {
-            document.getElementById("highScore").textContent = points.getCumulativePoints();
-            document.getElementById("pointsToNextRank").textContent = getNextRankPoints(points.getCumulativePoints());
+        function loadHighScore() {
+            highScore = parseInt(localStorage.getItem("highScore")) || 0;
+            document.getElementById("highScore").textContent = highScore;
+            document.getElementById("pointsToNextRank").textContent = getNextRankPoints(highScore);
+        }
 
-            currentRank = ranks.slice().reverse().find(r => points.getCumulativePoints() >= r.points) || ranks[0];
-            document.getElementById("rankName").textContent = currentRank.name;
-            document.getElementById("rankImage").src = currentRank.img;
-            document.getElementById("rankImage").alt = `Insignia de ${currentRank.name}`;
+        function saveHighScore() {
+            highScore = Math.max(score, highScore);
+            localStorage.setItem("highScore", highScore);
         }
 
         function loadPair() {
@@ -166,8 +146,8 @@
                 leftCard.classList.remove("incorrect");
                 rightCard.classList.remove("incorrect");
 
-                points.addPoints(leftGroup.order >= 2 || rightGroup.order >= 2 ? 2 : 1);
                 updateScoreDisplay();
+                saveHighScore();
                 setTimeout(loadPair, 500);
             } else {
                 document.getElementById("result").textContent = "Incorrecto. Inténtalo de nuevo.";
@@ -184,16 +164,11 @@
 
         function updateScoreDisplay() {
             document.getElementById("gameScore").textContent = score;
-            document.getElementById("pointsToNextRank").textContent = getNextRankPoints(points.getCumulativePoints());
-
-            currentRank = ranks.slice().reverse().find(r => points.getCumulativePoints() >= r.points) || ranks[0];
-            document.getElementById("rankName").textContent = currentRank.name;
-            document.getElementById("rankImage").src = currentRank.img;
-            document.getElementById("rankImage").alt = `Insignia de ${currentRank.name}`;
+            document.getElementById("pointsToNextRank").textContent = getNextRankPoints(score);
         }
 
         function startGame() {
-            loadCumulativePoints();
+            loadHighScore();
             document.getElementById("gameScore").textContent = score;
             loadPair();
         }

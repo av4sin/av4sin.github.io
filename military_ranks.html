@@ -48,7 +48,6 @@
         @media (max-width: 600px) {
             .options {
                 grid-template-columns: repeat(2, 1fr); /* Two columns on mobile */
-
             }
             .options button {
                 padding: 8px; /* Thicker padding for mobile */
@@ -118,6 +117,7 @@
         </div>
     </div>
 
+    <script src="Points.js"></script>
     <script>
         const ranks = [
             { name: "Soldado", img: "img/soldado.png", points: 0 },
@@ -219,7 +219,7 @@
 
                 setTimeout(() => {
                     document.getElementById("gameScore").textContent = score;
-                    document.getElementById("gameHighScore").textContent = highScore;
+                    document.getElementById("gameHighScore").textContent = points.getCumulativePoints();
                     loadQuestion();
                 }, 500);
             } else {
