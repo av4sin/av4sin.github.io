@@ -82,18 +82,19 @@
             return nextRank ? nextRank.points - currentPoints : 0;
         }
 
-        function loadHighScore() {
-            const highScore = parseInt(localStorage.getItem("highScore")) || 0;
-            document.getElementById("highScore").textContent = highScore;
+        function loadCumulativePoints() {
+            const points = new Points();
+            const cumulativePoints = points.getCumulativePoints();
+            document.getElementById("highScore").textContent = cumulativePoints;
 
-            const currentRank = ranks.slice().reverse().find(r => highScore >= r.points) || ranks[0];
+            const currentRank = ranks.slice().reverse().find(r => cumulativePoints >= r.points) || ranks[0];
             document.getElementById("rankName").textContent = currentRank.name;
             document.getElementById("rankImage").src = currentRank.img;
             document.getElementById("rankImage").alt = `Insignia de ${currentRank.name}`;
-            document.getElementById("pointsToNextRank").textContent = getNextRankPoints(highScore);
+            document.getElementById("pointsToNextRank").textContent = getNextRankPoints(cumulativePoints);
         }
 
-        document.addEventListener("DOMContentLoaded", loadHighScore);
+        document.addEventListener("DOMContentLoaded", loadCumulativePoints);
     </script>
 </body>
 </html>
