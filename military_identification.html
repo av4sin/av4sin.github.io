@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creador de Galletas Militares Personalizadas</title>
+    <style>
+        #canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Creador de Galletas Militares Personalizadas</h1>
+    <form id="tagForm">
+        <label for="surname">Apellido:</label>
+        <input type="text" id="surname" name="surname"><br><br>
+        <label for="bloodGroup">Grupo Sanguíneo:</label>
+        <select id="bloodGroup" name="bloodGroup">
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+        </select><br><br>
+        <label for="rank">Empleo:</label>
+        <select id="rank" name="rank">
+            <option value="captain_general">Capitán General</option>
+            <option value="general_of_the_army">General de Ejército</option>
+            <option value="lieutenant_general">Teniente General</option>
+            <option value="major_general">General de División</option>
+            <option value="brigadier_general">General de Brigada</option>
+            <option value="colonel">Coronel</option>
+            <option value="lieutenant_colonel">Teniente Coronel</option>
+            <option value="major">Comandante</option>
+            <option value="captain">Capitán</option>
+            <option value="lieutenant">Teniente</option>
+            <option value="second_lieutenant">Alférez</option>
+            <option value="sergeant_major">Suboficial Mayor</option>
+            <option value="sergeant_first_class">Subteniente</option>
+            <option value="sergeant">Sargento</option>
+            <option value="corporal">Cabo</option>
+            <option value="private">Soldado</option>
+        </select><br><br>
+        <label for="corps">Cuerpo:</label>
+        <input type="text" id="corps" name="corps"><br><br>
+        <button type="button" onclick="generateTag()">Generar Galleta</button>
+    </form>
+    <canvas id="canvas" width="472" height="196"></canvas>
+    <br>
+    <a id="downloadLink" download="military_tag.jpg">Descargar Galleta</a>
+    <script>
+        function drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius) {
+            let rot = Math.PI / 2 * 3;
+            let x = cx;
+            let y = cy;
+            let step = Math.PI / spikes;
+
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - outerRadius);
+            for (let i = 0; i < spikes; i++) {
+                x = cx + Math.cos(rot) * outerRadius;
+                y = cy + Math.sin(rot) * outerRadius;
+                ctx.lineTo(x, y);
+                rot += step;
+
+                x = cx + Math.cos(rot) * innerRadius;
+                y = cy + Math.sin(rot) * innerRadius;
+                ctx.lineTo(x, y);
+                rot += step;
+            }
+            ctx.lineTo(cx, cy - outerRadius);
+            ctx.closePath();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'black';
+            ctx.stroke();
+            ctx.fillStyle = 'gold';
+            ctx.fill();
+        }
+
+        function drawRank(ctx, rank) {
+            ctx.fillStyle = 'black';
+            ctx.font = 'bold 10px Arial';
+            switch(rank) {
+                case 'captain_general':
+                    drawStar(ctx, 20, 20, 4, 10, 5);
+                    drawStar(ctx, 40, 20, 4, 10, 5);
+                    drawStar(ctx, 60, 20, 4, 10, 5);
+                    drawStar(ctx, 80, 20, 4, 10, 5);
+                    drawStar(ctx, 50, 40, 4, 10, 5);
+                    break;
+                case 'general_of_the_army':
+                    drawStar(ctx, 20, 20, 4, 10, 5);
+                    drawStar(ctx, 40, 20, 4, 10, 5);
+                    drawStar(ctx, 60, 20, 4, 10, 5);
+                    drawStar(ctx, 80, 20, 4, 10, 5);
+                    break;
+                case 'lieutenant_general':
+                    drawStar(ctx, 20, 20, 4, 10, 5);
+                    drawStar(ctx, 40, 20, 4, 10, 5);
+                    drawStar(ctx, 60, 20, 4, 10, 5);
+                    break;
+                case 'major_general':
+                    drawStar(ctx, 20, 20, 4, 10, 5);
+                    drawStar(ctx, 40, 20, 4, 10, 5);
+                    break;
+                case 'brigadier_general':
+                    drawStar(ctx, 20, 20, 4, 10, 5);
+                    break;
+                case 'colonel':
+                    drawStar(ctx, 20, 20, 8, 10, 5);
+                    drawStar(ctx, 40, 20, 8, 10, 5);
+                    drawStar(ctx, 60, 20, 8, 10, 5);
+                    break;
+                case 'lieutenant_colonel':
+                    drawStar(ctx, 20, 20, 8, 10, 5);
+                    drawStar(ctx, 40, 20, 8, 10, 5);
+                    break;
+                case 'major':
+                    drawStar(ctx, 20, 20, 8, 10, 5);
+                    break;
+                case 'captain':
+                    drawStar(ctx, 20, 20, 6, 10, 5);
+                    drawStar(ctx, 40, 20, 6, 10, 5);
+                    drawStar(ctx, 60, 20, 6, 10, 5);
+                    break;
+                case 'lieutenant':
+                    drawStar(ctx, 20, 20, 6, 10, 5);
+                    drawStar(ctx, 40, 20, 6, 10, 5);
+                    break;
+                case 'second_lieutenant':
+                    drawStar(ctx, 20, 20, 6, 10, 5);
+                    break;
+                case 'sergeant_major':
+                    ctx.fillRect(10, 10, 25, 5);
+                    ctx.fillRect(10, 20, 25, 5);
+                    drawStar(ctx, 22.5, 35, 5, 5, 2.5);
+                    break;
+                case 'sergeant_first_class':
+                    ctx.fillRect(10, 10, 25, 5);
+                    drawStar(ctx, 22.5, 25, 5, 5, 2.5);
+                    break;
+                case 'sergeant':
+                    ctx.fillRect(10, 10, 25, 5);
+                    ctx.fillRect(10, 20, 25, 5);
+                    ctx.fillRect(10, 30, 25, 5);
+                    break;
+                case 'corporal':
+                    ctx.fillRect(10, 10, 25, 5);
+                    ctx.fillRect(10, 20, 25, 5);
+                    ctx.fillRect(10, 30, 25, 5);
+                    break;
+                case 'private':
+                    ctx.fillRect(10, 10, 25, 5);
+                    break;
+                default:
+                    ctx.fillText('N/A', 10, 20);
+            }
+        }
+
+        function generateTag() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'black';
+            ctx.font = 'bold 15px Arial';
+            const surname = document.getElementById('surname').value;
+            const bloodGroup = document.getElementById('bloodGroup').value;
+            const rank = document.getElementById('rank').value;
+            const corps = document.getElementById('corps').value;
+            // Draw elements based on user input
+            drawRank(ctx, rank);
+            ctx.fillText(surname, 100, 30); // Surname
+            ctx.fillText(bloodGroup, 100, 60); // Blood group
+            ctx.fillText(corps, 100, 90); // Corps
+            const link = document.getElementById('downloadLink');
+            link.href = canvas.toDataURL('image/jpeg', 1.0);
+            link.style.display = 'inline'; // Ensure the link is visible
+        }
+    </script>
+</body>
+</html>
