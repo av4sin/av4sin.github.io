@@ -45,6 +45,17 @@
             color: #6B8E23;
             cursor: pointer;
         }
+        #questionBox {
+            height: 300px; /* Fixed height for consistent spacing */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #questionImage {
+            width: 200px; /* Fixed width */
+            height: 200px; /* Fixed height */
+            object-fit: contain; /* Ensure the image fits within the box */
+        }
         @media (max-width: 600px) {
             .options {
                 grid-template-columns: repeat(2, 1fr); /* Two columns on mobile */
@@ -53,9 +64,12 @@
                 padding: 8px; /* Thicker padding for mobile */
                 font-size: 0.8em; /* Slightly larger font size for mobile */
             }
+            #questionBox {
+                height: 200px; /* Adjust height for smaller screens */
+            }
             #questionImage {
-                max-width: 100%;
-                height: auto;
+                width: 150px; /* Adjust width for smaller screens */
+                height: 150px; /* Adjust height for smaller screens */
             }
         }
     </style>
