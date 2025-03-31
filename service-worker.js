@@ -4,12 +4,12 @@ const urlsToCache = [
     './index.html',
     './manifest.json',
     './img/favicon.ico',
-    './img/icon-192.png',
-    './img/icon-512.png',
     './Points.js',
     './military_ranks.html',
     './military_groups.html',
-    './styles.css'
+    './styles.css',
+    './regist_serviceWorker.js',
+    './military_identification.html'
     // Add other assets to cache as needed
 ];
 
