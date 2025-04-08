@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Misión</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <button class="back-button" onclick="location.href='../index.html'">&larr; Volver</button>
+    <div class="container">
+        <h1>Simulador de Misión</h1>
+        <div id="storySelectionContainer">
+            <h2>Selecciona una historia:</h2>
+            <div id="storyButtons" class="options"></div>
+        </div>
+        <div id="missionContainer" style="display: none;">
+            <p id="missionText"></p>
+            <div id="decisionButtons" class="options"></div>
+        </div>
+        <p id="result"></p>
+        <button id="nextButton" onclick="loadNextMission()" style="display: none;">Siguiente</button>
+    </div>
+    <script>
+        const stories = [
+            {
+                name: "Operación Rescate",
+                missions: [
+                    {
+                        description: "Un grupo de rehenes está retenido en un edificio fuertemente custodiado. Recibes un mensaje por radio: 'El enemigo está patrullando la entrada principal. Procede con precaución.' ¿Cómo procedes?",
+                        decisions: [
+                            { text: "Infiltrarte sigilosamente por una ventana lateral", outcome: 10, next: 1 },
+                            { text: "Atacar frontalmente con todo el equipo", outcome: -10, next: 2 },
+                            { text: "Negociar con los captores usando un megáfono", outcome: 5, next: 3 }
+                        ],
+                        correct: 0
+                    },
+                    {
+                        description: "Has logrado infiltrarte, pero encuentras una insignia en el suelo. ¿A qué rango pertenece esta insignia?",
+                        interactive: {
+                            type: "identifyInsignia",
+                            image: "../img/teniente.png",
+                            options: ["Soldado", "Cabo", "Sargento", "Teniente"],
+                            correct: 3,
+                            successOutcome: 10,
+                            failureOutcome: -5,
+                            next: 4
+                        }
+                    },
+                    {
+                        description: "El ataque frontal ha fallado y has perdido a varios soldados. Recibes un mensaje por radio: 'El enemigo está reforzando sus defensas.' ¿Cómo procedes?",
+                        decisions: [
+                            { text: "Reagrupar y atacar de nuevo", outcome: -10, next: 5 },
+                            { text: "Solicitar refuerzos por radio", outcome: 5, next: 6 },
+                            { text: "Buscar una entrada alternativa", outcome: 10, next: 1 }
+                        ],
+                        correct: 2
+                    },
+                    {
+                        description: "Has llegado a una sala con un mapa del edificio. Selecciona el camino más seguro para llegar a los rehenes.",
+                        interactive: {
+                            type: "mapSelection",
+                            mapImage: "../img/building-map.png",
+                            paths: [
+                                { label: "Pasillo principal", outcome: -10, next: 5 },
+                                { label: "Conducto de ventilación", outcome: 10, next: 7 },
+                                { label: "Escaleras de emergencia", outcome: 5, next: 6 }
+                            ]
+                        }
+                    },
+                    {
+                        description: "Has llegado a la sala de los rehenes. Recibes un mensaje por radio: 'Cuidado, hay trampas explosivas en la puerta.' ¿Cómo los liberas?",
+                        decisions: [
+                            { text: "Desactivar las trampas con cuidado", outcome: 10, next: 8 },
+                            { text: "Forzar la puerta rápidamente", outcome: -10, next: 5 },
+                            { text: "Esperar refuerzos para desactivar las trampas", outcome: 5, next: 6 }
+                        ],
+                        correct: 0
+                    },
+                    {
+                        description: "¡Misión completada! Has rescatado a los rehenes con éxito.",
+                        decisions: [],
+                        correct: null
+                    }
+                ]
+            },
+            {
+                name: "Operación Sabotaje",
+                missions: [
+                    {
+                        description: "Tu objetivo es infiltrarte en una base enemiga y sabotear su suministro de energía. Recibes un mensaje por radio: 'El enemigo ha reforzado la entrada principal.' ¿Cómo procedes?",
+                        decisions: [
+                            { text: "Infiltrarte por el sistema de alcantarillado", outcome: 10, next: 1 },
+                            { text: "Disfrazarte como un soldado enemigo", outcome: 5, next: 2 },
+                            { text: "Atacar directamente la entrada principal", outcome: -10, next: 3 }
+                        ],
+                        correct: 0
+                    },
+                    {
+                        description: "Encuentras un mapa de la base enemiga. Selecciona el camino más corto hacia el generador principal.",
+                        interactive: {
+                            type: "mapSelection",
+                            mapImage: "../img/base-map.png",
+                            paths: [
+                                { label: "Pasillo principal", outcome: -10, next: 3 },
+                                { label: "Túnel subterráneo", outcome: 10, next: 4 },
+                                { label: "Zona de carga", outcome: 5, next: 4 }
+                            ]
+                        }
+                    },
+                    {
+                        description: "Has llegado al generador principal, pero está fuertemente custodiado. ¿Qué haces?",
+                        decisions: [
+                            { text: "Colocar explosivos silenciosamente", outcome: 10, next: 5 },
+                            { text: "Crear una distracción para alejar a los guardias", outcome: 5, next: 5 },
+                            { text: "Atacar a los guardias directamente", outcome: -10, next: 3 }
+                        ],
+                        correct: 0
+                    },
+                    {
+                        description: "Has logrado sabotear el generador, pero el enemigo está en alerta. Recibes un mensaje por radio: 'El enemigo está bloqueando las salidas.' ¿Cómo escapas?",
+                        decisions: [
+                            { text: "Usar el sistema de alcantarillado", outcome: 10, next: 6 },
+                            { text: "Robar un vehículo enemigo", outcome: 5, next: 6 },
+                            { text: "Correr hacia el bosque cercano", outcome: -5, next: 3 }
+                        ],
+                        correct: 0
+                    },
+                    {
+                        description: "¡Misión completada! Has saboteado con éxito el suministro de energía enemigo.",
+                        decisions: [],
+                        correct: null
+                    }
+                ]
+            },
+            {
+                name: "Operación Fénix",
+                missions: [
+                    {
+                        description: "Tu misión es infiltrarte en una base enemiga para recuperar documentos clasificados. Recibes un mensaje por radio: 'El enemigo ha reforzado las entradas principales. Procede con cautela.' ¿Cómo procedes?",
+                        decisions: [
+                            { text: "Infiltrarte por el sistema de alcantarillado", outcome: 10, next: 1 },
+                            { text: "Disfrazarte como un soldado enemigo", outcome: 5, next: 2 },
+                            { text: "Atacar directamente la entrada principal", outcome: -10, next: 3 }
+                        ],
+                        correct: 0
+                    },
+                    {
+                        description: "Encuentras una insignia en el suelo. ¿A qué rango pertenece esta insignia?",
+                        interactive: {
+                            type: "identifyInsignia",
+                            image: "../img/teniente.png",
+                            options: ["Soldado", "Cabo", "Sargento", "Teniente"],
+                            correct: 3,
+                            successOutcome: 10,
+                            failureOutcome: -5,
+                            next: 4
+                        }
+                    },
+                    {
+                        description: "Has llegado a una sala con un mapa de la base. Selecciona el camino más seguro para llegar a los documentos clasificados.",
+                        interactive: {
+                            type: "mapSelection",
+                            mapImage: "../img/base-map.png",
+                            paths: [
+                                { label: "Pasillo principal", outcome: -10, next: 5 },
+                                { label: "Conducto de ventilación", outcome: 10, next: 6 },
+                                { label: "Escaleras de emergencia", outcome: 5, next: 6 }
+                            ]
+                        }
+                    },
+                    {
+                        description: "Has llegado a la sala de los documentos, pero está protegida por un sistema de seguridad avanzado. Recibes un mensaje por radio: 'El sistema tiene un código de acceso de 4 dígitos.' ¿Qué haces?",
+                        decisions: [
+                            { text: "Intentar hackear el sistema", outcome: 10, next: 7 },
+                            { text: "Buscar el código en la sala", outcome: 5, next: 7 },
+                            { text: "Forzar la puerta", outcome: -10, next: 5 }
+                        ],
+                        correct: 0
+                    },
+                    {
+                        description: "Has recuperado los documentos, pero el enemigo está en alerta. Recibes un mensaje por radio: 'El enemigo está bloqueando las salidas.' ¿Cómo escapas?",
+                        decisions: [
+                            { text: "Usar el sistema de alcantarillado", outcome: 10, next: 8 },
+                            { text: "Robar un vehículo enemigo", outcome: 5, next: 8 },
+                            { text: "Correr hacia el bosque cercano", outcome: -5, next: 5 }
+                        ],
+                        correct: 0
+                    },
+                    {
+                        description: "¡Misión completada! Has recuperado los documentos clasificados con éxito.",
+                        decisions: [],
+                        correct: null
+                    }
+                ]
+            },
+            {
+                name: "Misión Diplomática Avanzada",
+                missions: [
+                    {
+                        description: "Debes negociar un tratado de paz con un líder rebelde en un territorio hostil. Recibes un mensaje por radio: 'El líder rebelde está dispuesto a reunirse, pero desconfía de nuestras intenciones.' ¿Cómo inicias la negociación?",
+                        decisions: [
+                            { text: "Ofrecer concesiones económicas", outcome: 10, next: 1 },
+                            { text: "Hablar sobre los beneficios de la paz", outcome: 5, next: 2 },
+                            { text: "Amenazar con represalias militares", outcome: -10, next: 3 }
+                        ],
+                        correct: 0
+                    },
+                    {
+                        description: "El líder rebelde está dispuesto a escuchar, pero exige pruebas de buena fe. ¿Qué haces?",
+                        decisions: [
+                            { text: "Proveer pruebas de buena fe", outcome: 10, next: 4 },
+                            { text: "Invitarlo a una reunión en terreno neutral", outcome: 5, next: 4 },
+                            { text: "Insistir en que confíe en ti", outcome: -5, next: 3 }
+                        ],
+                        correct: 0
+                    },
+                    {
+                        description: "Durante la reunión, el líder rebelde menciona un ataque inminente en su territorio. Recibes un mensaje por radio: 'Nuestros satélites confirman actividad enemiga en la zona.' ¿Qué haces?",
+                        decisions: [
+                            { text: "Ofrecer apoyo militar para defender su territorio", outcome: 10, next: 5 },
+                            { text: "Proponer un alto el fuego inmediato", outcome: 5, next: 5 },
+                            { text: "Ignorar la información y continuar negociando", outcome: -10, next: 3 }
+                        ],
+                        correct: 0
+                    },
+                    {
+                        description: "El líder rebelde ha aceptado firmar el tratado, pero exige garantías adicionales. ¿Qué ofreces?",
+                        decisions: [
+                            { text: "Un acuerdo de supervisión internacional", outcome: 10, next: 6 },
+                            { text: "Un intercambio de prisioneros", outcome: 5, next: 6 },
+                            { text: "Nada, insiste en tu posición", outcome: -10, next: 3 }
+                        ],
+                        correct: 0
+                    },
+                    {
+                        description: "¡Misión completada! Has negociado con éxito un tratado de paz y asegurado la estabilidad en la región.",
+                        decisions: [],
+                        correct: null
+                    }
+                ]
+            }
+        ];
+
+        let selectedStory = null;
+        let currentMissionIndex = 0;
+        let score = 0;
+
+        function loadStorySelection() {
+            const storyButtons = document.getElementById("storyButtons");
+            storyButtons.innerHTML = "";
+            stories.forEach((story, index) => {
+                const button = document.createElement("button");
+                button.textContent = story.name;
+                button.onclick = () => selectStory(index);
+                storyButtons.appendChild(button);
+            });
+        }
+
+        function selectStory(index) {
+            selectedStory = stories[index];
+            document.getElementById("storySelectionContainer").style.display = "none";
+            document.getElementById("missionContainer").style.display = "block";
+            loadMission();
+        }
+
+        function loadMission() {
+            const mission = selectedStory.missions[currentMissionIndex];
+            document.getElementById("missionText").textContent = mission.description;
+            const decisionButtons = document.getElementById("decisionButtons");
+            decisionButtons.innerHTML = "";
+
+            if (mission.interactive) {
+                handleInteractiveMission(mission.interactive);
+            } else {
+                mission.decisions.forEach((decision, index) => {
+                    const button = document.createElement("button");
+                    button.textContent = decision.text;
+                    button.onclick = () => makeDecision(index);
+                    decisionButtons.appendChild(button);
+                });
+            }
+
+            document.getElementById("result").textContent = "";
+            document.getElementById("nextButton").style.display = "none";
+        }
+
+        function handleInteractiveMission(interactive) {
+            const decisionButtons = document.getElementById("decisionButtons");
+            if (interactive.type === "identifyInsignia") {
+                const img = document.createElement("img");
+                img.src = interactive.image;
+                img.alt = "Insignia encontrada";
+                img.style.maxWidth = "100px";
+                decisionButtons.appendChild(img);
+
+                interactive.options.forEach((option, index) => {
+                    const button = document.createElement("button");
+                    button.textContent = option;
+                    button.onclick = () => {
+                        if (index === interactive.correct) {
+                            score += interactive.successOutcome;
+                            document.getElementById("result").textContent = "¡Correcto!";
+                            document.getElementById("result").style.color = "green";
+                        } else {
+                            score += interactive.failureOutcome;
+                            document.getElementById("result").textContent = "Incorrecto.";
+                            document.getElementById("result").style.color = "red";
+                        }
+                        currentMissionIndex = interactive.next;
+                        document.getElementById("nextButton").style.display = "block";
+                    };
+                    decisionButtons.appendChild(button);
+                });
+            } else if (interactive.type === "mapSelection") {
+                const img = document.createElement("img");
+                img.src = interactive.mapImage;
+                img.alt = "Mapa";
+                img.style.maxWidth = "300px";
+                decisionButtons.appendChild(img);
+
+                interactive.paths.forEach((path, index) => {
+                    const button = document.createElement("button");
+                    button.textContent = path.label;
+                    button.onclick = () => {
+                        score += path.outcome;
+                        currentMissionIndex = path.next;
+                        document.getElementById("result").textContent = path.outcome > 0 ? "¡Buena elección!" : "Decisión arriesgada.";
+                        document.getElementById("result").style.color = path.outcome > 0 ? "green" : "red";
+                        document.getElementById("nextButton").style.display = "block";
+                    };
+                    decisionButtons.appendChild(button);
+                });
+            }
+        }
+
+        function makeDecision(selectedIndex) {
+            const mission = selectedStory.missions[currentMissionIndex];
+            const result = document.getElementById("result");
+            const decision = mission.decisions[selectedIndex];
+            score += decision.outcome;
+            if (selectedIndex === mission.correct) {
+                result.textContent = "¡Decisión correcta! Has ganado puntos.";
+                result.style.color = "green";
+            } else {
+                result.textContent = "Decisión subóptima. Has perdido puntos.";
+                result.style.color = "red";
+            }
+            currentMissionIndex = decision.next !== null ? decision.next : currentMissionIndex;
+            document.getElementById("nextButton").style.display = "block";
+        }
+
+        function loadNextMission() {
+            if (currentMissionIndex < selectedStory.missions.length) {
+                loadMission();
+            } else {
+                document.getElementById("missionContainer").innerHTML = `<p>¡Has completado la historia "${selectedStory.name}"! Puntuación final: ${score}</p>`;
+                document.getElementById("nextButton").style.display = "none";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadStorySelection);
+    </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Estrategia</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <button class="back-button" onclick="location.href='../index.html'">&larr; Volver</button>
+    <div class="container">
+        <h1>Simulador de Estrategia</h1>
+        <p>Organiza tus tropas y recursos para completar la misión.</p>
+        <div id="missionContainer">
+            <p id="missionText"></p>
+            <div id="resourceAllocation">
+                <label for="troops">Tropas:</label>
+                <input type="number" id="troops" min="0" value="0">
+                <label for="supplies">Suministros:</label>
+                <input type="number" id="supplies" min="0" value="0">
+            </div>
+            <button onclick="submitMission()">Enviar Misión</button>
+        </div>
+        <p id="result"></p>
+    </div>
+    <script>
+        const missions = [
+            { description: "Defender una base militar", requiredTroops: 50, requiredSupplies: 30 },
+            { description: "Rescatar rehenes", requiredTroops: 30, requiredSupplies: 20 },
+            { description: "Atacar una posición enemiga", requiredTroops: 70, requiredSupplies: 50 },
+        ];
+
+        let currentMissionIndex = 0;
+
+        function loadMission() {
+            const mission = missions[currentMissionIndex];
+            document.getElementById("missionText").textContent = mission.description;
+            document.getElementById("troops").value = 0;
+            document.getElementById("supplies").value = 0;
+            document.getElementById("result").textContent = "";
+        }
+
+        function submitMission() {
+            const mission = missions[currentMissionIndex];
+            const troops = parseInt(document.getElementById("troops").value);
+            const supplies = parseInt(document.getElementById("supplies").value);
+            const result = document.getElementById("result");
+
+            if (troops >= mission.requiredTroops && supplies >= mission.requiredSupplies) {
+                result.textContent = "¡Misión completada con éxito!";
+                result.style.color = "green";
+                currentMissionIndex = (currentMissionIndex + 1) % missions.length;
+                setTimeout(loadMission, 2000);
+            } else {
+                result.textContent = "Misión fallida. Asegúrate de asignar suficientes recursos.";
+                result.style.color = "red";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadMission);
+    </script>
+</body>
+</html>

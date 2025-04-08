@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrenamiento Básico</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .minigame-container {
+            margin-top: 20px;
+        }
+        .obstacle {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background-color: #4CAF50;
+            margin: 5px;
+            border-radius: 5px;
+        }
+        .target {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="location.href='../index.html'">&larr; Volver</button>
+    <div class="container">
+        <h1>Entrenamiento Básico</h1>
+        <div id="minigameContainer" class="minigame-container">
+            <p id="instruction">Haz clic en los objetivos rojos para ganar puntos.</p>
+            <div id="gameArea"></div>
+        </div>
+        <p>Puntuación: <span id="score">0</span></p>
+        <button id="startButton" onclick="startGame()">Iniciar Entrenamiento</button>
+    </div>
+    <script>
+        let score = 0;
+        let gameInterval;
+
+        function startGame() {
+            score = 0;
+            document.getElementById("score").textContent = score;
+            document.getElementById("gameArea").innerHTML = "";
+            document.getElementById("instruction").textContent = "Haz clic en los objetivos rojos antes de que desaparezcan.";
+            document.getElementById("startButton").style.display = "none";
+
+            gameInterval = setInterval(() => {
+                const gameArea = document.getElementById("gameArea");
+                gameArea.innerHTML = "";
+
+                for (let i = 0; i < 5; i++) {
+                    const isTarget = Math.random() > 0.5;
+                    const element = document.createElement("div");
+                    element.className = isTarget ? "target" : "obstacle";
+                    if (isTarget) {
+                        element.onclick = () => {
+                            score++;
+                            document.getElementById("score").textContent = score;
+                            element.style.backgroundColor = "gray";
+                            element.onclick = null;
+                        };
+                    }
+                    gameArea.appendChild(element);
+                }
+            }, 1000);
+
+            setTimeout(() => {
+                clearInterval(gameInterval);
+                document.getElementById("instruction").textContent = "Entrenamiento finalizado. Puntuación final: " + score;
+                document.getElementById("startButton").style.display = "block";
+            }, 15000); // 15 seconds of gameplay
+        }
+    </script>
+</body>
+</html>

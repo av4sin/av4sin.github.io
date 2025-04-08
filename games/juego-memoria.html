@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Memoria</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .memory-card {
+            width: 100px;
+            height: 100px;
+            background-color: #4CAF50;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: white;
+            cursor: pointer;
+        }
+        .memory-card.flipped {
+            background-color: #FFF;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="location.href='../index.html'">&larr; Volver</button>
+    <div class="container">
+        <h1>Juego de Memoria</h1>
+        <div id="memoryGrid" class="memory-grid"></div>
+        <p id="result"></p>
+        <h2>Tabla de Líderes</h2>
+        <ul id="leaderboardList"></ul>
+    </div>
+    <script>
+        const items = [
+            "⚔️", "🛡️", "🎖️", "🚁", 
+            "⚔️", "🛡️", "🎖️", "🚁"
+        ];
+
+        let shuffledItems = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let score = 0;
+        let timer = 60; // 60 seconds timer
+        let timerInterval;
+        let leaderboard = JSON.parse(localStorage.getItem("memoryLeaderboard")) || [];
+
+        function shuffleItems() {
+            shuffledItems = [...items].sort(() => Math.random() - 0.5);
+        }
+
+        function createMemoryGrid() {
+            const memoryGrid = document.getElementById("memoryGrid");
+            memoryGrid.innerHTML = "";
+            shuffledItems.forEach((item, index) => {
+                const card = document.createElement("div");
+                card.classList.add("memory-card");
+                card.dataset.index = index;
+                card.onclick = () => flipCard(card, item);
+                memoryGrid.appendChild(card);
+            });
+        }
+
+        function flipCard(card, item) {
+            if (card.classList.contains("flipped") || flippedCards.length === 2) return;
+
+            card.textContent = item;
+            card.classList.add("flipped");
+            flippedCards.push({ card, item });
+
+            if (flippedCards.length === 2) {
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            const [first, second] = flippedCards;
+            if (first.item === second.item) {
+                matchedPairs++;
+                score += 10; // Add points for a match
+                flippedCards = [];
+                if (matchedPairs === items.length / 2) {
+                    endGame("¡Has completado el juego!");
+                }
+            } else {
+                setTimeout(() => {
+                    first.card.textContent = "";
+                    first.card.classList.remove("flipped");
+                    second.card.textContent = "";
+                    second.card.classList.remove("flipped");
+                    flippedCards = [];
+                }, 1000);
+            }
+            document.getElementById("result").textContent = `Puntuación: ${score}`;
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timer--;
+                document.getElementById("result").textContent = `Tiempo restante: ${timer} segundos | Puntuación: ${score}`;
+                if (timer <= 0) {
+                    endGame("Se acabó el tiempo. Intenta nuevamente.");
+                }
+            }, 1000);
+        }
+
+        function endGame(message) {
+            clearInterval(timerInterval);
+            document.getElementById("memoryGrid").innerHTML = `<p>${message}</p>`;
+            saveToLeaderboard();
+        }
+
+        function saveToLeaderboard() {
+            const playerName = prompt("Introduce tu nombre para la tabla de líderes:");
+            if (playerName) {
+                leaderboard.push({ name: playerName, score });
+                leaderboard.sort((a, b) => b.score - a.score);
+                leaderboard = leaderboard.slice(0, 5); // Keep top 5 scores
+                localStorage.setItem("memoryLeaderboard", JSON.stringify(leaderboard));
+                updateLeaderboard();
+            }
+        }
+
+        function updateLeaderboard() {
+            const leaderboardList = document.getElementById("leaderboardList");
+            leaderboardList.innerHTML = "";
+            leaderboard.forEach(entry => {
+                const li = document.createElement("li");
+                li.textContent = `${entry.name}: ${entry.score} puntos`;
+                leaderboardList.appendChild(li);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            shuffleItems();
+            createMemoryGrid();
+            startTimer();
+            updateLeaderboard();
+        });
+    </script>
+</body>
+</html>

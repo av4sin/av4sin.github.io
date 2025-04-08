@@ -2,6 +2,48 @@
     "name": "Juego de Rangos Militares",
     "short_name": "Rangos Militares",
     "start_url": "/index.html",
+    "games": [
+        {
+            "name": "Trivia Militar",
+            "url": "/games/trivia-militar.html"
+        },
+        {
+            "name": "Simulador de Estrategia",
+            "url": "/games/simulador-estrategia.html"
+        },
+        {
+            "name": "Identificación de Equipos",
+            "url": "/games/identificacion-equipos.html"
+        },
+        {
+            "name": "Orden Jerárquico",
+            "url": "/games/orden-jerarquico.html"
+        },
+        {
+            "name": "Batalla de Rangos",
+            "url": "/games/batalla-rangos.html"
+        },
+        {
+            "name": "Simulador de Misión",
+            "url": "/games/simulador-mision.html"
+        },
+        {
+            "name": "Juego de Memoria",
+            "url": "/games/juego-memoria.html"
+        },
+        {
+            "name": "Reconocimiento de Insignias",
+            "url": "/games/reconocimiento-insignias.html"
+        },
+        {
+            "name": "Entrenamiento Básico",
+            "url": "/games/entrenamiento-basico.html"
+        },
+        {
+            "name": "Simulador de Ascenso",
+            "url": "/games/simulador-ascenso.html"
+        }
+    ],
     "display": "fullScreen",
     "background_color": "#F5F5DC",
     "theme_color": "#4CAF50",

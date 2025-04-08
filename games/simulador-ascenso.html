@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Ascenso</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <button class="back-button" onclick="location.href='../index.html'">&larr; Volver</button>
+    <div class="container">
+        <h1>Simulador de Ascenso</h1>
+        <p>Completa las tareas para cumplir los requisitos de ascenso.</p>
+        <div id="taskContainer">
+            <p id="taskText"></p>
+            <button id="completeTaskButton" onclick="completeTask()">Completar Tarea</button>
+        </div>
+        <div id="progressContainer">
+            <p>Puntos acumulados: <span id="points">0</span></p>
+            <p>Rango Actual: <span id="currentRank">Soldado</span></p>
+            <p>Puntos para el próximo rango: <span id="pointsToNextRank">30</span></p>
+        </div>
+        <p id="result"></p>
+    </div>
+    <script>
+        const ranks = [
+            { name: "Soldado", points: 0 },
+            { name: "Cabo", points: 30 },
+            { name: "Sargento", points: 60 },
+            { name: "Teniente", points: 100 },
+            { name: "Capitán", points: 150 },
+            { name: "Comandante", points: 210 },
+            { name: "Coronel", points: 280 },
+            { name: "General", points: 360 }
+        ];
+
+        const tasks = [
+            "Completa un ejercicio de puntería.",
+            "Organiza un pelotón para una misión.",
+            "Realiza un reconocimiento del terreno.",
+            "Supera un curso de obstáculos.",
+            "Planifica una estrategia defensiva."
+        ];
+
+        let currentPoints = 0;
+        let currentRankIndex = 0;
+
+        function loadTask() {
+            const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
+            document.getElementById("taskText").textContent = randomTask;
+            document.getElementById("result").textContent = "";
+        }
+
+        function completeTask() {
+            currentPoints += 10;
+            updateRank();
+            document.getElementById("points").textContent = currentPoints;
+            document.getElementById("result").textContent = "¡Tarea completada! Has ganado 10 puntos.";
+            document.getElementById("result").style.color = "green";
+            loadTask();
+        }
+
+        function updateRank() {
+            while (
+                currentRankIndex < ranks.length - 1 &&
+                currentPoints >= ranks[currentRankIndex + 1].points
+            ) {
+                currentRankIndex++;
+            }
+            const nextRankPoints =
+                currentRankIndex < ranks.length - 1
+                    ? ranks[currentRankIndex + 1].points - currentPoints
+                    : 0;
+            document.getElementById("currentRank").textContent = ranks[currentRankIndex].name;
+            document.getElementById("pointsToNextRank").textContent = nextRankPoints;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadTask();
+            updateRank();
+        });
+    </script>
+</body>
+</html>

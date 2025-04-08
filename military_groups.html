@@ -173,8 +173,21 @@
             loadPair();
         }
 
+        function saveRecentGame(gameName) {
+            const recentGames = JSON.parse(localStorage.getItem("recentGames")) || [];
+            const existingIndex = recentGames.findIndex(game => game.name === gameName);
+            if (existingIndex !== -1) {
+                recentGames.splice(existingIndex, 1);
+            }
+            recentGames.unshift({ name: gameName });
+            localStorage.setItem("recentGames", JSON.stringify(recentGames));
+        }
+
         // Load high score and start game on page load
-        document.addEventListener("DOMContentLoaded", startGame);
+        document.addEventListener("DOMContentLoaded", () => {
+            startGame();
+            saveRecentGame("Juego de Grupos Militares");
+        });
     </script>
 </body>
 </html>

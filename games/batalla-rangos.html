@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batalla de Rangos</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <button class="back-button" onclick="location.href='../index.html'">&larr; Volver</button>
+    <div class="container">
+        <h1>Batalla de Rangos</h1>
+        <div id="questionContainer">
+            <p id="questionText"></p>
+            <div id="answerButtons" class="options"></div>
+        </div>
+        <p id="result"></p>
+        <div id="scoreContainer">
+            <p>Puntuación: <span id="score">0</span></p>
+            <p>Rango Actual: <span id="currentRank">Soldado</span></p>
+        </div>
+        <button id="nextButton" onclick="loadNextQuestion()" style="display: none;">Siguiente Pregunta</button>
+    </div>
+    <script>
+        const questions = [
+            { question: "¿Qué país lideró la invasión de Normandía en 1944?", answers: ["Estados Unidos", "Reino Unido", "Francia", "Alemania"], correct: 0 },
+            { question: "¿Cuál es el arma estándar de un soldado de infantería?", answers: ["Rifle", "Pistola", "Granada", "Cuchillo"], correct: 0 },
+            { question: "¿Qué rango sigue después de Teniente?", answers: ["Capitán", "Sargento", "Coronel", "General"], correct: 0 },
+        ];
+
+        const ranks = ["Soldado", "Cabo", "Sargento", "Teniente", "Capitán", "Comandante", "Coronel", "General"];
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            document.getElementById("questionText").textContent = question.question;
+            const answerButtons = document.getElementById("answerButtons");
+            answerButtons.innerHTML = "";
+            question.answers.forEach((answer, index) => {
+                const button = document.createElement("button");
+                button.textContent = answer;
+                button.onclick = () => checkAnswer(index);
+                answerButtons.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedIndex) {
+            const question = questions[currentQuestionIndex];
+            const result = document.getElementById("result");
+            if (selectedIndex === question.correct) {
+                result.textContent = "¡Correcto!";
+                result.style.color = "green";
+                score += 10;
+                updateRank();
+            } else {
+                result.textContent = "Incorrecto. La respuesta correcta es: " + question.answers[question.correct];
+                result.style.color = "red";
+            }
+            document.getElementById("nextButton").style.display = "block";
+        }
+
+        function updateRank() {
+            const rankIndex = Math.min(Math.floor(score / 20), ranks.length - 1);
+            document.getElementById("currentRank").textContent = ranks[rankIndex];
+            document.getElementById("score").textContent = score;
+        }
+
+        function loadNextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+                document.getElementById("result").textContent = "";
+                document.getElementById("nextButton").style.display = "none";
+            } else {
+                document.getElementById("questionContainer").innerHTML = "<p>¡Has completado la batalla de rangos!</p>";
+                document.getElementById("nextButton").style.display = "none";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadQuestion);
+    </script>
+</body>
+</html>

@@ -258,5 +258,21 @@
         // Load high score and rank on page load
         document.addEventListener("DOMContentLoaded", loadCumulativePoints);
     </script>
+    <script>
+        function saveRecentGame(gameName) {
+            const recentGames = JSON.parse(localStorage.getItem("recentGames")) || [];
+            const existingIndex = recentGames.findIndex(game => game.name === gameName);
+            if (existingIndex !== -1) {
+                recentGames.splice(existingIndex, 1);
+            }
+            recentGames.unshift({ name: gameName });
+            localStorage.setItem("recentGames", JSON.stringify(recentGames));
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            saveRecentGame("Juego de Rangos Militares");
+        });
+    </script>
 </body>
 </html>
+``` 

@@ -1,165 +1,241 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     text-align: center;
-    background-color: #F5F5DC; /* Beige background */
-    color: #4B5320; /* Dark olive green text */
+    background-image: url('img/camouflage-pattern.jpg'); /* Updated to camouflage pattern */
+    background-size: cover;
+    background-attachment: fixed;
+    color: #F5F5F5; /* Light text for contrast */
     margin: 0;
     padding: 0;
+    animation: fadeIn 1s ease-in-out;
 }
+
 .container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 50px auto;
-    background: #D2B48C; /* Tan background */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    background: rgba(34, 34, 34, 0.85); /* Dark gray with transparency */
+    padding: 30px;
+    border-radius: 15px;
+    border: 3px solid #A67B5B; /* Coyote brown border */
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 1s ease-in-out;
 }
+
 .card {
     display: block;
     width: 80%;
     padding: 20px;
     margin: 10px auto;
     background-color: #FFF;
-    border: 2px solid #4B5320;
+    border: 2px solid #6B8E23; /* Olive drab for military theme */
     border-radius: 10px;
     cursor: pointer;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 .card.selected {
-    background-color: #8FBC8F; /* Dark sea green */
+    background-color: #A67B5B; /* Coyote brown for selected cards */
 }
+
 .card.incorrect {
     background-color: #CD5C5C; /* Indian red */
 }
+
+h1, h2 {
+    font-family: 'Oswald', sans-serif;
+    color: #A67B5B; /* Coyote brown */
+    text-shadow: 2px 2px 5px #000;
+}
+
 button {
-    padding: 10px;
+    padding: 12px 20px;
     border: none;
     color: white;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 8px;
     font-weight: bold;
-    background-color: #6B8E23; /* Olive drab button */
+    background-color: #6B8E23; /* Olive drab for buttons */
+    transition: transform 0.2s, background-color 0.2s;
 }
+
 button:hover {
-    background-color: #556B2F; /* Olive drab hover */
+    background-color: #556B2F; /* Darker olive drab for hover effect */
+    transform: scale(1.05);
 }
+
 button.correct {
-    background-color: #8FBC8F; /* Dark sea green */
+    background-color: #A67B5B; /* Coyote brown for correct answers */
 }
+
 button.incorrect {
-    background-color: #CD5C5C; /* Indian red */
+    background-color: #CD5C5C; /* Indian red for incorrect answers */
 }
+
+.options button {
+    margin: 10px;
+    font-size: 1em;
+}
+
 .score {
     font-size: 1.2em;
     font-weight: bold;
 }
+
 .high-score {
-    color: #FFD700; /* Gold color for high score */
+    color: #A67B5B; /* Coyote brown for high score */
 }
+
 #rankDisplay {
     font-size: 1.4em;
     margin-top: 10px;
     display: inline-flex;
     align-items: center;
 }
+
 #rankImage {
     max-width: 30px;
     margin-left: 10px;
 }
+
 #gameContainer {
     display: none;
 }
+
 #mainContainer {
     display: block;
 }
+
 #currentRankImage {
     max-width: 40px;
     margin-top: 10px;
     display: inline-block;
     vertical-align: middle; /* Vertical alignment */
 }
+
 #questionImage {
     max-width: 300px; /* Large question image */
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
 #rankBox {
     display: inline-block;
     vertical-align: top;
     margin-top: 10px;
 }
+
 #currentRankText {
     display: inline-block;
     vertical-align: middle; /* Vertical alignment */
 }
+
 .score-container {
-    background-color: #FFF8DC; /* Cornsilk background */
-    border: 2px solid #4B5320; /* Dark olive green border */
+    background-color: rgba(255, 255, 255, 0.1); /* Transparent white */
+    border: 3px solid #A67B5B; /* Coyote brown border */
     border-radius: 10px;
     padding: 20px;
     margin: 20px 0;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
     text-align: left;
 }
+
 .score-container h2 {
     margin-top: 0;
-    color: #4B5320; /* Dark olive green */
+    color: #A67B5B; /* Coyote brown */
 }
+
 .score-container p {
     margin: 5px 0;
 }
+
 .score-details {
     display: flex;
     justify-content: space-around;
     align-items: center;
     flex-wrap: wrap;
 }
+
 .score-item {
     display: flex;
     align-items: center;
     margin: 10px;
 }
+
 .score-icon {
     width: 24px;
     height: 24px;
     margin-right: 10px;
 }
+
 .rank-display {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 10px;
 }
+
+.rank-display img {
+    max-width: 50px;
+    margin-left: 10px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 @media (max-width: 600px) {
     .container {
-        padding: 10px;
+        padding: 15px;
         margin: 20px auto;
     }
+
     button {
-        padding: 8px;
+        padding: 10px;
         font-size: 0.9em;
     }
+
+    h1, h2 {
+        font-size: 1.5em;
+    }
+
     .score {
         font-size: 1em;
     }
+
     #rankDisplay {
         font-size: 1.2em;
     }
+
     #currentRankImage {
         max-width: 30px;
     }
+
     #questionImage {
         max-width: 100%;
     }
+
     .score-container {
         padding: 10px;
     }
+
     .options {
         grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Adjust grid for smaller screens */
         gap: 5px; /* Adjust gap for smaller screens */
     }
+
     .options button {
         padding: 8px; /* Adjust padding for smaller screens */
         font-size: 0.8em; /* Adjust font size for smaller screens */
+    }
+
+    .rank-display img {
+        max-width: 40px;
     }
 }
