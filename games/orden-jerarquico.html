@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orden Jerárquico</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <button class="back-button" onclick="location.href='../index.html'">&larr; Volver</button>
+    <div class="container">
+        <h1>Orden Jerárquico</h1>
+        <p>Organiza los rangos militares en el orden correcto.</p>
+        <div id="rankContainer" class="options"></div>
+        <button id="submitButton" onclick="checkOrder()">Verificar Orden</button>
+        <p id="result"></p>
+    </div>
+    <script>
+        const ranks = [
+            "Soldado",
+            "Cabo",
+            "Sargento",
+            "Teniente",
+            "Capitán",
+            "Comandante",
+            "Coronel",
+            "General"
+        ];
+
+        let shuffledRanks = [];
+
+        function shuffleRanks() {
+            shuffledRanks = [...ranks].sort(() => Math.random() - 0.5);
+            const rankContainer = document.getElementById("rankContainer");
+            rankContainer.innerHTML = "";
+            shuffledRanks.forEach(rank => {
+                const button = document.createElement("button");
+                button.textContent = rank;
+                button.draggable = true;
+                button.ondragstart = dragStart;
+                button.ondragover = dragOver;
+                button.ondrop = drop;
+                rankContainer.appendChild(button);
+            });
+        }
+
+        let draggedElement = null;
+
+        function dragStart(event) {
+            draggedElement = event.target;
+        }
+
+        function dragOver(event) {
+            event.preventDefault();
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const target = event.target;
+            const parent = target.parentNode;
+            parent.insertBefore(draggedElement, target.nextSibling);
+        }
+
+        function checkOrder() {
+            const rankContainer = document.getElementById("rankContainer");
+            const buttons = rankContainer.querySelectorAll("button");
+            const currentOrder = Array.from(buttons).map(button => button.textContent);
+            const result = document.getElementById("result");
+
+            if (JSON.stringify(currentOrder) === JSON.stringify(ranks)) {
+                result.textContent = "¡Correcto! Has organizado los rangos en el orden correcto.";
+                result.style.color = "green";
+            } else {
+                result.textContent = "Incorrecto. Intenta nuevamente.";
+                result.style.color = "red";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", shuffleRanks);
+    </script>
+</body>
+</html>

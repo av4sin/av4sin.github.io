@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Militar</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body {
+            background-image: url('../img/military-background.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            color: #fff;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            font-family: 'Arial Black', sans-serif;
+            color: #FFD700; /* Gold */
+            text-shadow: 2px 2px 5px #000;
+        }
+        .options button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        .options button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+        .options button.correct {
+            background-color: #8FBC8F; /* Dark Sea Green */
+        }
+        .options button.incorrect {
+            background-color: #CD5C5C; /* Indian Red */
+        }
+        #result {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        #scoreContainer {
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+        #nextButton {
+            background-color: #FFD700;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            display: none;
+        }
+        #nextButton:hover {
+            background-color: #FFC107;
+        }
+        #leaderboard {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+            color: #FFD700;
+        }
+        #leaderboard h2 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+        #leaderboard ul {
+            list-style: none;
+            padding: 0;
+        }
+        #leaderboard li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="location.href='../index.html'">&larr; Volver</button>
+    <div class="container">
+        <h1>Trivia Militar</h1>
+        <div id="questionContainer">
+            <p id="questionText"></p>
+            <div id="answerButtons" class="options"></div>
+        </div>
+        <div id="scoreContainer">
+            <p>Puntuación: <span id="score">0</span></p>
+            <p>Rango Actual: <span id="currentRank">Soldado</span></p>
+        </div>
+        <p id="result"></p>
+        <button id="nextButton" onclick="loadNextQuestion()">Siguiente Pregunta</button>
+    </div>
+    <div id="leaderboard">
+        <h2>Tabla de Líderes</h2>
+        <ul id="leaderboardList"></ul>
+    </div>
+    <script>
+        const questions = [
+            { question: "¿En qué año comenzó la Segunda Guerra Mundial?", answers: ["1939", "1941", "1935", "1945"], correct: 0 },
+            { question: "¿Cuál es el rango más alto en el ejército?", answers: ["General", "Coronel", "Teniente", "Sargento"], correct: 0 },
+            { question: "¿Qué país utilizó por primera vez tanques en la guerra?", answers: ["Reino Unido", "Alemania", "Francia", "Estados Unidos"], correct: 0 },
+            // Add more questions dynamically as difficulty increases
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let streak = 0;
+        let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            document.getElementById("questionText").textContent = question.question;
+            const answerButtons = document.getElementById("answerButtons");
+            answerButtons.innerHTML = "";
+            question.answers.forEach((answer, index) => {
+                const button = document.createElement("button");
+                button.textContent = answer;
+                button.onclick = () => checkAnswer(index, button);
+                answerButtons.appendChild(button);
+            });
+        }
+
+        function updateScoreAndRank() {
+            score += 10 + streak * 5; // Add streak bonus
+            streak++;
+            const rankIndex = Math.min(Math.floor(score / 30), ranks.length - 1);
+            document.getElementById("score").textContent = score;
+            document.getElementById("currentRank").textContent = ranks[rankIndex];
+        }
+
+        function checkAnswer(selectedIndex, button) {
+            const question = questions[currentQuestionIndex];
+            const result = document.getElementById("result");
+            const buttons = document.querySelectorAll(".options button");
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selectedIndex === question.correct) {
+                result.textContent = "¡Correcto!";
+                result.style.color = "green";
+                button.classList.add("correct");
+                updateScoreAndRank();
+            } else {
+                result.textContent = "Incorrecto. La respuesta correcta es: " + question.answers[question.correct];
+                result.style.color = "red";
+                button.classList.add("incorrect");
+                buttons[question.correct].classList.add("correct");
+                streak = 0; // Reset streak on incorrect answer
+            }
+            document.getElementById("nextButton").style.display = "block";
+        }
+
+        function loadNextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+                document.getElementById("result").textContent = "";
+                document.getElementById("nextButton").style.display = "none";
+            } else {
+                saveToLeaderboard();
+                document.getElementById("questionContainer").innerHTML = "<p>¡Has completado la trivia!</p>";
+                document.getElementById("nextButton").style.display = "none";
+            }
+        }
+
+        function saveToLeaderboard() {
+            const playerName = prompt("Introduce tu nombre para la tabla de líderes:");
+            if (playerName) {
+                leaderboard.push({ name: playerName, score });
+                leaderboard.sort((a, b) => b.score - a.score);
+                leaderboard = leaderboard.slice(0, 5); // Keep top 5 scores
+                localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+                updateLeaderboard();
+            }
+        }
+
+        function updateLeaderboard() {
+            const leaderboardList = document.getElementById("leaderboardList");
+            leaderboardList.innerHTML = "";
+            leaderboard.forEach(entry => {
+                const li = document.createElement("li");
+                li.textContent = `${entry.name}: ${entry.score} puntos`;
+                leaderboardList.appendChild(li);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadQuestion();
+            updateLeaderboard();
+        });
+    </script>
+</body>
+</html>

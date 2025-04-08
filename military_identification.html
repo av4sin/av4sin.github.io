@@ -182,6 +182,20 @@
             link.href = canvas.toDataURL('image/jpeg', 1.0);
             link.style.display = 'inline'; // Ensure the link is visible
         }
+
+        function saveRecentGame(gameName) {
+            const recentGames = JSON.parse(localStorage.getItem("recentGames")) || [];
+            const existingIndex = recentGames.findIndex(game => game.name === gameName);
+            if (existingIndex !== -1) {
+                recentGames.splice(existingIndex, 1);
+            }
+            recentGames.unshift({ name: gameName });
+            localStorage.setItem("recentGames", JSON.stringify(recentGames));
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            saveRecentGame("Creador de Galletas Militares Personalizadas");
+        });
     </script>
 </body>
 </html>

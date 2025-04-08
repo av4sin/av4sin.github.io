@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identificación de Equipos</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <button class="back-button" onclick="location.href='../index.html'">&larr; Volver</button>
+    <div class="container">
+        <h1>Identificación de Equipos</h1>
+        <div id="equipmentContainer">
+            <img id="equipmentImage" src="" alt="Equipo militar" style="max-width: 100%; height: auto;">
+            <div id="answerButtons" class="options"></div>
+        </div>
+        <p id="result"></p>
+        <button id="nextButton" onclick="loadNextEquipment()" style="display: none;">Siguiente</button>
+    </div>
+    <script>
+        const equipmentData = [
+            { image: "../img/tank.png", options: ["Tanque", "Avión", "Submarino", "Helicóptero"], correct: 0 },
+            { image: "../img/jet.png", options: ["Tanque", "Avión", "Submarino", "Helicóptero"], correct: 1 },
+            { image: "../img/submarine.png", options: ["Tanque", "Avión", "Submarino", "Helicóptero"], correct: 2 },
+        ];
+
+        let currentEquipmentIndex = 0;
+
+        function loadEquipment() {
+            const equipment = equipmentData[currentEquipmentIndex];
+            document.getElementById("equipmentImage").src = equipment.image;
+            const answerButtons = document.getElementById("answerButtons");
+            answerButtons.innerHTML = "";
+            equipment.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => checkAnswer(index);
+                answerButtons.appendChild(button);
+            });
+            document.getElementById("result").textContent = "";
+            document.getElementById("nextButton").style.display = "none";
+        }
+
+        function checkAnswer(selectedIndex) {
+            const equipment = equipmentData[currentEquipmentIndex];
+            const result = document.getElementById("result");
+            if (selectedIndex === equipment.correct) {
+                result.textContent = "¡Correcto!";
+                result.style.color = "green";
+            } else {
+                result.textContent = "Incorrecto. La respuesta correcta es: " + equipment.options[equipment.correct];
+                result.style.color = "red";
+            }
+            document.getElementById("nextButton").style.display = "block";
+        }
+
+        function loadNextEquipment() {
+            currentEquipmentIndex++;
+            if (currentEquipmentIndex < equipmentData.length) {
+                loadEquipment();
+            } else {
+                document.getElementById("equipmentContainer").innerHTML = "<p>¡Has completado el juego!</p>";
+                document.getElementById("nextButton").style.display = "none";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadEquipment);
+    </script>
+</body>
+</html>

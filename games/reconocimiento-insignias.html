@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reconocimiento de Insignias</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <button class="back-button" onclick="location.href='../index.html'">&larr; Volver</button>
+    <div class="container">
+        <h1>Reconocimiento de Insignias</h1>
+        <div id="insigniaContainer">
+            <img id="insigniaImage" src="" alt="Insignia militar" style="max-width: 100%; height: auto;">
+            <div id="answerButtons" class="options"></div>
+        </div>
+        <p id="timer">Tiempo restante: <span id="timeLeft">30</span> segundos</p>
+        <p id="result"></p>
+    </div>
+    <script>
+        const insignias = [
+            { image: "../img/soldado.png", options: ["Soldado", "Cabo", "Sargento", "Teniente"], correct: 0 },
+            { image: "../img/cabo.png", options: ["Soldado", "Cabo", "Sargento", "Teniente"], correct: 1 },
+            { image: "../img/sargento.png", options: ["Soldado", "Cabo", "Sargento", "Teniente"], correct: 2 },
+        ];
+
+        let currentInsigniaIndex = 0;
+        let timeLeft = 30;
+        let timerInterval;
+
+        function loadInsignia() {
+            const insignia = insignias[currentInsigniaIndex];
+            document.getElementById("insigniaImage").src = insignia.image;
+            const answerButtons = document.getElementById("answerButtons");
+            answerButtons.innerHTML = "";
+            insignia.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => checkAnswer(index);
+                answerButtons.appendChild(button);
+            });
+            document.getElementById("result").textContent = "";
+        }
+
+        function checkAnswer(selectedIndex) {
+            const insignia = insignias[currentInsigniaIndex];
+            const result = document.getElementById("result");
+            if (selectedIndex === insignia.correct) {
+                result.textContent = "¡Correcto!";
+                result.style.color = "green";
+                currentInsigniaIndex++;
+                if (currentInsigniaIndex < insignias.length) {
+                    setTimeout(loadInsignia, 1000);
+                } else {
+                    endGame("¡Has identificado todas las insignias correctamente!");
+                }
+            } else {
+                result.textContent = "Incorrecto. Intenta nuevamente.";
+                result.style.color = "red";
+            }
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById("timeLeft").textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    endGame("Se acabó el tiempo. Intenta nuevamente.");
+                }
+            }, 1000);
+        }
+
+        function endGame(message) {
+            clearInterval(timerInterval);
+            document.getElementById("insigniaContainer").innerHTML = `<p>${message}</p>`;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadInsignia();
+            startTimer();
+        });
+    </script>
+</body>
+</html>
