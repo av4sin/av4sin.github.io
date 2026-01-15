@@ -1,9 +1,10 @@
 ---
 layout: post
-title: "Domando la tapa del portátil en Fedora: El arte de no rendirse cuando la tapa no suspende"
+title: "Domando la tapa del portátil en Fedora: El arte de no rendirse cuando al cerrarla no se suspende"
 date: 2026-01-15
 categories: [tecnico, linux]
 tags: [fedora, zenbook, tlp, powerdevil, troubleshooting]
+featured: true
 ---
 
 ## De la teoría a la práctica (o por qué mi portátil no quería dormir)
