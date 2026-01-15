@@ -40,7 +40,6 @@ HandleLidSwitch=suspend
 HandleLidSwitchExternalPower=suspend
 HandleLidSwitchDocked=suspend
 LidSwitchIgnoreInhibited=yes
-
 ```
 
 ### 2. Resetear PowerDevil
@@ -51,7 +50,6 @@ A veces, los archivos de configuración arrastran basura de instalaciones previa
 # Limpiar y reconfigurar
 rm ~/.config/powerdevilrc
 systemctl --user restart plasma-powerdevil.service
-
 ```
 
 ### 3. Optimizando el Ryzen: El driver "AMD P-State"
@@ -62,7 +60,6 @@ Para ello, añadí `amd_pstate=active` a los parámetros del kernel en el GRUB y
 
 ```bash
 sudo systemctl mask power-profiles-daemon
-
 ```
 
 ---
@@ -74,7 +71,6 @@ Lo último fue un toque de cariño a la batería. Como paso muchas horas con el 
 ```ini
 START_CHARGE_THRESH_BAT0=75
 STOP_CHARGE_THRESH_BAT0=80
-
 ```
 
 Ahora, mi batería deja de cargar al 80%. Es un ajuste que hará que, dentro de tres años, mi portátil siga teniendo una autonomía decente.
@@ -94,4 +90,4 @@ He pasado de un sistema que "se rompía" a cada paso, a uno donde cada pieza sab
 
 Esta es mi nueva huella digital. Si alguna vez tu portátil se niega a dormir, ya sabes dónde encontrar la respuesta.
 
-Nos vemos en la próxima!
+¡Nos vemos en el próximo log!

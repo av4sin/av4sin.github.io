@@ -1,10 +1,9 @@
-
 ---
-**layout:** post
-**title:** "El botón del pánico: Cuando Fedora decide apagar por las malas (y cómo domar a acpid)"
-**date:** 2026-01-15
-**categories:** [tecnico, linux]
-**tags:** [fedora, kde, plasma, acpid, troubleshooting, logind, zenbook]
+layout: post
+title: "El botón del pánico: Cuando Fedora decide apagar por las malas (y cómo domar a acpid)"
+date: 2026-01-15
+categories: [tecnico, linux]
+tags: [fedora, kde, plasma, acpid, troubleshooting, logind, zenbook]
 ---
 
 ## El menú fantasma y el mensaje de "Root"
@@ -43,7 +42,6 @@ sudo systemctl stop acpid.socket
 sudo systemctl disable acpid.socket
 sudo systemctl stop acpid
 sudo systemctl disable acpid
-
 ```
 
 ### 2. Obligar a Systemd a "hacerse el sordo"
@@ -55,7 +53,6 @@ Incluso sin `acpid`, el propio corazón del sistema (`systemd-logind`) a veces i
 # Le decimos que ignore el botón para que KDE pueda capturarlo
 HandlePowerKey=ignore
 PowerKeyIgnoreInhibited=no
-
 ```
 
 ### 3. El toque final en KDE
