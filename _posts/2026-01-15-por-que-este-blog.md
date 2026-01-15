@@ -4,6 +4,7 @@ title: "Por que este blog: de Kali a Fedora y la necesidad de documentar"
 date: 2026-01-15
 categories: [reflexiones, linux]
 tags: [blog, kali, fedora, migracion, documentacion]
+featured: true
 ---
 
 ## El origen de todo

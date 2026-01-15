@@ -697,6 +697,75 @@ body {
 }
 
 /* ============================================
+   FEATURED POSTS
+   ============================================ */
+
+.featured-posts {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.featured-title {
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 20px;
+}
+
+.featured-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.featured-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid #16a085;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.featured-item:hover {
+    background: rgba(22, 160, 133, 0.2);
+    transform: translateX(5px);
+    text-decoration: none;
+}
+
+.featured-item-title {
+    color: #fff;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.featured-item:hover .featured-item-title {
+    color: #16a085;
+}
+
+.featured-item-date {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+    .featured-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .featured-item-date {
+        font-size: 12px;
+    }
+}
+
+/* ============================================
    ANIMATIONS
    ============================================ */
 
