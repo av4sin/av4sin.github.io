@@ -432,11 +432,25 @@ document.addEventListener('DOMContentLoaded', function() {
     let allCategories = new Set();
     let allTags = new Set();
     
-    // Cargar posts - usar ruta absoluta
-    fetch('/search.json')
+    // Cargar posts - usar baseurl de Jekyll
+    const searchUrl = '{{ site.baseurl }}/search.json';
+    console.log('Cargando desde:', searchUrl);
+    
+    fetch(searchUrl)
         .then(response => {
-            if (!response.ok) throw new Error('No se pudo cargar search.json');
-            return response.json();
+            console.log('Response status:', response.status);
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+            return response.text();
+        })
+        .then(text => {
+            // Limpiar posibles caracteres problematicos
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                console.error('Error parseando JSON:', e);
+                console.log('Primeros 500 chars:', text.substring(0, 500));
+                throw e;
+            }
         })
         .then(data => {
             posts = data;
@@ -451,7 +465,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             console.error('Error cargando posts:', error);
             document.getElementById('search-results').innerHTML = 
-                '<div class="no-results"><i class="fas fa-exclamation-triangle"></i><p>Error cargando datos. Refresca la pagina.</p></div>';
+                '<div class="no-results"><i class="fas fa-exclamation-triangle"></i><p>Error cargando datos. Abre la consola (F12) para ver detalles.</p></div>';
         });
     
     // Elementos del DOM
