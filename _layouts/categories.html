@@ -1,0 +1,51 @@
+---
+layout: default
+---
+
+<div class="page-wrapper">
+    <header class="page-header">
+        <h1><i class="fas fa-folder-open"></i> Categorías</h1>
+        <p>Artículos organizados por tema</p>
+    </header>
+    
+    <div class="categories-content">
+        {% assign categories = site.posts | map: "categories" | flatten | uniq | sort %}
+        
+        <!-- Categories Navigation -->
+        <nav class="categories-nav">
+            {% for category in categories %}
+            <a href="#{{ category | slugify }}" class="category-nav-link">
+                {{ category }}
+                <span class="count">
+                    {% assign count = 0 %}
+                    {% for post in site.posts %}
+                        {% if post.categories contains category %}
+                            {% assign count = count | plus: 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {{ count }}
+                </span>
+            </a>
+            {% endfor %}
+        </nav>
+        
+        <!-- Categories List -->
+        {% for category in categories %}
+        <section class="category-section" id="{{ category | slugify }}">
+            <h2 class="category-title">
+                <i class="fas fa-folder"></i> {{ category }}
+            </h2>
+            <ul class="category-posts">
+                {% for post in site.posts %}
+                    {% if post.categories contains category %}
+                    <li class="category-post-item">
+                        <span class="post-date">{{ post.date | date: "%d %b %Y" }}</span>
+                        <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </section>
+        {% endfor %}
+    </div>
+</div>

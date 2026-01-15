@@ -1,0 +1,138 @@
+---
+layout: default
+---
+
+<!-- Blog Banner -->
+<header class="blog-banner">
+    <div class="banner-content">
+        <h1>{{ site.banner.title | default: "Blog" }}</h1>
+        <p>{{ site.banner.subtitle | default: "Artículos y tutoriales" }}</p>
+    </div>
+</header>
+
+<!-- Blog Content -->
+<div class="blog-container">
+    <div class="blog-content">
+        
+        <!-- Featured Posts -->
+        {% assign pinned_posts = site.posts | where: "pin", true %}
+        {% if pinned_posts.size > 0 %}
+        <section class="featured-posts">
+            <h2><i class="fas fa-thumbtack"></i> Destacados</h2>
+            <div class="posts-grid">
+                {% for post in pinned_posts limit: 2 %}
+                <article class="post-card featured">
+                    <div class="post-card-content">
+                        <div class="post-meta">
+                            <span class="post-date">
+                                <i class="far fa-calendar"></i>
+                                {{ post.date | date: "%d %b %Y" }}
+                            </span>
+                            {% if post.categories.size > 0 %}
+                            <span class="post-category">
+                                <i class="far fa-folder"></i>
+                                {{ post.categories | first }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        <h3 class="post-title">
+                            <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+                        </h3>
+                        <p class="post-excerpt">{{ post.excerpt | strip_html | truncate: 150 }}</p>
+                        <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">
+                            Leer más <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+        
+        <!-- Recent Posts -->
+        <section class="recent-posts">
+            <h2><i class="fas fa-clock"></i> Artículos Recientes</h2>
+            <div class="posts-list">
+                {% for post in site.posts %}
+                {% unless post.pin %}
+                <article class="post-item">
+                    <div class="post-item-date">
+                        <span class="day">{{ post.date | date: "%d" }}</span>
+                        <span class="month">{{ post.date | date: "%b" }}</span>
+                        <span class="year">{{ post.date | date: "%Y" }}</span>
+                    </div>
+                    <div class="post-item-content">
+                        <h3 class="post-title">
+                            <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+                        </h3>
+                        <p class="post-excerpt">{{ post.excerpt | strip_html | truncate: 200 }}</p>
+                        <div class="post-tags">
+                            {% for tag in post.tags limit: 3 %}
+                            <span class="tag">#{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </article>
+                {% endunless %}
+                {% endfor %}
+            </div>
+        </section>
+        
+    </div>
+    
+    <!-- Sidebar -->
+    <aside class="blog-sidebar">
+        <!-- About Widget -->
+        <div class="widget about-widget">
+            <h3>Sobre el Blog</h3>
+            <p>Comparto tutoriales, reflexiones y aprendizajes sobre desarrollo web y tecnología.</p>
+            <a href="{{ site.baseurl }}/blog/about.html" class="widget-link">Conocer más →</a>
+        </div>
+        
+        <!-- Categories Widget -->
+        <div class="widget categories-widget">
+            <h3>Categorías</h3>
+            <ul class="category-list">
+                {% assign categories = site.posts | map: "categories" | flatten | uniq %}
+                {% for category in categories %}
+                <li>
+                    <a href="{{ site.baseurl }}/blog/categories.html#{{ category | slugify }}">
+                        <span class="category-name">{{ category }}</span>
+                        <span class="category-count">
+                            {% assign count = 0 %}
+                            {% for post in site.posts %}
+                                {% if post.categories contains category %}
+                                    {% assign count = count | plus: 1 %}
+                                {% endif %}
+                            {% endfor %}
+                            {{ count }}
+                        </span>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <!-- Tags Widget -->
+        <div class="widget tags-widget">
+            <h3>Tags Populares</h3>
+            <div class="tags-cloud">
+                {% assign tags = site.posts | map: "tags" | flatten | uniq %}
+                {% for tag in tags limit: 15 %}
+                <a href="{{ site.baseurl }}/blog/tags.html#{{ tag | slugify }}" class="tag-link">
+                    {{ tag }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Newsletter Widget -->
+        <div class="widget newsletter-widget">
+            <h3>📬 Mantente Actualizado</h3>
+            <p>Suscríbete al feed RSS para no perderte ningún artículo.</p>
+            <a href="{{ site.baseurl }}/feed.xml" class="rss-button">
+                <i class="fas fa-rss"></i> Suscribirse al RSS
+            </a>
+        </div>
+    </aside>
+</div>

@@ -1,0 +1,28 @@
+{% if site.utterances and page.comments != false %}
+<div id="utterances-comments">
+  <script src="https://utteranc.es/client.js"
+          repo="{{ site.utterances.repo }}"
+          issue-term="{{ site.utterances.issue_term | default: 'pathname' }}"
+          {% if site.utterances.label %}label="{{ site.utterances.label }}"{% endif %}
+          theme="{{ site.utterances.theme | default: 'github-dark' }}"
+          crossorigin="anonymous"
+          async>
+  </script>
+</div>
+
+<style>
+#utterances-comments {
+  margin-top: 50px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.utterances {
+  max-width: 100% !important;
+}
+
+.utterances-frame {
+  min-height: 200px;
+}
+</style>
+{% endif %}

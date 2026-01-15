@@ -1,0 +1,41 @@
+---
+layout: default
+---
+
+<div class="page-wrapper">
+    <header class="page-header">
+        <h1><i class="fas fa-archive"></i> Archivos</h1>
+        <p>Todos los artículos organizados por fecha</p>
+    </header>
+    
+    <div class="archives-content">
+        {% assign postsByYear = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
+        
+        {% for year in postsByYear %}
+        <div class="archive-year">
+            <h2 class="year-title">{{ year.name }}</h2>
+            
+            {% assign postsByMonth = year.items | group_by_exp: "post", "post.date | date: '%B'" %}
+            
+            {% for month in postsByMonth %}
+            <div class="archive-month">
+                <h3 class="month-title">{{ month.name }}</h3>
+                <ul class="archive-list">
+                    {% for post in month.items %}
+                    <li class="archive-item">
+                        <span class="archive-date">{{ post.date | date: "%d" }}</span>
+                        <a href="{{ site.baseurl }}{{ post.url }}" class="archive-link">
+                            {{ post.title }}
+                        </a>
+                        {% if post.pin %}
+                        <span class="pin-badge"><i class="fas fa-thumbtack"></i></span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</div>

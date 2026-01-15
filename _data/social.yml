@@ -1,0 +1,28 @@
+# Enlaces Sociales
+# Centraliza todos los enlaces de redes sociales
+
+profiles:
+  - name: GitHub
+    icon: github
+    url: "https://github.com/av4sin"
+    username: "av4sin"
+    
+  - name: Twitter
+    icon: twitter
+    url: "https://twitter.com/"
+    username: ""
+    
+  - name: LinkedIn
+    icon: linkedin
+    url: "https://linkedin.com/in/"
+    username: ""
+    
+  - name: Email
+    icon: envelope
+    url: "mailto:tu@email.com"
+    username: "tu@email.com"
+
+# RSS Feed
+rss:
+  url: "/feed.xml"
+  enabled: true

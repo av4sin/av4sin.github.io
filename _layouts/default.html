@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+    <meta name="description" content="{{ page.description | default: site.description }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{{ site.baseurl }}/img/favicon.ico" type="image/x-icon">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Highlight.js for code -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    
+    <!-- Blog Styles -->
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/blog.css">
+    
+    <!-- SEO -->
+    {% seo %}
+    
+    <!-- Feed -->
+    <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ site.baseurl }}/feed.xml">
+</head>
+<body class="{% if site.night_mode %}dark-mode{% endif %}">
+    
+    <!-- Navigation -->
+    <nav class="blog-nav">
+        <div class="nav-container">
+            <a href="{{ site.baseurl }}/" class="nav-brand">
+                <i class="fas fa-rocket"></i>
+                <span>{{ site.title }}</span>
+            </a>
+            
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-menu">
+                {% for item in site.nav %}
+                <li class="nav-item">
+                    <a href="{{ site.baseurl }}{{ item.url }}" class="nav-link {% if page.url == item.url %}active{% endif %}">
+                        {{ item.title }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            
+            <button class="theme-toggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="blog-main">
+        {{ content }}
+    </main>
+
+    <!-- Footer -->
+    <footer class="blog-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>{{ site.title }}</h4>
+                    <p>{{ site.description }}</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Enlaces</h4>
+                    <ul>
+                        <li><a href="{{ site.baseurl }}/">Inicio</a></li>
+                        <li><a href="{{ site.baseurl }}/blog/">Blog</a></li>
+                        <li><a href="{{ site.baseurl }}/blog/about.html">Sobre Mí</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Sígueme</h4>
+                    <div class="social-links">
+                        {% if site.social.github %}
+                        <a href="https://github.com/{{ site.social.github }}" target="_blank" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        {% endif %}
+                        {% if site.social.twitter %}
+                        <a href="https://twitter.com/{{ site.social.twitter }}" target="_blank" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        {% endif %}
+                        {% if site.social.linkedin %}
+                        <a href="https://linkedin.com/in/{{ site.social.linkedin }}" target="_blank" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        {% endif %}
+                        <a href="{{ site.baseurl }}/feed.xml" aria-label="RSS Feed">
+                            <i class="fas fa-rss"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; {{ site.time | date: '%Y' }} {{ site.copyright }}. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>
+        // Highlight.js
+        hljs.highlightAll();
+        
+        // Mobile nav toggle
+        document.querySelector('.nav-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+        
+        // Theme toggle
+        document.querySelector('.theme-toggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        });
+        
+        // Check saved theme
+        if (localStorage.getItem('darkMode') === 'false') {
+            document.body.classList.remove('dark-mode');
+            document.querySelector('.theme-toggle i').classList.replace('fa-moon', 'fa-sun');
+        }
+    </script>
+</body>
+</html>
