@@ -263,7 +263,7 @@ a:focus {
 }
 .terminal-body {
     padding: 18px 18px 10px 18px;
-    min-height: 70px;
+    min-height: 140px;
     font-size: 18px;
     color: #16a085;
     background: #23272e;
@@ -272,7 +272,7 @@ a:focus {
     align-items: flex-start;
     justify-content: flex-start;
     position: relative;
-    height: 70px;
+    height: 140px;
     overflow: hidden;
 }
 #typed-output {

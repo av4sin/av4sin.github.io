@@ -106,12 +106,14 @@ $(document).ready(function() {
         // Bloques de comandos y respuestas
         const blocks = [
             { cmd: 'whoami', resp: 'av4sin' },
-            { cmd: 'echo "Programador C/Python/Java"', resp: 'Programador C/Python/Java' },
-            { cmd: 'cat proyectos.txt', resp: 'Raspberry Pi\nArduino\nBlog\nLinux\nDomótica' },
-            { cmd: 'python3 script.py', resp: 'Hola, mundo desde Python!' },
-            { cmd: 'sudo apt update', resp: 'Obteniendo paquetes...\nTodo actualizado.' },
+            { cmd: 'ls', resp: 'blog.md\ngames/\nREADME.md' },
+            { cmd: 'uname -s', resp: 'Linux' },
+            { cmd: 'echo "Hola!"', resp: 'Hola!' },
+            { cmd: 'cat skills.txt', resp: 'C\nPython\nJava' },
+            { cmd: 'pwd', resp: '/home/av4sin' },
+            { cmd: 'date', resp: '2026-01-15' },
             { cmd: 'clear', resp: '' },
-            { cmd: 'echo "Bienvenido a mi web"', resp: 'Bienvenido a mi web' }
+            { cmd: 'echo "Bienvenido!"', resp: 'Bienvenido!' }
         ];
         const wait = typedElement.getAttribute('data-wait');
         new TypeWriter(typedElement, blocks, wait);
