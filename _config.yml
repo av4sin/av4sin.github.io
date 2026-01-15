@@ -51,6 +51,8 @@ nav:
     url: /
   - title: Blog
     url: /blog/
+  - title: Buscar
+    url: /blog/search.html
   - title: Archivos
     url: /blog/archives.html
   - title: Categorías

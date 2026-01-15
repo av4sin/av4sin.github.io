@@ -1,0 +1,713 @@
+---
+layout: default
+title: Buscar
+permalink: /blog/search.html
+---
+
+<div class="search-page">
+    <header class="search-header">
+        <h1>Buscar en el Blog</h1>
+        <p>Encuentra articulos por texto, fecha, categoria o etiqueta</p>
+    </header>
+
+    <!-- Barra de busqueda principal -->
+    <div class="search-main">
+        <div class="search-input-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="search-input" class="search-input" placeholder="Escribe para buscar..." autocomplete="off">
+            <button id="clear-search" class="clear-btn" title="Limpiar">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="search-filters">
+        <div class="filters-header">
+            <button id="toggle-filters" class="toggle-filters-btn">
+                <i class="fas fa-sliders-h"></i> Filtros avanzados
+            </button>
+        </div>
+
+        <div id="filters-panel" class="filters-panel">
+            <div class="filters-grid">
+                <!-- Filtro de fechas -->
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <i class="fas fa-calendar"></i> Rango de fechas
+                    </label>
+                    <div class="date-range">
+                        <input type="date" id="date-from" class="filter-input">
+                        <span>a</span>
+                        <input type="date" id="date-to" class="filter-input">
+                    </div>
+                </div>
+
+                <!-- Filtro de categorias -->
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <i class="fas fa-folder"></i> Categoria
+                    </label>
+                    <select id="filter-category" class="filter-select">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+
+                <!-- Filtro de tags -->
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <i class="fas fa-tags"></i> Etiqueta
+                    </label>
+                    <select id="filter-tag" class="filter-select">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+
+                <!-- Filtro de longitud -->
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <i class="fas fa-align-left"></i> Longitud
+                    </label>
+                    <select id="filter-length" class="filter-select">
+                        <option value="">Cualquiera</option>
+                        <option value="short">Corto (&lt; 500 palabras)</option>
+                        <option value="medium">Medio (500-1500 palabras)</option>
+                        <option value="long">Largo (&gt; 1500 palabras)</option>
+                    </select>
+                </div>
+
+                <!-- Ordenar por -->
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <i class="fas fa-sort"></i> Ordenar por
+                    </label>
+                    <select id="filter-sort" class="filter-select">
+                        <option value="relevance">Relevancia</option>
+                        <option value="date-desc">Fecha (reciente primero)</option>
+                        <option value="date-asc">Fecha (antiguo primero)</option>
+                        <option value="length-desc">Longitud (largo primero)</option>
+                        <option value="length-asc">Longitud (corto primero)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filters-actions">
+                <button id="apply-filters" class="btn-apply">
+                    <i class="fas fa-check"></i> Aplicar filtros
+                </button>
+                <button id="reset-filters" class="btn-reset">
+                    <i class="fas fa-undo"></i> Restablecer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resultados -->
+    <div class="search-results-wrapper">
+        <div id="search-stats" class="search-stats"></div>
+        <div id="search-results" class="search-results">
+            <div class="search-placeholder">
+                <i class="fas fa-search"></i>
+                <p>Escribe algo para comenzar a buscar</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.search-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: calc(70px + var(--space-2xl)) var(--space-lg) var(--space-2xl);
+}
+
+.search-header {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+}
+
+.search-header h1 {
+    font-size: 2.5rem;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.search-header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+/* Barra de busqueda principal */
+.search-main {
+    margin-bottom: var(--space-xl);
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 20px;
+    font-size: 1.3rem;
+    color: var(--text-muted);
+}
+
+.search-input {
+    width: 100%;
+    padding: 20px 50px 20px 55px;
+    font-size: 1.3rem;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transition: var(--transition);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(22, 160, 133, 0.2);
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.clear-btn {
+    position: absolute;
+    right: 15px;
+    padding: 10px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.clear-btn.visible {
+    opacity: 1;
+}
+
+.clear-btn:hover {
+    color: var(--accent);
+}
+
+/* Filtros */
+.search-filters {
+    margin-bottom: var(--space-xl);
+}
+
+.filters-header {
+    text-align: center;
+}
+
+.toggle-filters-btn {
+    padding: 10px 20px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.toggle-filters-btn:hover {
+    background: var(--bg-tertiary);
+    color: var(--accent);
+}
+
+.toggle-filters-btn.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+}
+
+.filters-panel {
+    display: none;
+    margin-top: var(--space-lg);
+    padding: var(--space-xl);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+}
+
+.filters-panel.open {
+    display: block;
+}
+
+.filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-lg);
+    margin-bottom: var(--space-lg);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.filter-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.filter-label i {
+    margin-right: 5px;
+    color: var(--accent);
+}
+
+.filter-input,
+.filter-select {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.date-range {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.date-range input {
+    flex: 1;
+}
+
+.date-range span {
+    color: var(--text-muted);
+}
+
+.filters-actions {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+}
+
+.btn-apply,
+.btn-reset {
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.btn-apply {
+    background: var(--accent);
+    color: white;
+}
+
+.btn-apply:hover {
+    background: var(--accent-hover);
+}
+
+.btn-reset {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+}
+
+.btn-reset:hover {
+    background: var(--border);
+}
+
+/* Estadisticas */
+.search-stats {
+    padding: var(--space-md) 0;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+/* Resultados */
+.search-results {
+    min-height: 200px;
+}
+
+.search-placeholder {
+    text-align: center;
+    padding: var(--space-3xl);
+    color: var(--text-muted);
+}
+
+.search-placeholder i {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+    opacity: 0.5;
+}
+
+.search-placeholder p {
+    font-size: 1.1rem;
+}
+
+/* Tarjeta de resultado */
+.result-card {
+    padding: var(--space-lg);
+    margin-bottom: var(--space-md);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+}
+
+.result-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-md);
+    margin-bottom: var(--space-sm);
+}
+
+.result-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.result-title a {
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.result-title a:hover {
+    color: var(--accent);
+}
+
+.result-meta {
+    display: flex;
+    gap: var(--space-md);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.result-excerpt {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-md);
+}
+
+.result-excerpt mark {
+    background: rgba(22, 160, 133, 0.3);
+    color: inherit;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+.result-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}
+
+.result-category {
+    padding: 4px 10px;
+    background: rgba(22, 160, 133, 0.15);
+    color: var(--accent);
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+}
+
+.result-tag {
+    padding: 4px 8px;
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+}
+
+/* Sin resultados */
+.no-results {
+    text-align: center;
+    padding: var(--space-3xl);
+    color: var(--text-muted);
+}
+
+.no-results i {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+    opacity: 0.5;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .search-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .search-input {
+        padding: 15px 45px 15px 50px;
+        font-size: 1.1rem;
+    }
+    
+    .filters-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .result-header {
+        flex-direction: column;
+    }
+    
+    .result-meta {
+        order: -1;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let posts = [];
+    let allCategories = new Set();
+    let allTags = new Set();
+    
+    // Cargar posts
+    fetch('{{ site.baseurl }}/search.json')
+        .then(response => response.json())
+        .then(data => {
+            posts = data;
+            // Extraer categorias y tags
+            posts.forEach(post => {
+                post.categories.forEach(cat => allCategories.add(cat));
+                post.tags.forEach(tag => allTags.add(tag));
+            });
+            populateFilters();
+        })
+        .catch(error => console.error('Error cargando posts:', error));
+    
+    // Elementos del DOM
+    const searchInput = document.getElementById('search-input');
+    const clearBtn = document.getElementById('clear-search');
+    const toggleFiltersBtn = document.getElementById('toggle-filters');
+    const filtersPanel = document.getElementById('filters-panel');
+    const applyFiltersBtn = document.getElementById('apply-filters');
+    const resetFiltersBtn = document.getElementById('reset-filters');
+    const resultsContainer = document.getElementById('search-results');
+    const statsContainer = document.getElementById('search-stats');
+    
+    // Toggle filtros
+    toggleFiltersBtn.addEventListener('click', function() {
+        filtersPanel.classList.toggle('open');
+        this.classList.toggle('active');
+    });
+    
+    // Busqueda en tiempo real
+    searchInput.addEventListener('input', function() {
+        clearBtn.classList.toggle('visible', this.value.length > 0);
+        performSearch();
+    });
+    
+    // Limpiar busqueda
+    clearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        clearBtn.classList.remove('visible');
+        performSearch();
+    });
+    
+    // Aplicar filtros
+    applyFiltersBtn.addEventListener('click', performSearch);
+    
+    // Restablecer filtros
+    resetFiltersBtn.addEventListener('click', function() {
+        document.getElementById('date-from').value = '';
+        document.getElementById('date-to').value = '';
+        document.getElementById('filter-category').value = '';
+        document.getElementById('filter-tag').value = '';
+        document.getElementById('filter-length').value = '';
+        document.getElementById('filter-sort').value = 'relevance';
+        performSearch();
+    });
+    
+    // Poblar filtros
+    function populateFilters() {
+        const categorySelect = document.getElementById('filter-category');
+        const tagSelect = document.getElementById('filter-tag');
+        
+        allCategories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = cat;
+            categorySelect.appendChild(option);
+        });
+        
+        allTags.forEach(tag => {
+            const option = document.createElement('option');
+            option.value = tag;
+            option.textContent = tag;
+            tagSelect.appendChild(option);
+        });
+    }
+    
+    // Realizar busqueda
+    function performSearch() {
+        const query = searchInput.value.toLowerCase().trim();
+        const dateFrom = document.getElementById('date-from').value;
+        const dateTo = document.getElementById('date-to').value;
+        const category = document.getElementById('filter-category').value;
+        const tag = document.getElementById('filter-tag').value;
+        const length = document.getElementById('filter-length').value;
+        const sort = document.getElementById('filter-sort').value;
+        
+        let results = posts.filter(post => {
+            // Filtro de texto
+            if (query) {
+                const inTitle = post.title.toLowerCase().includes(query);
+                const inContent = post.content.toLowerCase().includes(query);
+                const inTags = post.tags.some(t => t.toLowerCase().includes(query));
+                const inCategories = post.categories.some(c => c.toLowerCase().includes(query));
+                if (!inTitle && !inContent && !inTags && !inCategories) return false;
+            }
+            
+            // Filtro de fecha
+            if (dateFrom && post.date < dateFrom) return false;
+            if (dateTo && post.date > dateTo) return false;
+            
+            // Filtro de categoria
+            if (category && !post.categories.includes(category)) return false;
+            
+            // Filtro de tag
+            if (tag && !post.tags.includes(tag)) return false;
+            
+            // Filtro de longitud
+            if (length) {
+                if (length === 'short' && post.words >= 500) return false;
+                if (length === 'medium' && (post.words < 500 || post.words > 1500)) return false;
+                if (length === 'long' && post.words <= 1500) return false;
+            }
+            
+            return true;
+        });
+        
+        // Calcular relevancia
+        results = results.map(post => {
+            let relevance = 0;
+            if (query) {
+                const titleMatches = (post.title.toLowerCase().match(new RegExp(query, 'g')) || []).length;
+                const contentMatches = (post.content.toLowerCase().match(new RegExp(query, 'g')) || []).length;
+                relevance = titleMatches * 10 + contentMatches;
+            }
+            return { ...post, relevance };
+        });
+        
+        // Ordenar
+        results.sort((a, b) => {
+            switch (sort) {
+                case 'relevance':
+                    return b.relevance - a.relevance;
+                case 'date-desc':
+                    return new Date(b.date) - new Date(a.date);
+                case 'date-asc':
+                    return new Date(a.date) - new Date(b.date);
+                case 'length-desc':
+                    return b.words - a.words;
+                case 'length-asc':
+                    return a.words - b.words;
+                default:
+                    return 0;
+            }
+        });
+        
+        displayResults(results, query);
+    }
+    
+    // Mostrar resultados
+    function displayResults(results, query) {
+        if (!query && !hasActiveFilters()) {
+            resultsContainer.innerHTML = `
+                <div class="search-placeholder">
+                    <i class="fas fa-search"></i>
+                    <p>Escribe algo para comenzar a buscar</p>
+                </div>
+            `;
+            statsContainer.textContent = '';
+            return;
+        }
+        
+        if (results.length === 0) {
+            resultsContainer.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <p>No se encontraron resultados</p>
+                </div>
+            `;
+            statsContainer.textContent = '0 resultados';
+            return;
+        }
+        
+        statsContainer.textContent = `${results.length} resultado${results.length !== 1 ? 's' : ''} encontrado${results.length !== 1 ? 's' : ''}`;
+        
+        resultsContainer.innerHTML = results.map(post => {
+            let excerpt = post.excerpt;
+            if (query) {
+                const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
+                excerpt = excerpt.replace(regex, '<mark>$1</mark>');
+            }
+            
+            const readingTime = Math.ceil(post.words / 200);
+            
+            return `
+                <div class="result-card">
+                    <div class="result-header">
+                        <h3 class="result-title">
+                            <a href="${post.url}">${highlightText(post.title, query)}</a>
+                        </h3>
+                        <div class="result-meta">
+                            <span><i class="far fa-calendar"></i> ${formatDate(post.date)}</span>
+                            <span><i class="far fa-clock"></i> ${readingTime} min</span>
+                        </div>
+                    </div>
+                    <p class="result-excerpt">${excerpt}</p>
+                    <div class="result-footer">
+                        ${post.categories.map(cat => `<span class="result-category">${cat}</span>`).join('')}
+                        ${post.tags.slice(0, 3).map(tag => `<span class="result-tag">#${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    // Utilidades
+    function hasActiveFilters() {
+        return document.getElementById('date-from').value ||
+               document.getElementById('date-to').value ||
+               document.getElementById('filter-category').value ||
+               document.getElementById('filter-tag').value ||
+               document.getElementById('filter-length').value;
+    }
+    
+    function highlightText(text, query) {
+        if (!query) return text;
+        const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
+        return text.replace(regex, '<mark>$1</mark>');
+    }
+    
+    function escapeRegex(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+    
+    function formatDate(dateStr) {
+        const date = new Date(dateStr);
+        const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+        return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+    }
+});
+</script>
