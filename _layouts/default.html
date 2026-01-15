@@ -78,7 +78,7 @@
                 </div>
                 
                 <div class="footer-section">
-                    <h4>Sígueme</h4>
+                    <h4>Sigueme</h4>
                     <div class="social-links">
                         {% if site.social.github %}
                         <a href="https://github.com/{{ site.social.github }}" target="_blank" aria-label="GitHub">
@@ -93,6 +93,11 @@
                         {% if site.social.linkedin %}
                         <a href="https://linkedin.com/in/{{ site.social.linkedin }}" target="_blank" aria-label="LinkedIn">
                             <i class="fab fa-linkedin"></i>
+                        </a>
+                        {% endif %}
+                        {% if site.social.email %}
+                        <a href="mailto:{{ site.social.email }}" aria-label="Email">
+                            <i class="fas fa-envelope"></i>
                         </a>
                         {% endif %}
                         <a href="{{ site.baseurl }}/feed.xml" aria-label="RSS Feed">

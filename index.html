@@ -227,16 +227,27 @@
                     Escríbeme y hablamos.
                 </p>
                 <ul class="list-inline banner-social-buttons">
+                    {% if site.social.github %}
                     <li>
-                        <a href="https://github.com/av4sin" class="btn btn-default btn-lg" target="_blank">
+                        <a href="https://github.com/{{ site.social.github }}" class="btn btn-default btn-lg" target="_blank">
                             <i class="fa fa-github fa-fw"></i> <span class="network-name">GitHub</span>
                         </a>
                     </li>
+                    {% endif %}
+                    {% if site.social.linkedin %}
                     <li>
-                        <a href="https://av4sin.github.io/blog/about.html" class="btn btn-default btn-lg" target="_blank">
+                        <a href="https://linkedin.com/in/{{ site.social.linkedin }}" class="btn btn-default btn-lg" target="_blank">
                             <i class="fa fa-linkedin fa-fw"></i> <span class="network-name">LinkedIn</span>
                         </a>
                     </li>
+                    {% endif %}
+                    {% if site.social.email %}
+                    <li>
+                        <a href="mailto:{{ site.social.email }}" class="btn btn-default btn-lg">
+                            <i class="fa fa-envelope fa-fw"></i> <span class="network-name">Email</span>
+                        </a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

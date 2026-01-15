@@ -6,16 +6,16 @@ permalink: /blog/projects.html
 
 <div class="projects-page">
 
-## 🚀 Mis Proyectos
+## Mis Proyectos
 
 Una colección de proyectos personales, experimentos y contribuciones.
 
 ---
 
-### 🎮 Juegos Militares Educativos
+### Juegos Militares Educativos
 
 <div class="project-detail">
-<span class="project-status status-completed">✅ Completado</span>
+<span class="project-status status-completed">Completado</span>
 
 Una suite de juegos educativos interactivos para aprender sobre rangos militares, estrategia y más.
 
@@ -27,15 +27,15 @@ Una suite de juegos educativos interactivos para aprender sobre rangos militares
 
 **Tecnologías:** JavaScript, HTML5, CSS3, Service Workers
 
-[🔗 Ver Demo]({{ site.baseurl }}/juegos.html) | [📂 Código](https://github.com/av4sin/av4sin.github.io)
+[Ver Demo]({{ site.baseurl }}/juegos.html) | [Codigo](https://github.com/av4sin/av4sin.github.io)
 </div>
 
 ---
 
-### 📝 Blog Personal
+### Blog Personal
 
 <div class="project-detail">
-<span class="project-status status-completed">✅ Completado</span>
+<span class="project-status status-completed">Completado</span>
 
 Blog técnico con artículos sobre desarrollo, tecnología y aprendizajes.
 
@@ -47,15 +47,15 @@ Blog técnico con artículos sobre desarrollo, tecnología y aprendizajes.
 
 **Tecnologías:** Jekyll, GitHub Pages, YAML, Markdown
 
-[🔗 Ver Blog]({{ site.baseurl }}/blog/) | [📂 Código](https://github.com/av4sin/av4sin.github.io)
+[Ver Blog]({{ site.baseurl }}/blog/) | [Codigo](https://github.com/av4sin/av4sin.github.io)
 </div>
 
 ---
 
-### 🌐 Sitio Web Personal
+### Sitio Web Personal
 
 <div class="project-detail">
-<span class="project-status status-completed">✅ Completado</span>
+<span class="project-status status-completed">Completado</span>
 
 Página de inicio personal con diseño moderno estilo Grayscale.
 
@@ -67,15 +67,15 @@ Página de inicio personal con diseño moderno estilo Grayscale.
 
 **Tecnologías:** HTML5, CSS3, JavaScript, Bootstrap
 
-[🔗 Ver Sitio]({{ site.baseurl }}/) | [📂 Código](https://github.com/av4sin/av4sin.github.io)
+[Ver Sitio]({{ site.baseurl }}/) | [Codigo](https://github.com/av4sin/av4sin.github.io)
 </div>
 
 ---
 
-### 🔮 Próximos Proyectos
+### Proximos Proyectos
 
 <div class="project-detail">
-<span class="project-status status-progress">🚧 En Desarrollo</span>
+<span class="project-status status-progress">En Desarrollo</span>
 
 Algunos proyectos en los que estoy trabajando actualmente:
 
@@ -83,12 +83,12 @@ Algunos proyectos en los que estoy trabajando actualmente:
 - **App Móvil con React Native** - Aplicación multiplataforma
 - **Dashboard Analytics** - Visualización de datos en tiempo real
 
-¿Tienes alguna idea o propuesta? [¡Contáctame!](mailto:tu@email.com)
+Tienes alguna idea o propuesta? [Contactame](mailto:{{ site.social.email }})
 </div>
 
 ---
 
-## 📊 Estadísticas
+## Estadisticas
 
 | Métrica | Valor |
 |---------|-------|
@@ -99,11 +99,11 @@ Algunos proyectos en los que estoy trabajando actualmente:
 
 ---
 
-## 🤝 Contribuciones Open Source
+## Contribuciones Open Source
 
-Creo en el poder del código abierto. Todos mis proyectos están disponibles en GitHub.
+Creo en el poder del codigo abierto. Todos mis proyectos estan disponibles en GitHub.
 
-[Ver mi perfil de GitHub →](https://github.com/av4sin)
+[Ver mi perfil de GitHub](https://github.com/{{ site.social.github }})
 
 </div>
 

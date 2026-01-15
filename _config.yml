@@ -57,14 +57,15 @@ nav:
     url: /blog/archives.html
   - title: Categorías
     url: /blog/categories.html
-  - title: Sobre Mí
+  - title: Sobre Mi
     url: /blog/about.html
 
-# Social links
+# Social links (edita aqui y se actualiza en toda la web)
 social:
   github: av4sin
   twitter: 
-  linkedin: https://www.linkedin.com/in/gonzalo-mondragon-bascones
+  linkedin: gonzalo-mondragon-bascones
+  email: tu@email.com
 
 # ============================================
 # COMMENTS - Utterances (GitHub-based)
