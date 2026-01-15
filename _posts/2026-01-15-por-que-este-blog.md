@@ -5,6 +5,7 @@ date: 2026-01-15
 categories: [reflexiones, linux]
 tags: [blog, kali, fedora, migracion, documentacion]
 featured: true
+pin: true
 ---
 
 ## El origen de todo

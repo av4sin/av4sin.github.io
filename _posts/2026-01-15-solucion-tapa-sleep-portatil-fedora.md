@@ -5,6 +5,7 @@ date: 2026-01-15
 categories: [tecnico, linux]
 tags: [fedora, zenbook, tlp, powerdevil, troubleshooting]
 featured: true
+pin: true
 ---
 
 ## De la teoría a la práctica (o por qué mi portátil no quería dormir)

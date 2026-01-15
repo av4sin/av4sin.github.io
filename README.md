@@ -187,6 +187,54 @@ Texto final del articulo.
 | `categories` | Lista de categorias | No |
 | `tags` | Lista de tags | No |
 | `comments` | `true` o `false` (default: true) | No |
+| `featured` | `true` para destacar el articulo | No |
+| `pin` | `true` para fijar el articulo arriba | No |
+
+### Articulos destacados y fijados
+
+Puedes usar dos opciones especiales en el front matter para dar visibilidad a tus articulos:
+
+#### Featured (Destacado)
+
+Añade `featured: true` para marcar un articulo como destacado en la página principal. Los articulos destacados pueden mostrarse en secciones especiales o con un estilo diferente.
+
+```yaml
+---
+layout: post
+title: "Mi articulo importante"
+date: 2026-01-15
+featured: true
+---
+```
+
+#### Pin (Fijado)
+
+Añade `pin: true` para fijar un articulo en la parte superior de la lista, independientemente de su fecha. Util para anuncios o articulos de referencia.
+
+```yaml
+---
+layout: post
+title: "Bienvenido al blog"
+date: 2026-01-15
+pin: true
+---
+```
+
+#### Combinar ambos
+
+Puedes usar ambas opciones juntas:
+
+```yaml
+---
+layout: post
+title: "Articulo estrella"
+date: 2026-01-15
+categories: [anuncios]
+tags: [importante]
+featured: true
+pin: true
+---
+```
 
 ### Publicar
 
