@@ -104,6 +104,11 @@ $(document).ready(function() {
     const typedElement = document.getElementById('typed-output');
     if (typedElement) {
         // Bloques de comandos y respuestas
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        const realDate = `${yyyy}-${mm}-${dd}`;
         const blocks = [
             { cmd: 'whoami', resp: 'av4sin' },
             { cmd: 'ls', resp: 'blog.md\ngames/\nREADME.md' },
@@ -111,7 +116,7 @@ $(document).ready(function() {
             { cmd: 'echo "Hola!"', resp: 'Hola!' },
             { cmd: 'cat skills.txt', resp: 'C\nPython\nJava' },
             { cmd: 'pwd', resp: '/home/av4sin' },
-            { cmd: 'date', resp: '2026-01-15' },
+            { cmd: 'date', resp: realDate },
             { cmd: 'clear', resp: '' },
             { cmd: 'echo "Bienvenido!"', resp: 'Bienvenido!' }
         ];
