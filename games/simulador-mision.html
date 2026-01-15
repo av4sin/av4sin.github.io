@@ -39,7 +39,7 @@
                         description: "Has logrado infiltrarte, pero encuentras una insignia en el suelo. ¿A qué rango pertenece esta insignia?",
                         interactive: {
                             type: "identifyInsignia",
-                            image: "../img/teniente.png",
+                            image: "img/teniente.png",
                             options: ["Soldado", "Cabo", "Sargento", "Teniente"],
                             correct: 3,
                             successOutcome: 10,
@@ -60,7 +60,7 @@
                         description: "Has llegado a una sala con un mapa del edificio. Selecciona el camino más seguro para llegar a los rehenes.",
                         interactive: {
                             type: "mapSelection",
-                            mapImage: "../img/building-map.png",
+                            mapImage: "img/building-map.png",
                             paths: [
                                 { label: "Pasillo principal", outcome: -10, next: 5 },
                                 { label: "Conducto de ventilación", outcome: 10, next: 7 },
@@ -100,7 +100,7 @@
                         description: "Encuentras un mapa de la base enemiga. Selecciona el camino más corto hacia el generador principal.",
                         interactive: {
                             type: "mapSelection",
-                            mapImage: "../img/base-map.png",
+                            mapImage: "img/base-map.png",
                             paths: [
                                 { label: "Pasillo principal", outcome: -10, next: 3 },
                                 { label: "Túnel subterráneo", outcome: 10, next: 4 },
@@ -149,7 +149,7 @@
                         description: "Encuentras una insignia en el suelo. ¿A qué rango pertenece esta insignia?",
                         interactive: {
                             type: "identifyInsignia",
-                            image: "../img/teniente.png",
+                            image: "img/teniente.png",
                             options: ["Soldado", "Cabo", "Sargento", "Teniente"],
                             correct: 3,
                             successOutcome: 10,
@@ -161,7 +161,7 @@
                         description: "Has llegado a una sala con un mapa de la base. Selecciona el camino más seguro para llegar a los documentos clasificados.",
                         interactive: {
                             type: "mapSelection",
-                            mapImage: "../img/base-map.png",
+                            mapImage: "img/base-map.png",
                             paths: [
                                 { label: "Pasillo principal", outcome: -10, next: 5 },
                                 { label: "Conducto de ventilación", outcome: 10, next: 6 },

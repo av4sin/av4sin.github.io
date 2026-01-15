@@ -1,119 +1,103 @@
-# 🌐 Mi Sitio Personal
+# Mi Sitio Personal
 
-Un sitio web personal moderno con página de inicio estilo Grayscale y blog basado en Jekyll Theme YAT.
+Sitio web personal con página de presentación, blog y juegos educativos militares.
+
+## 🌐 URL
+
+**https://av4sin.github.io**
 
 ## 📁 Estructura del Proyecto
 
 ```
-├── index.html              # Página principal (Grayscale Theme)
-├── juegos.html             # Portal de juegos (acceso oculto)
-├── blog/                   # Páginas del blog
-│   ├── index.html          # Inicio del blog
-│   ├── about.html          # Sobre mí
-│   ├── archives.html       # Archivo de posts
-│   ├── categories.html     # Categorías
-│   └── tags.html           # Etiquetas
-├── _posts/                 # Posts del blog (Markdown)
-├── games/                  # Juegos militares
-├── css/                    # Estilos personalizados
-│   └── grayscale.css       # Estilos de la página principal
-├── js/                     # JavaScript
-│   └── grayscale.js        # Scripts de la página principal
-├── img/                    # Imágenes y assets
-├── _config.yml             # Configuración de Jekyll
-└── Gemfile                 # Dependencias Ruby
+.
+├── assets/                    # Recursos de la página principal
+│   ├── css/                   # Estilos
+│   │   ├── grayscale.css      # Landing page
+│   │   └── blog.css           # Blog
+│   ├── js/                    # Scripts
+│   │   └── grayscale.js       # Animaciones y efectos
+│   └── img/                   # Imágenes
+│       └── backgrounds/       # Fondos SVG
+│
+├── blog/                      # Páginas del blog
+│   ├── index.html             # Home del blog
+│   ├── archives.html          # Archivo por fecha
+│   ├── categories.html        # Por categorías
+│   ├── tags.html              # Por etiquetas
+│   └── about.html             # Sobre mí
+│
+├── games/                     # Juegos educativos militares
+│   ├── css/                   # Estilos de juegos
+│   ├── js/                    # Scripts de juegos
+│   ├── img/                   # Imágenes y rangos
+│   ├── juegos.html            # Portal principal
+│   └── *.html                 # Juegos individuales
+│
+├── _layouts/                  # Plantillas Jekyll
+├── _includes/                 # Componentes reutilizables
+├── _posts/                    # Artículos del blog
+├── _data/                     # Datos YAML
+│
+├── index.html                 # Landing page principal
+├── 404.html                   # Página de error
+├── _config.yml                # Configuración Jekyll
+├── Gemfile                    # Dependencias Ruby
+└── README.md                  # Este archivo
 ```
 
-## ✨ Características
+## 🚀 Secciones
 
-### Página Principal
-- ✅ Diseño moderno y elegante estilo Grayscale
-- ✅ Navegación con scroll suave
-- ✅ Animaciones CSS
-- ✅ Totalmente responsive
-- ✅ Botón para acceder al blog
-- ✅ Enlace discreto a los juegos
+### Página Principal (/)
+Landing page estilo Grayscale con:
+- Header con efecto typing
+- Sección "Sobre Mí"
+- Proyectos destacados
+- Contacto
 
-### Blog
-- ✅ Tema Jekyll YAT con modo nocturno
-- ✅ Categorías y etiquetas
-- ✅ Archivo de posts
-- ✅ Diseño moderno y limpio
-- ✅ Soporte para Markdown
-- ✅ Resaltado de sintaxis
+### Blog (/blog/)
+Blog con Jekyll featuring:
+- Artículos por categoría y tags
+- Sistema de comentarios (Utterances)
+- Modo oscuro
+- Diseño responsivo
 
-### Juegos
-- ✅ Portal de juegos militares educativos
-- ✅ Sistema de puntuación
-- ✅ Múltiples juegos disponibles
+### Juegos (/games/juegos.html)
+Portal de juegos educativos sobre rangos militares:
+- Trivia militar
+- Juego de memoria
+- Identificación de rangos
+- Simuladores
 
-## 🚀 Desarrollo Local
+## 🛠️ Tecnologías
 
-### Requisitos
-- Ruby >= 2.7
-- Bundler
+- **Jekyll** - Generador de sitios estáticos
+- **Bootstrap 3** - Framework CSS (landing)
+- **Font Awesome** - Iconos
+- **Highlight.js** - Syntax highlighting
+- **Utterances** - Comentarios basados en GitHub Issues
 
-### Instalación
+## 📝 Desarrollo Local
 
 ```bash
-# Clonar el repositorio
-git clone https://github.com/av4sin/av4sin.github.io.git
-cd av4sin.github.io
-
 # Instalar dependencias
 bundle install
 
 # Ejecutar servidor local
 bundle exec jekyll serve
+
+# Acceder en http://localhost:4000
 ```
 
-El sitio estará disponible en `http://localhost:4000`
+## 🚢 Despliegue
 
-## 📝 Crear un nuevo post
+Push a la rama main despliega automáticamente en GitHub Pages.
 
-1. Crea un archivo en `_posts/` con el formato: `YYYY-MM-DD-titulo-del-post.md`
-2. Añade el front matter:
-
-```yaml
----
-layout: post
-title: "Título del Post"
-date: 2026-01-15 10:00:00 -0500
-categories: [Categoría]
-tags: [tag1, tag2]
----
-
-Tu contenido aquí...
+```bash
+git add .
+git commit -m "Update"
+git push
 ```
 
-## 🔗 Enlaces
+---
 
-- **Página Principal**: `https://av4sin.github.io`
-- **Blog**: `https://av4sin.github.io/blog/`
-- **Juegos**: `https://av4sin.github.io/juegos.html` (enlace oculto)
-
-## 🎨 Personalización
-
-### Colores
-Edita `css/grayscale.css` para cambiar la paleta de colores:
-- Color primario: `#1a1a2e`
-- Color secundario: `#16213e`
-- Color de acento: `#16a085`
-
-### Configuración del Blog
-Edita `_config.yml` para personalizar:
-- Título y descripción
-- Redes sociales
-- Navegación
-- Banner
-
-## 📜 Licencia
-
-Este proyecto está bajo la Licencia MIT.
-
-## 🙏 Créditos
-
-- [Grayscale Theme](https://github.com/jeromelachaud/grayscale-theme) - Inspiración para la página principal
-- [Jekyll Theme YAT](https://github.com/jeffreytse/jekyll-theme-yat) - Tema del blog
-- [Font Awesome](https://fontawesome.com/) - Iconos
-- [Bootstrap](https://getbootstrap.com/) - Framework CSS
+© 2026 Gonzalo Mondragón Báscones (av4sin)
