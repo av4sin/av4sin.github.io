@@ -1,103 +1,75 @@
-# Mi Sitio Personal
+# av4sin.github.io
 
-Sitio web personal con página de presentación, blog y juegos educativos militares.
+Sitio web personal de **Gonzalo Mondragón Báscones** (av4sin).
+
+Soluciones, ideas y proyectos de informática. Un espacio para compartir y dejar huella.
 
 ## 🌐 URL
 
 **https://av4sin.github.io**
 
-## 📁 Estructura del Proyecto
+## 📁 Estructura
 
 ```
 .
-├── assets/                    # Recursos de la página principal
-│   ├── css/                   # Estilos
-│   │   ├── grayscale.css      # Landing page
-│   │   └── blog.css           # Blog
-│   ├── js/                    # Scripts
-│   │   └── grayscale.js       # Animaciones y efectos
-│   └── img/                   # Imágenes
-│       └── backgrounds/       # Fondos SVG
-│
-├── blog/                      # Páginas del blog
-│   ├── index.html             # Home del blog
-│   ├── archives.html          # Archivo por fecha
-│   ├── categories.html        # Por categorías
-│   ├── tags.html              # Por etiquetas
-│   └── about.html             # Sobre mí
-│
-├── games/                     # Juegos educativos militares
-│   ├── css/                   # Estilos de juegos
-│   ├── js/                    # Scripts de juegos
-│   ├── img/                   # Imágenes y rangos
-│   ├── juegos.html            # Portal principal
-│   └── *.html                 # Juegos individuales
-│
-├── _layouts/                  # Plantillas Jekyll
-├── _includes/                 # Componentes reutilizables
-├── _posts/                    # Artículos del blog
-├── _data/                     # Datos YAML
-│
-├── index.html                 # Landing page principal
-├── 404.html                   # Página de error
-├── _config.yml                # Configuración Jekyll
-├── Gemfile                    # Dependencias Ruby
-└── README.md                  # Este archivo
+├── assets/          # CSS, JS, imágenes del sitio
+├── blog/            # Páginas del blog (Jekyll)
+├── games/           # Juegos educativos militares
+├── _layouts/        # Plantillas Jekyll
+├── _posts/          # Artículos del blog
+├── _data/           # Datos YAML
+└── index.html       # Landing page
 ```
-
-## 🚀 Secciones
-
-### Página Principal (/)
-Landing page estilo Grayscale con:
-- Header con efecto typing
-- Sección "Sobre Mí"
-- Proyectos destacados
-- Contacto
-
-### Blog (/blog/)
-Blog con Jekyll featuring:
-- Artículos por categoría y tags
-- Sistema de comentarios (Utterances)
-- Modo oscuro
-- Diseño responsivo
-
-### Juegos (/games/juegos.html)
-Portal de juegos educativos sobre rangos militares:
-- Trivia militar
-- Juego de memoria
-- Identificación de rangos
-- Simuladores
 
 ## 🛠️ Tecnologías
 
-- **Jekyll** - Generador de sitios estáticos
-- **Bootstrap 3** - Framework CSS (landing)
-- **Font Awesome** - Iconos
-- **Highlight.js** - Syntax highlighting
-- **Utterances** - Comentarios basados en GitHub Issues
+- **C, Python, Java** - Lenguajes principales
+- **Raspberry Pi & Arduino** - Proyectos hardware
+- **Jekyll** - Generador del blog
+- **GitHub Pages** - Hosting
+
+## 🚀 Secciones
+
+- **/** - Página principal
+- **/blog/** - Blog con tutoriales y proyectos
+- **/games/** - Juegos educativos (enlace oculto)
 
 ## 📝 Desarrollo Local
 
 ```bash
-# Instalar dependencias
 bundle install
-
-# Ejecutar servidor local
 bundle exec jekyll serve
-
-# Acceder en http://localhost:4000
+# http://localhost:4000
 ```
 
-## 🚢 Despliegue
+## 📄 Licencia
 
-Push a la rama main despliega automáticamente en GitHub Pages.
+Este proyecto está bajo la **Licencia MIT**.
 
-```bash
-git add .
-git commit -m "Update"
-git push
+```
+MIT License
+
+Copyright (c) 2026 Gonzalo Mondragón Báscones (av4sin)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```
 
 ---
 
-© 2026 Gonzalo Mondragón Báscones (av4sin)
+**av4sin** · Gonzalo Mondragón Báscones · 2026

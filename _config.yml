@@ -1,6 +1,6 @@
 # Site Configuration
-title: Mi Sitio Personal
-description: Un sitio web personal con blog y proyectos
+title: av4sin
+description: Soluciones, ideas y proyectos de informática - Gonzalo Mondragón Báscones
 url: "https://av4sin.github.io"
 baseurl: ""
 lang: es
@@ -21,8 +21,8 @@ paginate_path: "/blog/page/:num/"
 
 # Banner Settings for Blog
 banner:
-  title: "Mi Blog"
-  subtitle: "Pensamientos, tutoriales y experiencias"
+  title: "Blog de av4sin"
+  subtitle: "Proyectos, tutoriales y cacharreos varios"
   background: "#1a1a2e"
   opacity: 0.618
 
@@ -34,16 +34,16 @@ highlighter: rouge
 header:
   mode: normal
 
-# Copyright
-copyright: "Mi Sitio Personal"
+# License
+license: "MIT"
 
 # Night Mode
 night_mode: true
 
 # Author info
 author:
-  name: "Tu Nombre"
-  email: "tu@email.com"
+  name: "Gonzalo Mondragón Báscones"
+  alias: "av4sin"
 
 # Navigation for blog pages
 nav:
@@ -64,7 +64,7 @@ nav:
 social:
   github: av4sin
   twitter: 
-  linkedin: 
+  linkedin: https://www.linkedin.com/in/gonzalo-mondragon-bascones
 
 # ============================================
 # COMMENTS - Utterances (GitHub-based)

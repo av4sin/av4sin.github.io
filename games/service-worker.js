@@ -3,7 +3,6 @@ const urlsToCache = [
     '.',
     './index.html',
     './manifest.json',
-    './img/favicon.ico',
     './Points.js',
     './military_ranks.html',
     './military_groups.html',

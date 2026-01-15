@@ -6,9 +6,6 @@
     <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
     <meta name="description" content="{{ page.description | default: site.description }}">
     
-    <!-- Favicon -->
-    <link rel="icon" href="{{ site.baseurl }}/assets/img/icons/favicon.ico" type="image/x-icon">
-    
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
@@ -33,8 +30,8 @@
     <nav class="blog-nav">
         <div class="nav-container">
             <a href="{{ site.baseurl }}/" class="nav-brand">
-                <i class="fas fa-rocket"></i>
-                <span>{{ site.title }}</span>
+                <i class="fas fa-terminal"></i>
+                <span>av4sin</span>
             </a>
             
             <button class="nav-toggle" aria-label="Toggle navigation">
@@ -106,7 +103,12 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; {{ site.time | date: '%Y' }} {{ site.copyright }}. Todos los derechos reservados.</p>
+                <p>
+                    <a href="https://opensource.org/licenses/MIT" target="_blank" title="Licencia MIT">
+                        <i class="fas fa-unlock-alt"></i> MIT License
+                    </a> · {{ site.time | date: '%Y' }} · 
+                    <strong>av4sin</strong> (Gonzalo Mondragón Báscones)
+                </p>
             </div>
         </div>
     </footer>

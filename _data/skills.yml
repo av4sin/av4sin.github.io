@@ -1,51 +1,51 @@
-# Habilidades y Skills
-# Datos estructurados para mostrar en el sitio
+# Habilidades y Skills de av4sin
+# Gonzalo Mondragón Báscones
 
 technical:
-  - category: "Desarrollo Web"
+  - category: "Programación"
     icon: "code"
     skills:
-      - HTML5
-      - CSS3
-      - JavaScript
-      - React
-      - Node.js
-      - Jekyll
-
-  - category: "Apps Móviles"
-    icon: "mobile"
-    skills:
-      - React Native
-      - Flutter
-      - PWA
-
-  - category: "Backend"
-    icon: "database"
-    skills:
+      - C
       - Python
       - Java
+      - Bash
       - SQL
-      - MongoDB
-      - REST APIs
 
-  - category: "Cloud & DevOps"
-    icon: "cloud"
+  - category: "Hardware & Electrónica"
+    icon: "microchip"
     skills:
-      - AWS
-      - Docker
-      - CI/CD
+      - Raspberry Pi
+      - Arduino
+      - ESP8266/ESP32
+      - Sensores
+      - Circuitos
+
+  - category: "Sistemas"
+    icon: "linux"
+    skills:
+      - Linux
+      - Redes
+      - Servidores
+      - Virtualización
       - Git
-      - GitHub Actions
+
+  - category: "Maker & IoT"
+    icon: "cogs"
+    skills:
+      - Domótica
+      - Automatización
+      - Impresión 3D
+      - Proyectos DIY
 
 soft:
   - "Resolución de problemas"
-  - "Trabajo en equipo"
-  - "Comunicación efectiva"
-  - "Aprendizaje continuo"
-  - "Gestión del tiempo"
+  - "Autodidacta"
+  - "Documentación"
+  - "Pensamiento lógico"
+  - "Perseverancia"
 
 languages:
   - name: "Español"
     level: "Nativo"
   - name: "Inglés"
-    level: "Avanzado"
+    level: "Técnico"
