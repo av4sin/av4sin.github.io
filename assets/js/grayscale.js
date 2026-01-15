@@ -38,44 +38,64 @@ $("a").mouseup(function() {
 // TYPING EFFECT
 // ============================================
 class TypeWriter {
-    constructor(element, words, wait = 3000) {
+    constructor(element, blocks, wait = 3000) {
         this.element = element;
-        this.words = words;
+        this.blocks = blocks;
         this.wait = parseInt(wait, 10);
+        this.blockIndex = 0;
         this.txt = '';
-        this.wordIndex = 0;
-        this.isDeleting = false;
+        this.isTypingCmd = true;
+        this.cmd = '';
+        this.resp = '';
+        this.cmdPos = 0;
+        this.respPos = 0;
         this.type();
     }
 
     type() {
-        const current = this.wordIndex % this.words.length;
-        const fullTxt = this.words[current];
+        const current = this.blockIndex % this.blocks.length;
+        const block = this.blocks[current];
+        const cmd = block.cmd;
+        const resp = block.resp;
 
-        if (this.isDeleting) {
-            this.txt = fullTxt.substring(0, this.txt.length - 1);
-        } else {
-            this.txt = fullTxt.substring(0, this.txt.length + 1);
+        if (cmd === 'clear') {
+            this.element.innerHTML = `<div class='typed-block'>&nbsp;</div>`;
+            setTimeout(() => {
+                this.blockIndex++;
+                this.isTypingCmd = true;
+                this.cmdPos = 0;
+                this.respPos = 0;
+                this.type();
+            }, 600);
+            return;
         }
 
-        this.element.innerHTML = `<span class="typed-text">${this.txt}</span><span class="cursor">|</span>`;
-
-        let typeSpeed = 100;
-
-        if (this.isDeleting) {
-            typeSpeed /= 2;
+        let html = "<div class='typed-block'>";
+        // Typing command
+        if (this.isTypingCmd) {
+            this.cmdPos++;
+            let shownCmd = cmd.substring(0, this.cmdPos);
+            html += `<span class='typed-cmd'>$ ${shownCmd}</span>`;
+            html += "</div>";
+            this.element.innerHTML = html;
+            if (this.cmdPos < cmd.length) {
+                setTimeout(() => this.type(), 60);
+            } else {
+                this.isTypingCmd = false;
+                setTimeout(() => this.type(), 400);
+            }
+            return;
         }
-
-        if (!this.isDeleting && this.txt === fullTxt) {
-            typeSpeed = this.wait;
-            this.isDeleting = true;
-        } else if (this.isDeleting && this.txt === '') {
-            this.isDeleting = false;
-            this.wordIndex++;
-            typeSpeed = 500;
-        }
-
-        setTimeout(() => this.type(), typeSpeed);
+        // Mostrar respuesta instantáneamente
+        html += `<span class='typed-cmd'>$ ${cmd}</span><br><span class='typed-resp'>${resp}</span></div>`;
+        this.element.innerHTML = html;
+        setTimeout(() => {
+            this.blockIndex++;
+            this.isTypingCmd = true;
+            this.cmdPos = 0;
+            this.respPos = 0;
+            this.type();
+        }, this.wait);
     }
 }
 
@@ -83,9 +103,18 @@ class TypeWriter {
 $(document).ready(function() {
     const typedElement = document.getElementById('typed-output');
     if (typedElement) {
-        const words = JSON.parse(typedElement.getAttribute('data-words'));
+        // Bloques de comandos y respuestas
+        const blocks = [
+            { cmd: 'whoami', resp: 'av4sin' },
+            { cmd: 'echo "Programador C/Python/Java"', resp: 'Programador C/Python/Java' },
+            { cmd: 'cat proyectos.txt', resp: 'Raspberry Pi\nArduino\nBlog\nLinux\nDomótica' },
+            { cmd: 'python3 script.py', resp: 'Hola, mundo desde Python!' },
+            { cmd: 'sudo apt update', resp: 'Obteniendo paquetes...\nTodo actualizado.' },
+            { cmd: 'clear', resp: '' },
+            { cmd: 'echo "Bienvenido a mi web"', resp: 'Bienvenido a mi web' }
+        ];
         const wait = typedElement.getAttribute('data-wait');
-        new TypeWriter(typedElement, words, wait);
+        new TypeWriter(typedElement, blocks, wait);
     }
     
     // Add animation on scroll
@@ -163,4 +192,48 @@ $(window).scroll(function() {
         'transform': 'translateY(' + scroll * 0.3 + 'px)',
         'opacity': 1 - scroll / 600
     });
+});
+
+// ============================================
+// FIXED SCROLL ARROW
+// ============================================
+$(document).ready(function() {
+    var $scrollArrow = $('#scroll-arrow');
+    var sections = ['#about', '#featured-projects', '#blog', '#contact'];
+    var currentSectionIndex = 0;
+    
+    // Update arrow href based on current position
+    function updateScrollArrow() {
+        var scroll = $(window).scrollTop();
+        var windowHeight = $(window).height();
+        var documentHeight = $(document).height();
+        
+        // Hide arrow when near bottom of page
+        if (scroll + windowHeight >= documentHeight - 100) {
+            $scrollArrow.addClass('hidden');
+            return;
+        } else {
+            $scrollArrow.removeClass('hidden');
+        }
+        
+        // Find next section
+        for (var i = 0; i < sections.length; i++) {
+            var $section = $(sections[i]);
+            if ($section.length && $section.offset().top > scroll + 100) {
+                $scrollArrow.attr('href', sections[i]);
+                return;
+            }
+        }
+        
+        // If past all sections, hide
+        $scrollArrow.addClass('hidden');
+    }
+    
+    // Update on scroll
+    $(window).scroll(function() {
+        updateScrollArrow();
+    });
+    
+    // Initialize
+    updateScrollArrow();
 });

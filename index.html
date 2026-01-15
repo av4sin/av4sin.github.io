@@ -66,15 +66,20 @@
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
                         <h1 class="brand-heading">Hola, soy Gonzalo</h1>
-                        <p class="intro-text">
-                            <span id="typed-output" data-words='["Informático", "Programador C/Python/Java", "Maker con Raspberry Pi", "Entusiasta de Arduino", "av4sin"]' data-wait="2000"></span>
-                        </p>
+                        <div class="terminal-sim">
+                            <div class="terminal-bar">
+                                <span class="terminal-dot red"></span>
+                                <span class="terminal-dot yellow"></span>
+                                <span class="terminal-dot green"></span>
+                                <span class="terminal-title">av4sin@linux:~$</span>
+                            </div>
+                            <div class="terminal-body">
+                                <span id="typed-output" data-words='["$ whoami", "$ echo \"Programador C/Python/Java\"", "$ cat proyectos.txt", "$ python3 script.py", "$ sudo apt update", "$ clear", "$ echo \"Bienvenido a mi web\""]' data-wait="2000"></span>
+                            </div>
+                        </div>
                         <p class="intro-subtext">
                             Compartiendo soluciones, ideas y proyectos. Dejando mi huella digital.
                         </p>
-                        <a href="#about" class="btn btn-circle page-scroll">
-                            <i class="fa fa-angle-double-down animated"></i>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -283,6 +288,11 @@
             </p>
         </div>
     </footer>
+
+    <!-- Scroll Down Arrow (Fixed) -->
+    <a href="#" id="scroll-arrow" class="scroll-arrow-fixed page-scroll" title="Bajar">
+        <i class="fa fa-angle-double-down"></i>
+    </a>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>

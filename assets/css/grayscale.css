@@ -1,3 +1,37 @@
+.typed-block {
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    font-size: 18px;
+    color: #16a085;
+    background: #23272e;
+    min-height: 70px;
+    width: 100%;
+    display: block;
+    white-space: pre-line;
+    padding: 0 0 0 8px;
+    text-align: left !important;
+}
+.typed-cmd {
+    color: #fff;
+    font-weight: 600;
+}
+.typed-resp {
+    color: #16a085;
+    font-weight: 400;
+}
+.typed-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.2em;
+    background: #16a085;
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: blink-block 1s steps(1) infinite;
+    text-align: left;
+}
+@keyframes blink-block {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
 /*!
  * Grayscale Theme - Adapted for personal site
  * Based on Start Bootstrap - Grayscale Bootstrap Theme
@@ -190,15 +224,66 @@ a:focus {
     animation: fadeIn 1.5s ease;
 }
 
+
+.terminal-sim {
+    background: #23272e;
+    border-radius: 8px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    max-width: 480px;
+    margin: 0 auto 20px auto;
+    padding: 0;
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+}
+.terminal-bar {
+    background: #181a1b;
+    border-radius: 8px 8px 0 0;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.terminal-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 3px;
+}
+.terminal-dot.red { background: #ff5f56; }
+.terminal-dot.yellow { background: #ffbd2e; }
+.terminal-dot.green { background: #27c93f; }
+.terminal-title {
+    margin-left: 10px;
+    color: #888;
+    font-size: 13px;
+    font-family: inherit;
+}
+.terminal-body {
+    padding: 18px 18px 10px 18px;
+    min-height: 70px;
+    font-size: 18px;
+    color: #16a085;
+    background: #23272e;
+    border-radius: 0 0 8px 8px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: relative;
+    height: 70px;
+    overflow: hidden;
+}
 #typed-output {
     color: #16a085;
     font-weight: 600;
-}
-
-.cursor {
-    color: #16a085;
-    font-weight: 100;
-    margin-left: 2px;
+    font-family: inherit;
+    min-width: 100%;
+    min-height: 1em;
+    display: block;
+    white-space: pre;
+    font-size: 18px;
 }
 
 @keyframes fadeInDown {
@@ -850,5 +935,59 @@ body {
     .blog-stats {
         flex-direction: column;
         gap: 20px;
+    }
+}
+
+/* ============================================
+   FIXED SCROLL ARROW
+   ============================================ */
+
+.scroll-arrow-fixed {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(26, 26, 46, 0.8);
+    z-index: 1000;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    opacity: 1;
+}
+
+.scroll-arrow-fixed:hover,
+.scroll-arrow-fixed:focus {
+    color: #fff;
+    border-color: #16a085;
+    background: rgba(22, 160, 133, 0.3);
+    text-decoration: none;
+}
+
+.scroll-arrow-fixed.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.scroll-arrow-fixed i {
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(5px);
+    }
+    60% {
+        transform: translateY(3px);
     }
 }
