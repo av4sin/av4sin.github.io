@@ -1,40 +1,32 @@
 # av4sin.github.io
 
-Sitio web personal de **Gonzalo Mondragón Báscones** (av4sin).
+Sitio web personal de Gonzalo Mondragon Bascones (av4sin).
 
-Soluciones, ideas y proyectos de informática. Un espacio para compartir y dejar huella.
+Soluciones, ideas y proyectos de informatica. Un espacio para compartir y dejar huella.
 
-## 🌐 URL
+## URL
 
-**https://av4sin.github.io**
+https://av4sin.github.io
 
-## 📁 Estructura
+## Estructura
 
 ```
 .
-├── assets/          # CSS, JS, imágenes del sitio
-├── blog/            # Páginas del blog (Jekyll)
-├── games/           # Juegos educativos militares
+├── assets/          # CSS, JS, imagenes del sitio
+├── blog/            # Paginas del blog (Jekyll)
+├── games/           # Juegos educativos (oculto)
 ├── _layouts/        # Plantillas Jekyll
-├── _posts/          # Artículos del blog
+├── _posts/          # Articulos del blog
 ├── _data/           # Datos YAML
 └── index.html       # Landing page
 ```
 
-## 🛠️ Tecnologías
+## Secciones
 
-- **C, Python, Java** - Lenguajes principales
-- **Raspberry Pi & Arduino** - Proyectos hardware
-- **Jekyll** - Generador del blog
-- **GitHub Pages** - Hosting
+- `/` - Pagina principal
+- `/blog/` - Blog con tutoriales y proyectos
 
-## 🚀 Secciones
-
-- **/** - Página principal
-- **/blog/** - Blog con tutoriales y proyectos
-- **/games/** - Juegos educativos (enlace oculto)
-
-## 📝 Desarrollo Local
+## Desarrollo Local
 
 ```bash
 bundle install
@@ -42,14 +34,14 @@ bundle exec jekyll serve
 # http://localhost:4000
 ```
 
-## 📄 Licencia
+## Licencia
 
-Este proyecto está bajo la **Licencia MIT**.
+Este proyecto esta bajo la Licencia MIT.
 
 ```
 MIT License
 
-Copyright (c) 2026 Gonzalo Mondragón Báscones (av4sin)
+Copyright (c) 2026 Gonzalo Mondragon Bascones (av4sin)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -72,4 +64,4 @@ SOFTWARE.
 
 ---
 
-**av4sin** · Gonzalo Mondragón Báscones · 2026
+av4sin - Gonzalo Mondragon Bascones - 2026

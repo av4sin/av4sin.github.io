@@ -1,11 +1,13 @@
+---
+---
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>av4sin | Gonzalo Mondragón</title>
-    <meta name="description" content="Soluciones, ideas y proyectos de informática - Gonzalo Mondragón Báscones">
+    <title>av4sin | Gonzalo Mondragon</title>
+    <meta name="description" content="Soluciones, ideas y proyectos de informatica - Gonzalo Mondragon Bascones">
     
     <!-- Bootstrap Core CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -133,22 +135,7 @@
                 </div>
             </div>
             <div class="row projects-grid">
-                <div class="col-md-4 col-sm-6">
-                    <div class="project-card">
-                        <div class="project-icon">
-                            <i class="fa fa-gamepad"></i>
-                        </div>
-                        <h3>Juegos Militares</h3>
-                        <p>Colección de juegos educativos sobre rangos y estrategia militar.</p>
-                        <div class="project-tags">
-                            <span class="tag">JavaScript</span>
-                            <span class="tag">HTML5</span>
-                            <span class="tag">CSS3</span>
-                        </div>
-                        <a href="games/juegos.html" class="project-link">Ver proyecto <i class="fa fa-arrow-right"></i></a>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6">
+                <div class="col-md-6 col-sm-6">
                     <div class="project-card">
                         <div class="project-icon">
                             <i class="fa fa-pencil"></i>
@@ -163,13 +150,13 @@
                         <a href="blog/" class="project-link">Ver proyecto <i class="fa fa-arrow-right"></i></a>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6">
+                <div class="col-md-6 col-sm-6">
                     <div class="project-card">
                         <div class="project-icon">
                             <i class="fa fa-rocket"></i>
                         </div>
                         <h3>Próximamente</h3>
-                        <p>Nuevos proyectos en desarrollo. ¡Mantente atento!</p>
+                        <p>Nuevos proyectos en desarrollo. Mantente atento.</p>
                         <div class="project-tags">
                             <span class="tag">En progreso</span>
                         </div>
@@ -191,17 +178,33 @@
                         desarrollo y mucho más. Un espacio para compartir conocimiento.
                     </p>
                     <div class="blog-preview">
+                        {% assign all_categories = "" | split: "" %}
+                        {% for post in site.posts %}
+                            {% for cat in post.categories %}
+                                {% unless all_categories contains cat %}
+                                    {% assign all_categories = all_categories | push: cat %}
+                                {% endunless %}
+                            {% endfor %}
+                        {% endfor %}
+                        {% assign all_tags = "" | split: "" %}
+                        {% for post in site.posts %}
+                            {% for tag in post.tags %}
+                                {% unless all_tags contains tag %}
+                                    {% assign all_tags = all_tags | push: tag %}
+                                {% endunless %}
+                            {% endfor %}
+                        {% endfor %}
                         <div class="blog-stats">
                             <div class="stat-item">
-                                <span class="stat-number">4+</span>
-                                <span class="stat-label">Artículos</span>
+                                <span class="stat-number">{{ site.posts.size }}</span>
+                                <span class="stat-label">Articulos</span>
                             </div>
                             <div class="stat-item">
-                                <span class="stat-number">3</span>
-                                <span class="stat-label">Categorías</span>
+                                <span class="stat-number">{{ all_categories.size }}</span>
+                                <span class="stat-label">Categorias</span>
                             </div>
                             <div class="stat-item">
-                                <span class="stat-number">10+</span>
+                                <span class="stat-number">{{ all_tags.size }}</span>
                                 <span class="stat-label">Tags</span>
                             </div>
                         </div>
@@ -229,6 +232,11 @@
                             <i class="fa fa-github fa-fw"></i> <span class="network-name">GitHub</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="https://av4sin.github.io/blog/about.html" class="btn btn-default btn-lg" target="_blank">
+                            <i class="fa fa-linkedin fa-fw"></i> <span class="network-name">LinkedIn</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -240,12 +248,8 @@
             <p class="copyright">
                 <a href="https://opensource.org/licenses/MIT" target="_blank" title="Licencia MIT">
                     <i class="fa fa-unlock-alt"></i> MIT License
-                </a> · 2026 · 
-                <strong>av4sin</strong> (Gonzalo Mondragón Báscones)
-                <!-- Enlace discreto a los juegos -->
-                <span class="hidden-link">
-                    <a href="games/juegos.html" title="🎮">·</a>
-                </span>
+                </a> - 2026 - 
+                <strong>av4sin</strong> (Gonzalo Mondragon Bascones)
             </p>
         </div>
     </footer>
