@@ -795,8 +795,15 @@ img {
 }
 
 .author-avatar {
-    font-size: 4rem;
-    color: var(--accent);
+    flex-shrink: 0;
+}
+
+.author-avatar .author-avatar-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--accent);
 }
 
 .author-info h4 {

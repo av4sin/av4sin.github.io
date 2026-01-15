@@ -4,10 +4,6 @@ title: Sobre Mi
 permalink: /blog/about.html
 ---
 
-<div class="about-avatar">
-  <img src="https://github.com/av4sin.png" alt="av4sin" class="avatar-img">
-</div>
-
 ## Hola, soy Gonzalo
 
 Me conocen en la red como **av4sin**. Soy informatico, no desarrollador web (aunque aqui estoy con esta pagina).

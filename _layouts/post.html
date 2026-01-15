@@ -83,17 +83,17 @@ layout: default
             <!-- Author Box -->
             <div class="author-box">
                 <div class="author-avatar">
-                    <i class="fas fa-user-circle"></i>
+                    <img src="https://github.com/{{ site.social.github }}.png" alt="{{ site.author.name }}" class="author-avatar-img">
                 </div>
                 <div class="author-info">
                     <h4>{{ site.author.name | default: "Autor" }}</h4>
-                    <p>Desarrollador y creador de contenido. Me apasiona compartir conocimiento sobre tecnología y desarrollo web.</p>
+                    <p>Informatico. Programador C/Python/Java. Maker con Raspberry Pi y Arduino.</p>
                     <div class="author-social">
                         {% if site.social.github %}
                         <a href="https://github.com/{{ site.social.github }}" target="_blank"><i class="fab fa-github"></i></a>
                         {% endif %}
-                        {% if site.social.twitter %}
-                        <a href="https://twitter.com/{{ site.social.twitter }}" target="_blank"><i class="fab fa-twitter"></i></a>
+                        {% if site.social.linkedin %}
+                        <a href="https://linkedin.com/in/{{ site.social.linkedin }}" target="_blank"><i class="fab fa-linkedin"></i></a>
                         {% endif %}
                     </div>
                 </div>
