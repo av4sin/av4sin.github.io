@@ -1,0 +1,146 @@
+---
+layout: default
+---
+
+<article class="post-single">
+    <!-- Post Header -->
+    <header class="post-header">
+        <div class="post-header-content">
+            <div class="post-meta-top">
+                {% for category in page.categories %}
+                <a href="{{ site.baseurl }}/blog/categories.html#{{ category | slugify }}" class="post-category-link">
+                    {{ category }}
+                </a>
+                {% endfor %}
+            </div>
+            
+            <h1 class="post-title">{{ page.title }}</h1>
+            
+            <div class="post-meta-bottom">
+                <span class="post-date">
+                    <i class="far fa-calendar-alt"></i>
+                    {{ page.date | date: "%d de %B, %Y" }}
+                </span>
+                <span class="post-reading-time">
+                    <i class="far fa-clock"></i>
+                    {% assign words = content | number_of_words %}
+                    {% if words < 200 %}
+                        1 min de lectura
+                    {% else %}
+                        {{ words | divided_by: 200 }} min de lectura
+                    {% endif %}
+                </span>
+                {% if page.author %}
+                <span class="post-author">
+                    <i class="far fa-user"></i>
+                    {{ page.author }}
+                </span>
+                {% endif %}
+            </div>
+            
+            {% if page.tags.size > 0 %}
+            <div class="post-tags-header">
+                {% for tag in page.tags %}
+                <a href="{{ site.baseurl }}/blog/tags.html#{{ tag | slugify }}" class="tag-link">
+                    #{{ tag }}
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </header>
+
+    <!-- Post Content -->
+    <div class="post-content-wrapper">
+        <div class="post-content">
+            {{ content }}
+        </div>
+        
+        <!-- Post Footer -->
+        <footer class="post-footer">
+            <!-- Share Buttons -->
+            <div class="share-section">
+                <h4>Compartir este artículo</h4>
+                <div class="share-buttons">
+                    <a href="https://twitter.com/intent/tweet?text={{ page.title | uri_escape }}&url={{ site.url }}{{ site.baseurl }}{{ page.url }}" 
+                       target="_blank" class="share-btn twitter" aria-label="Compartir en Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ site.baseurl }}{{ page.url }}&title={{ page.title | uri_escape }}" 
+                       target="_blank" class="share-btn linkedin" aria-label="Compartir en LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ site.baseurl }}{{ page.url }}" 
+                       target="_blank" class="share-btn facebook" aria-label="Compartir en Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <button class="share-btn copy" onclick="copyToClipboard()" aria-label="Copiar enlace">
+                        <i class="fas fa-link"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Author Box -->
+            <div class="author-box">
+                <div class="author-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="author-info">
+                    <h4>{{ site.author.name | default: "Autor" }}</h4>
+                    <p>Desarrollador y creador de contenido. Me apasiona compartir conocimiento sobre tecnología y desarrollo web.</p>
+                    <div class="author-social">
+                        {% if site.social.github %}
+                        <a href="https://github.com/{{ site.social.github }}" target="_blank"><i class="fab fa-github"></i></a>
+                        {% endif %}
+                        {% if site.social.twitter %}
+                        <a href="https://twitter.com/{{ site.social.twitter }}" target="_blank"><i class="fab fa-twitter"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </footer>
+        
+        <!-- Post Navigation -->
+        <nav class="post-navigation">
+            {% if page.previous.url %}
+            <a href="{{ site.baseurl }}{{ page.previous.url }}" class="post-nav-link prev">
+                <span class="nav-label"><i class="fas fa-arrow-left"></i> Anterior</span>
+                <span class="nav-title">{{ page.previous.title | truncate: 40 }}</span>
+            </a>
+            {% endif %}
+            
+            {% if page.next.url %}
+            <a href="{{ site.baseurl }}{{ page.next.url }}" class="post-nav-link next">
+                <span class="nav-label">Siguiente <i class="fas fa-arrow-right"></i></span>
+                <span class="nav-title">{{ page.next.title | truncate: 40 }}</span>
+            </a>
+            {% endif %}
+        </nav>
+        
+        <!-- Comments Section -->
+        {% if page.comments != false and site.utterances %}
+        <section class="comments-section">
+            <h3><i class="fas fa-comments"></i> Comentarios</h3>
+            <script src="https://utteranc.es/client.js"
+                    repo="{{ site.utterances.repo }}"
+                    issue-term="{{ site.utterances.issue_term | default: 'pathname' }}"
+                    {% if site.utterances.label %}label="{{ site.utterances.label }}"{% endif %}
+                    theme="{{ site.utterances.theme | default: 'github-dark' }}"
+                    crossorigin="anonymous"
+                    async>
+            </script>
+        </section>
+        {% endif %}
+    </div>
+</article>
+
+<script>
+function copyToClipboard() {
+    navigator.clipboard.writeText(window.location.href);
+    const btn = document.querySelector('.share-btn.copy');
+    btn.innerHTML = '<i class="fas fa-check"></i>';
+    setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-link"></i>';
+    }, 2000);
+}
+</script>

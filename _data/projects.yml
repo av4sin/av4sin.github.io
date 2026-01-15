@@ -1,0 +1,51 @@
+# Datos de Proyectos
+# Facilita la gestión y actualización de proyectos
+
+featured:
+  - name: "Juegos Militares Educativos"
+    description: "Suite de juegos educativos interactivos sobre rangos militares"
+    icon: "gamepad"
+    status: "completed"
+    url: "/juegos.html"
+    github: "https://github.com/av4sin/av4sin.github.io"
+    tags:
+      - JavaScript
+      - HTML5
+      - CSS3
+      - PWA
+
+  - name: "Blog Personal"
+    description: "Blog técnico con artículos sobre desarrollo y tecnología"
+    icon: "pencil"
+    status: "completed"
+    url: "/blog/"
+    github: "https://github.com/av4sin/av4sin.github.io"
+    tags:
+      - Jekyll
+      - GitHub Pages
+      - Markdown
+
+  - name: "Sitio Web Personal"
+    description: "Página de inicio con diseño moderno estilo Grayscale"
+    icon: "rocket"
+    status: "completed"
+    url: "/"
+    github: "https://github.com/av4sin/av4sin.github.io"
+    tags:
+      - HTML5
+      - CSS3
+      - Bootstrap
+      - JavaScript
+
+upcoming:
+  - name: "API REST con Node.js"
+    description: "Backend para gestión de datos"
+    status: "in-progress"
+    
+  - name: "App Móvil React Native"
+    description: "Aplicación multiplataforma"
+    status: "planned"
+    
+  - name: "Dashboard Analytics"
+    description: "Visualización de datos en tiempo real"
+    status: "planned"

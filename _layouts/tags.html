@@ -1,0 +1,51 @@
+---
+layout: default
+---
+
+<div class="page-wrapper">
+    <header class="page-header">
+        <h1><i class="fas fa-tags"></i> Tags</h1>
+        <p>Explora artículos por etiquetas</p>
+    </header>
+    
+    <div class="tags-content">
+        {% assign tags = site.posts | map: "tags" | flatten | uniq | sort %}
+        
+        <!-- Tags Cloud -->
+        <div class="tags-cloud-large">
+            {% for tag in tags %}
+            <a href="#{{ tag | slugify }}" class="tag-cloud-link">
+                #{{ tag }}
+                <span class="tag-count">
+                    {% assign count = 0 %}
+                    {% for post in site.posts %}
+                        {% if post.tags contains tag %}
+                            {% assign count = count | plus: 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {{ count }}
+                </span>
+            </a>
+            {% endfor %}
+        </div>
+        
+        <!-- Tags Sections -->
+        {% for tag in tags %}
+        <section class="tag-section" id="{{ tag | slugify }}">
+            <h2 class="tag-title">
+                <span class="tag-hash">#</span>{{ tag }}
+            </h2>
+            <ul class="tag-posts">
+                {% for post in site.posts %}
+                    {% if post.tags contains tag %}
+                    <li class="tag-post-item">
+                        <span class="post-date">{{ post.date | date: "%d %b %Y" }}</span>
+                        <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </section>
+        {% endfor %}
+    </div>
+</div>

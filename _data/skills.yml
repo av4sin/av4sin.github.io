@@ -1,0 +1,51 @@
+# Habilidades y Skills
+# Datos estructurados para mostrar en el sitio
+
+technical:
+  - category: "Desarrollo Web"
+    icon: "code"
+    skills:
+      - HTML5
+      - CSS3
+      - JavaScript
+      - React
+      - Node.js
+      - Jekyll
+
+  - category: "Apps Móviles"
+    icon: "mobile"
+    skills:
+      - React Native
+      - Flutter
+      - PWA
+
+  - category: "Backend"
+    icon: "database"
+    skills:
+      - Python
+      - Java
+      - SQL
+      - MongoDB
+      - REST APIs
+
+  - category: "Cloud & DevOps"
+    icon: "cloud"
+    skills:
+      - AWS
+      - Docker
+      - CI/CD
+      - Git
+      - GitHub Actions
+
+soft:
+  - "Resolución de problemas"
+  - "Trabajo en equipo"
+  - "Comunicación efectiva"
+  - "Aprendizaje continuo"
+  - "Gestión del tiempo"
+
+languages:
+  - name: "Español"
+    level: "Nativo"
+  - name: "Inglés"
+    level: "Avanzado"

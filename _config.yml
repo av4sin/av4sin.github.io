@@ -1,0 +1,129 @@
+# Site Configuration
+title: Mi Sitio Personal
+description: Un sitio web personal con blog y proyectos
+url: "https://av4sin.github.io"
+baseurl: ""
+lang: es
+
+# No remote theme - using custom layouts
+# Previously: remote_theme: "jeffreytse/jekyll-theme-yat"
+
+# Plugins (removed jekyll-remote-theme)
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-paginate
+
+# Pagination
+paginate: 5
+paginate_path: "/blog/page/:num/"
+
+# Banner Settings for Blog
+banner:
+  title: "Mi Blog"
+  subtitle: "Pensamientos, tutoriales y experiencias"
+  background: "#1a1a2e"
+  opacity: 0.618
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Header and Footer
+header:
+  mode: normal
+
+# Copyright
+copyright: "Mi Sitio Personal"
+
+# Night Mode
+night_mode: true
+
+# Author info
+author:
+  name: "Tu Nombre"
+  email: "tu@email.com"
+
+# Navigation for blog pages
+nav:
+  - title: Inicio
+    url: /
+  - title: Blog
+    url: /blog/
+  - title: Proyectos
+    url: /blog/projects.html
+  - title: Archivos
+    url: /blog/archives.html
+  - title: Categorías
+    url: /blog/categories.html
+  - title: Sobre Mí
+    url: /blog/about.html
+
+# Social links
+social:
+  github: av4sin
+  twitter: 
+  linkedin: 
+
+# ============================================
+# COMMENTS - Utterances (GitHub-based)
+# ============================================
+# Utterances uses GitHub issues for comments
+# Go to https://utteranc.es to set it up
+utterances:
+  repo: "av4sin/av4sin.github.io"
+  issue_term: "pathname"
+  label: "💬 comments"
+  theme: "github-dark"
+
+# ============================================
+# ANALYTICS - Multiple options
+# ============================================
+# Google Analytics 4 (optional - add your measurement ID)
+# google_analytics: "G-XXXXXXXXXX"
+
+# Umami Analytics (privacy-friendly alternative)
+# Uncomment and add your details if using Umami
+# umami:
+#   website_id: "your-website-id"
+#   src: "https://analytics.yourdomain.com/umami.js"
+
+# Plausible Analytics (privacy-friendly)
+# plausible:
+#   domain: "av4sin.github.io"
+
+# Collections
+collections:
+  posts:
+    output: true
+    permalink: /blog/:year/:month/:day/:title/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      comments: true  # Enable comments by default on posts
+  - scope:
+      path: "blog"
+    values:
+      layout: page
+
+# Exclude from build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .git
+  - README.md
+
+# Include specific files/folders
+include:
+  - _posts
+
+# Keep the static index.html (Grayscale) as main page
+# Blog will be at /blog/

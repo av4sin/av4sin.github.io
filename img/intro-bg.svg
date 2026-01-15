@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="50%" style="stop-color:#16213e"/>
+      <stop offset="100%" style="stop-color:#0f3460"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bg-gradient)"/>
+  
+  <!-- Stars/particles -->
+  <g fill="#fff" opacity="0.3">
+    <circle cx="100" cy="100" r="1"/>
+    <circle cx="200" cy="150" r="1.5"/>
+    <circle cx="350" cy="80" r="1"/>
+    <circle cx="500" cy="200" r="2"/>
+    <circle cx="650" cy="120" r="1"/>
+    <circle cx="800" cy="180" r="1.5"/>
+    <circle cx="950" cy="90" r="1"/>
+    <circle cx="1100" cy="160" r="2"/>
+    <circle cx="1250" cy="100" r="1"/>
+    <circle cx="1400" cy="190" r="1.5"/>
+    <circle cx="1550" cy="70" r="1"/>
+    <circle cx="1700" cy="140" r="2"/>
+    <circle cx="1850" cy="110" r="1"/>
+    <circle cx="150" cy="300" r="1.5"/>
+    <circle cx="300" cy="350" r="1"/>
+    <circle cx="450" cy="280" r="2"/>
+    <circle cx="600" cy="320" r="1"/>
+    <circle cx="750" cy="380" r="1.5"/>
+    <circle cx="900" cy="290" r="1"/>
+    <circle cx="1050" cy="360" r="2"/>
+    <circle cx="1200" cy="300" r="1"/>
+    <circle cx="1350" cy="390" r="1.5"/>
+    <circle cx="1500" cy="270" r="1"/>
+    <circle cx="1650" cy="340" r="2"/>
+    <circle cx="1800" cy="310" r="1"/>
+    <circle cx="100" cy="500" r="1"/>
+    <circle cx="250" cy="550" r="1.5"/>
+    <circle cx="400" cy="480" r="1"/>
+    <circle cx="550" cy="520" r="2"/>
+    <circle cx="700" cy="580" r="1"/>
+    <circle cx="850" cy="490" r="1.5"/>
+    <circle cx="1000" cy="560" r="1"/>
+    <circle cx="1150" cy="500" r="2"/>
+    <circle cx="1300" cy="590" r="1"/>
+    <circle cx="1450" cy="470" r="1.5"/>
+    <circle cx="1600" cy="540" r="1"/>
+    <circle cx="1750" cy="510" r="2"/>
+    <circle cx="1900" cy="570" r="1"/>
+    <circle cx="180" cy="700" r="1.5"/>
+    <circle cx="330" cy="750" r="1"/>
+    <circle cx="480" cy="680" r="2"/>
+    <circle cx="630" cy="720" r="1"/>
+    <circle cx="780" cy="780" r="1.5"/>
+    <circle cx="930" cy="690" r="1"/>
+    <circle cx="1080" cy="760" r="2"/>
+    <circle cx="1230" cy="700" r="1"/>
+    <circle cx="1380" cy="790" r="1.5"/>
+    <circle cx="1530" cy="670" r="1"/>
+    <circle cx="1680" cy="740" r="2"/>
+    <circle cx="1830" cy="710" r="1"/>
+    <circle cx="120" cy="900" r="1"/>
+    <circle cx="270" cy="950" r="1.5"/>
+    <circle cx="420" cy="880" r="1"/>
+    <circle cx="570" cy="920" r="2"/>
+    <circle cx="720" cy="980" r="1"/>
+    <circle cx="870" cy="890" r="1.5"/>
+    <circle cx="1020" cy="960" r="1"/>
+    <circle cx="1170" cy="900" r="2"/>
+    <circle cx="1320" cy="990" r="1"/>
+    <circle cx="1470" cy="870" r="1.5"/>
+    <circle cx="1620" cy="940" r="1"/>
+    <circle cx="1770" cy="910" r="2"/>
+  </g>
+  
+  <!-- Geometric shapes -->
+  <g stroke="#16a085" stroke-width="1" fill="none" opacity="0.15">
+    <polygon points="960,200 1060,400 860,400" filter="url(#glow)"/>
+    <polygon points="300,600 400,800 200,800"/>
+    <polygon points="1600,500 1700,700 1500,700"/>
+    <circle cx="500" cy="300" r="80"/>
+    <circle cx="1400" cy="800" r="100"/>
+  </g>
+  
+  <!-- Connecting lines -->
+  <g stroke="#16a085" stroke-width="0.5" opacity="0.1">
+    <line x1="0" y1="540" x2="1920" y2="540"/>
+    <line x1="960" y1="0" x2="960" y2="1080"/>
+    <line x1="0" y1="0" x2="1920" y2="1080"/>
+    <line x1="1920" y1="0" x2="0" y2="1080"/>
+  </g>
+</svg>
