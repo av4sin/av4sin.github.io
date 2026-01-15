@@ -1167,9 +1167,23 @@ img {
 }
 
 .about-avatar {
-    font-size: 6rem;
-    color: var(--accent);
-    margin-bottom: var(--space-lg);
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.about-avatar .avatar-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--accent);
+    box-shadow: 0 4px 20px var(--shadow);
+    transition: var(--transition);
+}
+
+.about-avatar .avatar-img:hover {
+    transform: scale(1.05);
+    border-color: var(--accent-hover);
 }
 
 .about-avatar img {
