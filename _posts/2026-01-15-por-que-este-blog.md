@@ -10,7 +10,7 @@ pin: true
 
 ## El origen de todo
 
-Llevo anos usando ordenadores. Programando. Rompiendo cosas. Arreglandolas. Y en algun momento de ese ciclo infinito de prueba y error, me di cuenta de algo: **se me olvida todo**.
+Llevo años usando ordenadores. Programando. Rompiendo cosas. Arreglandolas. Y en algun momento de ese ciclo infinito de prueba y error, me di cuenta de algo: **se me olvida todo**.
 
 No es que tenga mala memoria. Es que la cantidad de problemas que resuelvo, configuraciones que hago, y soluciones que encuentro es tan grande que resulta imposible retenerlo todo. Y lo peor no es olvidarlo. Lo peor es volver a enfrentarte al mismo problema seis meses despues y no recordar como lo solucionaste.
 
