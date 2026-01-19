@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Construyendo un mando imposible: SuperTuxKart, joysticks y el límite del DigiSpark"
-date: 2026-01-18
+date: 2026-01-17
 categories: [tecnico, hardware, linux]
 tags: [fedora, arduino, digispark, joystick, supertuxkart, proyectos]
 ---
