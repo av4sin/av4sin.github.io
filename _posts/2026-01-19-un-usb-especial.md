@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Cuando Linux dijo no: USB, permisos y el día que tres placas casi me ganan"
-date: 2026-01-18
+date: 2026-01-19
 categories: [tecnico, hardware, linux]
 tags: [fedora, arduino, digispark, usb, udev, linux, permisos, ch340]
 ---
