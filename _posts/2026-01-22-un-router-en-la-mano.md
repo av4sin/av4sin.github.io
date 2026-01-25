@@ -3,14 +3,14 @@ layout: post
 title: "Negociando con la red: Tailscale en un router de 128MB y el muro del espacio"
 date: 2026-01-22
 categories: [tecnico, redes]
-tags: [openwrt, tailscale, cgnat, networking, troubleshooting]
+tags: [openwrt, tailscale, networking, troubleshooting, storage, usb]
 ---
 
 ## El siguiente frente de batalla
 
-Tras conseguir que mi servidor TAK funcione, el siguiente problema me esperaba en la esquina de la mesa: el router **GL-AR300M**. 
+Tras conseguir que mi [servidor TAK funcionase](https://av4sin.github.io/blog/2026/01/20/tak-server-install/), el siguiente problema me esperaba en la esquina de la mesa: el router **GL-AR300M**. 
 
-El objetivo era integrar este pequeño nodo en mi red para dar soporte al **Tak Server**. Si el servidor cae o si el CGNAT del operador decide que hoy no me deja pasar, necesito una puerta trasera. Una forma de entrar en mi casa sin pedir permiso al ISP. Tailscale era la respuesta lógica. O eso creía yo antes de chocarme con la realidad del hardware limitado.
+La idea no nació de una necesidad crítica, sino de esas ganas de liarse con proyectos nuevos. Quería un router que me diera acceso directo a la red creada por Tailscale. De esta forma, podría acceder a mi servidor TAK desde cualquier ciudad con cualquier dispositivo conectado a ese router, sin tener que pasar por el proceso de registro en la web de Tailscale ni instalar clientes en cada aparato. Sería mi llave maestra para entrar en la red local de mi casa y gestionar mi Raspberry Pi de forma remota.
 
 ## La dictadura de los 128MB
 
@@ -35,13 +35,13 @@ tar: write error: No space left on device
 
 ```
 
-Incluso la RAM temporal estaba colapsada. El router estaba respirando con un solo pulmón. Me di cuenta de que no podía seguir por la vía rápida. Si quería que este nodo viviera para ver el amanecer, tenía que externalizar el almacenamiento.
+Incluso la RAM temporal estaba colapsada. El router estaba respirando con un solo pulmón. Me di cuenta de que no podía seguir por la vía rápida. Si quería que este nodo viviera para ver el amanecer, tenía que externalizar el almacenamiento, algo que documenté a fondo en el [siguiente post](https://av4sin.github.io/blog/2026/01/24/usb-para-todo/).
 
 ## La solución: El bypass del USB
 
-No iba a usar *extroot* ni complicarme con particiones lógicas que pudieran corromperse al primer apagón. Necesitaba algo quirúrgico. Usar un USB solo como almacén de binarios y sockets.
+No iba a usar *extroot* ni complicarme con particiones lógicas que pudieran corromperse al primer apagón. Necesitaba algo quirúrgico. [Usar un USB](https://av4sin.github.io/blog/2026/01/24/usb-para-todo/) solo como almacén de binarios y sockets.
 
-Tras una pelea con el kernel para que reconociera el sistema de archivos del USB (una historia que daría para otro post lleno de logs de error), conseguí montarlo en `/mnt/usb`.
+Tras una pelea con el kernel para que reconociera el sistema de archivos del USB, conseguí montarlo en `/mnt/usb`.
 
 ### Ejecución manual
 
@@ -63,19 +63,18 @@ Con el demonio vivo, tocaba el apretón de manos con la red:
 
 ```
 
-Tras autorizar el dispositivo en el panel de control, apareció la magia: una IP 100.x.x.x respondiendo pings. El router ya no era una isla invisible tras el CGNAT.
+Tras autorizar el dispositivo en el panel de control, apareció la magia: una IP 100.x.x.x respondiendo pings. El router ya no era una isla invisible.
 
-## Por qué esto importa para el Tak Server
+## Por qué esto era una buena idea (y por qué falló)
 
-Este post no es solo por el placer de hackear un router viejo. Es por **redundancia**.
-En mi infraestructura, el **Tak Server** es el corazón. Pero si el túnel principal falla, este router es mi "botón del pánico". A través de él, puedo saltar por SSH al servidor, diagnosticar y arreglar el desastre sin tener que estar físicamente allí. Es el cordón umbilical que me permite dormir tranquilo.
+Este router no era solo una puerta de enlace para el [servidor TAK](https://av4sin.github.io/blog/2026/01/20/tak-server-install/), sino para **todos los dispositivos de mi casa**. La idea era sólida, pero la ejecución se topó con la obsolescencia.
+
+A pesar de tener el túnel arriba, el router no funcionó bien. Las versiones de los paquetes que manejaba eran demasiado antiguas y, por más que lo intenté, no logré conectarme ni siquiera a la Raspberry Pi por SSH. Tras consultarlo, la conclusión fue clara: **faltaba otro router para hacer el puente en mi casa**. Es un tema que tengo pendiente investigar más a fondo, ya que en su momento confié en que la configuración final de mi Tak Server en la RPi solventaría el problema.
 
 ## Lecciones aprendidas
 
-Nuevamente, la lección es que **nada es gratis en el hardware antiguo**. En sistemas modernos como Fedora nos hemos acostumbrado a que el espacio no importe, pero en OpenWrt, cada byte se gana.
+Nuevamente, la lección es que **nada es gratis en el hardware antiguo**. He pasado de un router ciego a tener una puerta trasera, aunque sea a medias. No ha sido elegante, ha sido una lucha contra los límites de la física y el software.
 
-He pasado de un router ciego a tener una puerta trasera segura y cifrada. No ha sido elegante, ha sido una lucha contra los límites de la física y el software, pero funciona.
-
-Esta es otra huella en mi bitácora. Si alguna vez te quedas sin espacio en un router y necesitas desesperadamente un túnel, ya sabes que el USB es tu único aliado.
+Esta es otra huella en mi hisorial. La teoría era perfecta; la práctica me enseñó que la topología de red es un monstruo mucho más complejo.
 
 ¡Nos vemos en el próximo log!
