@@ -8,7 +8,7 @@ tags: [fedora, arduino, digispark, usb, udev, linux, permisos, ch340]
 
 ## Cuando el problema no es el código
 
-Hoy, después del experimento del [mando imposible](https://av4sin.github.io/blog/2026/01/17/el-mando-no-manda/), os cuento la odisea de conectar Arduino a un Frankestein de SO.
+Hoy, después del experimento del [mando imposible](https://av4sin.github.io/blog/2026/01/18/el-mando-no-manda/), os cuento la odisea de conectar Arduino a un Frankestein de SO.
 
 Spoiler: no es facil.
 
@@ -218,7 +218,7 @@ Tras subir el codigo compilado al arduino nano, sorpesa, no se sube.
 En ese momento el IDE de arduino decide desconectar el nano cada vez que intento subir el codigo.
 
 Podría haber invertido 1 hora en solucionarlo. Sí.
-¿Lo hice? No. ([Y menos mal...](https://av4sin.github.io/blog/2026/01/17/el-mando-no-manda/))
+¿Lo hice? No. ([Y menos mal...](https://av4sin.github.io/blog/2026/01/18/el-mando-no-manda/))
 
 Cuando conecté mi otro Arduino:
 
