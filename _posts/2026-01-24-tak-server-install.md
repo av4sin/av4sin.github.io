@@ -1,79 +1,77 @@
 ---
-layout: post
-title: "Operación TAK: Montando un servidor táctico en Raspberry Pi (Guía de Supervivencia)"
-date: 2026-01-24
-categories: [tecnico, redes, raspberrypi, tak]
-tags: [takserver, atak, tailscale, linux, debian, seguridad, certificados]
+layout: post 
+title: "Operación TAK: De cero a Red Táctica en una Raspberry Pi (La Guía Definitiva)" 
+date: 2026-01-25 
+categories: [tecnico, redes, raspberrypi, tak, seguridad] 
+tags: [takserver, atak, tailscale, ufw, linux, debian, subnet-routing, certificados]
 ---
 
-## El verano de la obsesión táctica
+## Introducción: ¿Qué demonios es eso de TAK?
 
-Mis planes para este verano eran, sobre el papel, sencillos. Quería aprender. Quería entender cómo funcionan las redes tácticas, cómo trazar rutas automáticas y, sobre todo, quería dominar el ecosistema **TAK** (Tactical Awareness Kit).
+Mis planes para este verano eran, sobre el papel, sencillos. Quería aprender. Quería entender cómo funcionan las redes de coordinación, cómo trazar rutas automáticas para llegar a lugares sin intervención humana y, sobre todo, quería dominar el ecosistema **TAK**.
 
-Mi objetivo final: un rastreador casero compatible con TAK, todo controlado desde Linux, y una red privada para coordinarlo todo.
+Antes de entrar en la terminal y empezar a escribir código, hay que entender qué estamos montando. **ATAK** (Android Team Awareness Kit) y su contraparte de servidor, **TAK Server**, no son "otra app de mapas".
 
-Si no sabes qué es TAK, imagina Google Maps, pero con esteroides, diseñado originalmente para militares, y ahora disponible para civiles que nos gusta complicarnos la vida. Permite ver la posición de tu equipo en tiempo real, chat, compartir archivos y marcar objetivos.
+Originalmente, las siglas significaban **Tactical Awareness Kit**. Es software de grado militar desarrollado por el laboratorio de investigación de la Fuerza Aérea de EE.UU. Su propósito es el **SA (Situational Awareness)**: saber dónde estás tú, dónde están tus amigos (Blue Force Tracking) y dónde están los peligros, todo en tiempo real, sobre mapas geoespaciales complejos, con chat encriptado y transferencia de archivos.
 
-Hoy os voy a contar la primera parte de esta odisea: **La instalación del TAK Server**.
+Recientemente, se liberó la versión civil (**CIV**), cambiando "Tactical" por "Team". Es la misma bestia, pero accesible para nosotros.
 
-Spoiler: He quemado una tarjeta SD, he peleado con Java y he descubierto que mi router es mi peor enemigo.
+Mi objetivo era ambicioso:
+
+1. Montar un **TAK Server** central en casa.
+2. Usar una humilde **Raspberry Pi 4B** como cerebro.
+3. Crear una red privada segura que saltara las restricciones de mi operador de internet.
+4. Controlarlo todo estrictamente desde Linux.
+
+Spoiler: He tenido que quemar una tarjeta SD minimo 5 veces, he peleado con firewalls que me echaron de mi propia máquina y he descubierto que el enrutamiento en Linux es un arte oscuro. Si quieres replicar esto, prepárate un café largo. Empezamos.
 
 ---
 
-## El Hardware: La vieja confiable (y un pecado de seguridad)
+## El Hardware y el Pecado Original
 
-Para este proyecto he desempolvado mi **Raspberry Pi 4B**.
+Para este proyecto he usado una **Raspberry Pi 4B**. Es hardware suficiente, pero no le sobra nada para lo que vamos a hacer.
 
-* **SO:** Raspbian (Debian Bullseye/Bookworm).
-* **Instalación:** "A lo bruto". Quemé la imagen oficial en la SD y a correr.
+* **Sistema Operativo:** Raspbian (Debian Bookworm), instalación limpia.
+* **Almacenamiento:** Tarjeta SD (que sufrió lo indecible).
 * **Credenciales:** Usuario `pi`, contraseña `pi`.
 
-> **Nota de seguridad:** Sí, sé que dejar el usuario por defecto es invitar a que me hackeen. "Cosa que hay que cambiar", me dije. No lo he hecho. Si mi servidor cae mañana, ya sabéis por qué. De momento, vivimos al límite.
+> **Nota de seguridad:** Sé lo que estáis pensando. "¿Contraseña por defecto en un servidor táctico?". Sí. "Cosa que hay que cambiar", me dije el primer día. No lo he hecho. De momento, vivimos al límite. **No hagáis esto en producción real.**
 
-El objetivo de la instalación es un **Single Server** capaz de manejar, teóricamente, hasta 500 usuarios (aunque la Pi sudará tinta si llegamos a eso).
+El tipo de instalación que vamos a realizar es un **Single Server**. Teóricamente aguanta 500 usuarios, pero en una Raspberry Pi, si metemos 500 usuarios concurrentes, la CPU se derretirá. Nuestro objetivo es una escuadra pequeña, funcional y ágil.
 
 ---
 
-## FASE 1: La Burocracia (Conseguir el Software)
+## FASE 1: La Burocracia y los Cimientos
 
-A diferencia de `apt install nginx`, el TAK Server no está en los repositorios públicos. Tienes que ir a la fuente oficial.
+A diferencia de instalar un servidor web normal (`apt install nginx`), TAK Server es software controlado.
 
-1.  Registrarse en [TAK.gov](https://tak.gov/products/tak-server).
-2.  Navegar a la sección de descargas.
-3.  Descargar el instalador `.deb`. El archivo se verá algo así: `takserver_x.x_RELEASEXX_all.deb`.
+### 1. Conseguir el "Paquete"
 
-### La importancia de la firma GPG
-En este mundillo, la paranoia es una virtud. Antes de instalar nada, hay que verificar que lo que hemos bajado no ha sido manipulado.
+Debes ir a [TAK.gov](https://tak.gov/products/tak-server), registrarte y descargar el instalador. Buscamos el archivo `.deb`:
+`takserver_x.x_RELEASEXX_all.deb`.
 
-Descarga también el archivo de firma y la clave pública. Luego, en la terminal:
+**La importancia de la firma GPG:**
+En el mundo de la seguridad, la confianza es nula. Descargué también las firmas. Verificar que el paquete no ha sido alterado no es opcional, es obligatorio.
 
 ```bash
-# Importar la clave pública de TAK
-gpg --import TAK-Product-Signing-Key.asc
-
-# Verificar el paquete
-gpg --verify takserver_x.x_RELEASEXX_all.deb.sig takserver_x.x_RELEASEXX_all.deb
+gpg --verify takserver_x.x_RELEASEXX_all.deb.sig
 
 ```
 
-Si la respuesta es `Good signature`, podemos respirar tranquilos. Si dice `BAD signature`, borra el archivo y corre.
+Si la firma es correcta, procedemos.
 
----
+### 2. Preparando el terreno (Límites TCP)
 
-## FASE 2: Preparando el terreno (Prerrequisitos)
+TAK Server es una aplicación Java masiva que abre cientos de conexiones (sockets) simultáneas. La configuración por defecto de Linux está pensada para proteger el sistema, no para servir mapas a alta velocidad. Si no cambiamos esto, el servidor colapsará con errores de "Too many open files".
 
-Aquí es donde Linux empieza a ponerse exigente. El TAK Server es una bestia escrita en Java que abre muchas conexiones simultáneas. La configuración por defecto de Linux le parece "insultantemente baja".
-
-### 1. Ajustando los límites de TCP
-
-Tenemos que editar los límites del sistema. Si no hacemos esto, el servidor colapsará bajo carga.
+Editamos `/etc/security/limits.conf`:
 
 ```bash
 sudo nano /etc/security/limits.conf
 
 ```
 
-Añadimos estas líneas al final del archivo. No preguntes, solo hazlo:
+Y añadimos al final:
 
 ```text
 * hard nofile 32768
@@ -83,267 +81,279 @@ root soft nofile 32768
 
 ```
 
-Guardamos (`Ctrl+O`) y salimos (`Ctrl+X`).
+### 3. La Tiranía de Java
 
-### 2. La pesadilla de Java
+Aquí perdí tiempo la primera vez. TAK Server es extremadamente exigente con la versión de Java. La documentación actual pide **Java 17**. Ni la 8, ni la 11, ni la 21.
 
-TAK Server es muy "especialito" con Java. Necesita una versión específica. La documentación actual pide **Java 17**. Ni la 11, ni la 21. La 17.
-
-Instalamos la versión correcta:
-
-```bash
-sudo apt update
-sudo apt install openjdk-17-jdk
-
-```
-
-Y ahora, el paso crucial. Verificar qué versión está usando el sistema por defecto:
+Verificamos qué tenemos:
 
 ```bash
 java -version
 
 ```
 
-Debería salir algo como:
-
-```text
-openjdk version "17.0.x" ...
-OpenJDK Runtime Environment ...
-
-```
-
-Si te sale otra versión, tienes que cambiarla manualmente con `update-alternatives`:
-
-```bash
-sudo update-alternatives --config java
-
-```
-
-*(Selecciona el número que corresponda a java-17).*
-
-### 3. La base de datos
-
-TAK Server necesita PostgreSQL. Asegúrate de instalarlo y habilitarlo. El instalador del `.deb` suele encargarse de las dependencias, pero nunca está de más asegurarse:
-
-```bash
-sudo apt install postgresql postgresql-contrib
-sudo systemctl enable postgresql
-sudo systemctl start postgresql
-
-```
+Si no ves `openjdk version "17..."`, instálalo. Si tienes varias versiones, usa `update-alternatives` para fijar la 17 como predeterminada. Sin esto, el servicio ni siquiera arrancará.
 
 ---
 
-## FASE 3: La Instalación (El momento de la verdad)
+## FASE 2: Instalación y la Elección del Servicio
 
-Con el terreno preparado, lanzamos el instalador.
+Lanzamos la instalación:
 
 ```bash
 sudo apt install ./takserver_x.x_RELEASEXX_all.deb
 
 ```
 
-La terminal escupirá cientos de líneas. Verás scripts de post-instalación, creación de usuarios `tak`, y configuraciones de base de datos.
+El terminal escupirá líneas durante un buen rato instalando dependencias de base de datos (PostgreSQL) y configurando usuarios.
 
-Si todo acaba sin errores rojos... **felicidades, tienes un servidor instalado, pero completamente inútil.**
+Para evitar dolores de cabeza futuros con archivos de configuración XML (que son la columna vertebral de TAK), instalé herramientas de depuración:
 
-Ahora empieza lo difícil: **Los Certificados**.
+```bash
+sudo apt install xmllint libxml2-utils
+
+```
+
+Si alguna vez el servidor no arranca por un error de sintaxis en un XML, `xmllint` te dirá exactamente dónde te falta cerrar una etiqueta.
+
+### El secreto de la Raspberry: `takserver-noplugins`
+
+Aquí está la clave del éxito en hardware limitado. Por defecto, TAK intenta cargar todos los plugins habidos y por haber. En una Raspberry Pi 4, eso se come la RAM.
+
+Revisando mi historial, veréis que tomé la decisión consciente de usar la versión ligera del servicio:
+
+```bash
+# Habilitamos el servicio sin plugins
+sudo systemctl enable takserver-noplugins
+
+```
+
+Esto mantiene el núcleo táctico funcionando sin la sobrecarga innecesaria.
 
 ---
 
-## FASE 4: El laberinto de los Certificados (Donde lloran los valientes)
+## FASE 3: Criptografía y Certificados (El núcleo del dolor)
 
-TAK se basa en una arquitectura de confianza cero. Todo va cifrado. El servidor necesita un certificado, y cada cliente (tu móvil) necesita otro firmado por el servidor.
+TAK opera bajo una filosofía de **Zero Trust**. Todo va cifrado con SSL mutuo.
 
-Mi mayor punto de conflicto fue entender esto: **No toques el core**. No edites los archivos XML de configuración a mano si no quieres sufrir.
+* El servidor tiene certificado.
+* El cliente tiene certificado.
+* Ambos deben confiar en una Autoridad de Certificación (CA) común.
 
-Vamos a la carpeta de herramientas de certificados:
+Muchos tutoriales te dicen que edites el `CoreConfig.xml` a mano. **Error.** No toques el Core. Usa los scripts proporcionados.
+
+Navegamos a la carpeta de la muerte:
 
 ```bash
 cd /opt/tak/certs/
 
 ```
 
-### 1. Crear la Autoridad de Certificación (Root CA)
+### La generación
 
-Primero, nos convertimos en la autoridad.
+1. **Root CA:** Creamos la autoridad que firmará todo.
+`sudo ./makeRootCa.sh --ca-name "MiTakServerCA"`
+2. **Server Cert:** Creamos la identidad del servidor.
+`sudo ./makeCert.sh server takserver`
+
+Al terminar, el sistema genera archivos `.jks` (Java KeyStore) y `.p12`.
+
+### La Paranoia del Backup Físico
+
+Aquí tuve un momento de lucidez (o miedo). Ya había quemado una tarjeta SD antes con Raspbian. Si la SD muere ahora, pierdo la CA. Si pierdo la CA, todos los móviles conectados dejarán de funcionar y tendré que reconfigurar todo desde cero.
+
+Conecté mi pendrive **EMTEC T250** y ejecuté el salvavidas:
 
 ```bash
-sudo ./makeRootCa.sh --ca-name "MiTakServerCA"
+sudo cp /opt/tak/certs/files/* /media/pi/EMTEC\ T250/certs
 
 ```
 
-*(Te pedirá datos como país, estado, organización... rellénalo con calma).*
-
-### 2. Crear el certificado del Servidor
-
-Ahora firmamos el certificado para el propio servidor (localhost).
-
-```bash
-sudo ./makeCert.sh server takserver
-
-```
-
-Una vez hecho esto, el script te dirá que ha generado los archivos `takserver.jks` (Java KeyStore) y `truststore.jks`.
-
-### 3. El reinicio de fe
-
-Ahora que los certificados base están creados, reiniciamos el servicio para que Java los cargue.
-
-```bash
-sudo systemctl restart takserver
-
-```
-
-**Aquí viene un consejo de oro:** Espera.
-Java es lento. La Raspberry Pi no es un superordenador. Dale 2 o 3 minutos antes de intentar conectarte. Mira los logs para asegurarte de que no está ardiendo:
-
-```bash
-tail -f /opt/tak/logs/takserver-core.log
-
-```
-
-Si ves mensajes de `INFO` fluyendo y no ves `STACK TRACE` gigantescos, vas bien.
+Ahora, las llaves del reino están en hardware físico, fuera de la Raspberry. Haced copias de seguridad, amigos.
 
 ---
 
-## FASE 5: La configuración visual (`/setup`)
+## FASE 4: El Primer Arranque y la Configuración Visual
 
-Aquí es donde la documentación antigua te dice que edites XMLs infernales. La documentación moderna (y mi experiencia) dice: usa la web.
+Llegó el momento de la verdad. Arrancamos el servicio ligero:
 
-Abre tu navegador (en tu PC conectado a la misma red) y ve a:
+```bash
+sudo systemctl start takserver-noplugins
 
-`https://<IP-DE-TU-RASPBERRY>:8443/setup`
+```
 
-**Ojo:** Tu navegador te gritará. *"Sitio no seguro"*. Es normal. Estás usando certificados autofirmados que acabamos de crear. Acepta el riesgo y continúa.
+**Paciencia Táctica:**
+Java es lento al arrancar en arquitectura ARM. No funciona al instante. Monitoricé los logs para ver cuándo estaba realmente vivo:
 
-Esta interfaz web es una bendición. Te permite:
+```bash
+tail -f /opt/tak/logs/takserver-messaging.log
 
-1. Configurar la base de datos automáticamente.
-2. Establecer el puerto de conexión.
-3. Crear el usuario **Administrador**.
+```
 
-Sigue los pasos. Es "Siguiente, Siguiente, Aceptar". Cuando termine, el servidor estará realmente desplegado.
+Solo cuando el log dejó de escupir inicializaciones y se quedó "a la escucha", supe que podíamos seguir.
+
+### La interfaz `/setup`
+
+Accedemos vía navegador web (desde otro PC en la red) a `https://<IP-DE-LA-PI>:8443/setup`.
+Aceptamos la advertencia de seguridad (el certificado es autofirmado, es normal) y seguimos el asistente.
+
+Esta interfaz configura la base de datos PostgreSQL automáticamente y, lo más importante, nos permite crear el usuario **Administrador**.
 
 ---
 
-## FASE 6: Creando usuarios y entendiendo los puertos
+## FASE 5: Fortificando la Posición (UFW)
 
-Ahora accedemos al panel de administración real:
+Un servidor táctico abierto a internet es un blanco. Decidí activar el firewall **UFW** (Uncomplicated Firewall).
 
-`https://<IP-DE-TU-RASPBERRY>:8443`
+Aquí sudé frío. Configurar un firewall por SSH remoto es peligroso: si te equivocas, te bloqueas a ti mismo y pierdes el control de la Raspberry para siempre.
 
-Entras con el usuario administrador que acabas de crear. Aquí es donde gestionamos la "misión".
+Esta es la secuencia exacta que extraje de mi historial para hacerlo sin morir en el intento:
 
-### El caos de los puertos
+1. Instalar y verificar estado (estaba inactivo):
+```bash
+sudo apt install ufw
+sudo ufw status
 
-Es vital entender qué hace cada puerto para no volverse loco:
+```
 
-| Puerto | Protocolo | Descripción |
+
+2. **La Regla de Oro:** Bloquear todo lo entrante por defecto.
+```bash
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+```
+
+
+3. **EL SALVAVIDAS (SSH):** Antes de activar nada, permitir el puerto 22.
+```bash
+sudo ufw allow ssh
+
+```
+
+
+4. Abrir los puertos de TAK:
+```bash
+sudo ufw allow 8089  # Puerto de Streaming (donde conectan los móviles)
+sudo ufw allow 8443  # Puerto de Administración Web
+
+```
+
+
+5. Activar los escudos:
+```bash
+sudo ufw enable
+
+```
+
+
+
+Ahora, `sudo ufw status` muestra una fortaleza. Solo entra lo que nosotros queremos.
+
+---
+
+## FASE 6: Verificación de Supervivencia
+
+¿Realmente está escuchando? Usé `ss` y `curl` para interrogar al sistema:
+
+```bash
+# Ver qué procesos Java están escuchando y en qué puertos
+sudo ss -tulpn | grep java
+
+# Intentar una conexión local a la web de administración
+curl -k https://localhost:8443
+
+```
+
+Ver los puertos 8089 y 8443 en la lista de `ss` fue la confirmación de que el servidor estaba operativo a nivel de red.
+
+---
+
+## FASE 7: El Muro del CGNAT y la Magia de Tailscale
+
+Tenía el servidor funcionando en mi WiFi. Pero mi objetivo era usar esto en el campo, con 4G.
+Aquí surgió el problema: Mi proveedor de internet usa **CGNAT**. No tengo IP pública real. Abrir puertos en el router es inútil porque comparto IP con medio vecindario.
+
+La solución: **Tailscale**.
+Tailscale crea una red Mesh privada basada en WireGuard. Es mágica.
+
+### Nivel Pro: El Subnet Router
+
+No me conformé con instalar Tailscale para acceder a la Raspberry. Quería que la Raspberry actuara como **puerta de enlace** a toda mi red local (impresoras, otros servidores, cámaras) cuando estoy fuera.
+
+1. **Habilitar el reenvío de IP en el Kernel:**
+Linux, por seguridad, no pasa paquetes de una interfaz a otra. Hay que obligarlo.
+Intenté editarlo al vuelo, pero para que sea persistente hay que tocar `/etc/sysctl.conf`:
+```bash
+echo "net.ipv4.ip_forward=1" | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+
+```
+
+
+2. **Levantar Tailscale anunciando rutas:**
+Este comando es la joya de la corona de la instalación:
+```bash
+sudo tailscale up --advertise-routes=192.168.1.0/24 --accept-routes
+
+```
+
+
+¿Qué hace esto? Le dice a la red Tailscale: *"Si alguien (mi móvil en 4G) quiere acceder a algo en el rango 192.168.1.X, enviadme el tráfico a mí (la Raspberry), que yo me encargo"*.
+3. Verificamos:
+```bash
+tailscale status
+
+```
+
+
+
+Ahora, mi Raspberry no es solo un servidor TAK; es mi router VPN personal de acceso global.
+
+---
+
+## FASE 8: Conectando el Cliente (ATAK-CIV)
+
+Con la infraestructura lista, toca configurar el cliente (Android).
+
+1. Desde la web admin (`puerto 8443`), creamos un usuario (ej. `Tango01`).
+2. Descargamos su **Data Package** (zip).
+3. Transferimos el zip al móvil.
+4. Abrimos **ATAK**.
+5. Importamos el **Truststore** (para confiar en el servidor) y el **Certificado de Cliente** (para identificarnos).
+> **Dato vital:** La contraseña por defecto de los certificados generados es **`atallack`**. No la olvidéis.
+
+
+
+Configuramos la conexión en ATAK apuntando a la **IP de Tailscale** de la Raspberry (`100.x.y.z`) al puerto **8089** (SSL).
+
+Unos segundos de tensión... y el indicador de conexión se pone en **VERDE**.
+
+---
+
+## Resumen de la Batalla (Cheat Sheet)
+
+Para los que queráis los datos técnicos rápidos, aquí está el resumen de la configuración ganadora:
+
+| Componente | Configuración | ¿Por qué? |
 | --- | --- | --- |
-| **8443** | TCP (HTTPS) | **Panel de Administración**. Solo para configurar y crear usuarios. |
-| **8446** | TCP (HTTPS) | **WebTAK**. Interfaz táctica ligera para ver el mapa desde el navegador. |
-| **8089** | TCP (SSL) | **Streaming**. Aquí es donde se conectan los móviles (ATAK) para enviar datos. |
+| **Servicio** | `takserver-noplugins` | La RPi 4 no tiene RAM para los plugins completos. |
+| **Java** | OpenJDK 17 | Versión obligatoria. Otras fallan silenciosamente. |
+| **Firewall** | UFW (Allow 22, 8089, 8443) | Seguridad básica. SSH siempre primero. |
+| **VPN** | Tailscale + Subnet Router | Para saltarse el CGNAT y acceder a la LAN. |
+| **Kernel** | `ip_forward=1` | Necesario para que funcione el enrutamiento VPN. |
+| **Puertos** | 8089 (Stream), 8443 (Admin) | No confundir con 8446 (WebTAK). |
 
-### Creando los usuarios de campo
+## Conclusiones Reales
 
-En el menú de "User Management" o "Mandar Tarea", creamos las cuentas. Ejemplo: `Usuario1`.
+He aprendido que:
 
-Al crear un usuario, el servidor genera un paquete de certificados para él. Esto es lo que necesitamos para el móvil.
+1. **La persistencia paga:** Copiar los certificados a un USB físico me salvó de la ansiedad de la corrupción de datos.
+2. **Tailscale es brujería:** Convertir una instalación doméstica bloqueada por CGNAT en un nodo accesible globalmente con un solo comando (`advertise-routes`) es impresionante.
+3. **No hay que temer a los tochos de texto:** La interfaz web ayuda, pero la verdad siempre está en los logs (`tail -f`).
 
-Descarga el **Data Package** o el archivo `.zip` del usuario. Dentro encontrarás:
+Ahora tengo un sistema capaz de coordinar equipos, marcar objetivos y seguir rutas en tiempo real, corriendo en una placa del tamaño de una tarjeta de crédito.
 
-* `Usuario1.p12` (Certificado de identidad).
-* `truststore-root.p12` (Para confiar en el servidor).
-
-> **Dato:** La contraseña por defecto de estos certificados suele ser **`atallack`**. Grábatelo a fuego.
-
----
-
-## FASE 7: Conectando el móvil (ATAK-CIV)
-
-1. Instala **ATAK-CIV** desde la Play Store o F-Droid.
-2. Pásate los archivos `.p12` al móvil (por USB, Drive, etc).
-3. En ATAK: Ajustes -> Cuentas y Servidores -> Añadir Servidor.
-4. IP: La IP de tu Raspberry.
-5. Puerto: **8089**.
-6. Activa "Use Authentication".
-7. Carga el **Truststore** y el **Client Certificate**.
-8. Contraseña: `atallack`.
-
-Si todo va bien, el indicador del servidor en ATAK se pondrá en **VERDE**.
-
----
-
-## FASE 8: El muro del CGNAT y la salvación llamada Tailscale
-
-Todo funcionaba de maravilla en mi red WiFi. Pero claro, la idea es usar esto en el campo, con 4G.
-
-Intenté abrir los puertos en mi router (8089, 8443).
-**Resultado:** Fracaso absoluto.
-Mi compañía usa **CGNAT** (Carrier Grade NAT). Básicamente, no tengo una IP pública real. Comparto IP con medio vecindario. Abrir puertos es imposible.
-
-### La solución: Tailscale
-
-Descubrí **Tailscale** y fue como ver la luz.
-
-Es una VPN "Mesh" basada en WireGuard. No necesitas abrir puertos. Crea una red virtual donde tus dispositivos se ven como si estuvieran en la misma LAN, estén donde estén.
-
-**Paso 1: Instalar en la Raspberry**
-
-```bash
-curl -fsSL [https://tailscale.com/install.sh](https://tailscale.com/install.sh) | sh
-sudo tailscale up
-
-```
-
-Te dará una URL. Entra, loguéate con Google/Microsoft y listo. Tu Pi ahora tiene una IP del tipo `100.x.y.z`.
-
-**Paso 2: Instalar en el móvil**
-Bajas la app de Tailscale, te logueas con la misma cuenta y activas el interruptor.
-
-**Paso 3: Reconfigurar ATAK**
-En el móvil, cambias la IP del servidor en ATAK por la **IP de Tailscale** de la Raspberry (`100.x.y.z`).
-
-Mágicamente, funciona. Desde 4G, desde el WiFi del vecino, desde la Antártida. Sin abrir ni un solo puerto en el router.
-
----
-
-## FASE FINAL: Persistencia
-
-No queremos tener que arrancar servicios a mano cada vez que se vaya la luz.
-
-```bash
-# Habilitar TAK Server al inicio
-sudo systemctl enable takserver
-
-# Tailscale ya se habilita solo por defecto, pero por si acaso:
-sudo systemctl enable tailscaled
-
-```
-
----
-
-## Resumen técnico real de la instalación
-
-Para los que venís buscando el dato rápido, esto es lo que ha quedado montado:
-
-| Componente | Configuración | Notas Críticas |
-| --- | --- | --- |
-| **Dispositivo** | RPi 4B 4GB | Usuario `pi` (No me juzguéis) |
-| **Java** | OpenJDK 17 | **No usar v11 ni v8**. Verificar con `java -version`. |
-| **Setup Inicial** | `/setup` vía Web | Puerto 8443. Ahorra editar XMLs. |
-| **Certificados** | Scripts en `/opt/tak/certs` | Contraseña por defecto: `atallack`. |
-| **Acceso Remoto** | Tailscale | Salta CGNAT y Firewalls. IP rango `100.x`. |
-| **Puerto Cliente** | 8089 (SSL) | Donde apunta la app ATAK. |
-
-## Lo que realmente aprendí
-
-* **Java es el jefe:** El 90% de los errores de instalación son por tener la versión incorrecta de Java o no definir el `JAVA_HOME`.
-* **No toques el Core:** Los archivos de configuración de TAK son frágiles. Usa los scripts y la web de setup siempre que puedas.
-* **Tailscale es brujería:** En el buen sentido. Ha convertido una configuración de red imposible en algo trivial.
-* **Paciencia con el Boot:** Un servidor Java en una Raspberry Pi tarda en arrancar. Si no conecta al segundo 1, espera al segundo 60.
-
-Ahora tengo un servidor táctico funcional, accesible desde cualquier lugar del mundo. El siguiente paso será configurar la automatización de rutas, pero esa... esa es otra historia.
+¿El siguiente paso? Automatizar la ingesta de rutas y ver si puedo conectar sensores externos. Pero esa... esa es otra historia.
 
 ¡Nos vemos en el siguiente log!
