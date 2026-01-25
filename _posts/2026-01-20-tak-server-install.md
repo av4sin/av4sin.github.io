@@ -1,7 +1,7 @@
 ---
 layout: post 
 title: "Operación TAK: Crónica de cómo monté una red táctica militar en una Raspberry Pi (y sobreviví a los certificados)" 
-date: 2026-01-24
+date: 2026-01-20
 categories: [tecnico, redes, raspberrypi, tak, seguridad] 
 tags: [takserver, atak, tailscale, ufw, linux, debian, subnet-routing, opsec]
 ---
