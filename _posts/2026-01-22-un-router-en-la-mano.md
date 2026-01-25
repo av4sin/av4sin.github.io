@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Negociando con la red: Tailscale en un router de 128MB y el muro del espacio"
-date: 2026-01-24
+date: 2026-01-22
 categories: [tecnico, redes]
 tags: [openwrt, tailscale, cgnat, networking, troubleshooting]
 ---
