@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "El botón del pánico: Cuando Fedora decide apagar por las malas (y cómo domar a acpid)"
-date: 2026-01-15
+date: 2026-01-17
 categories: [tecnico, linux]
 tags: [fedora, kde, plasma, acpid, troubleshooting, logind, zenbook]
 ---
