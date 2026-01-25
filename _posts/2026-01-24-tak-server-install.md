@@ -137,7 +137,7 @@ TAK opera bajo una filosofía **Zero Trust**. No hay "usuario y contraseña" sim
 * El cliente debe probar que es él.
 * Ambos deben confiar en la misma Autoridad (CA).
 
-Si pensabas editar los archivos de configuración a mano, olvídalo. Es suicidio. Fui a la carpeta de herramientas:
+Si pensabas editar los archivos de configuración a mano, olvídalo. Es como cortar el cesped con un cortauñas. Fui a la carpeta de herramientas:
 
 ```bash
 cd /opt/tak/certs/
