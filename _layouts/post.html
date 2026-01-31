@@ -192,7 +192,7 @@ function copyToClipboard() {
 document.addEventListener('DOMContentLoaded', function() {
     const tocContainer = document.getElementById('toc');
     const tocSection = document.getElementById('toc-section');
-    const headers = document.querySelectorAll('.post-content h1, .post-content h2, .post-content h3, .post-content h4, .post-content h5, .post-content h6');
+    const headers = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
     
     if (headers.length > 0) {
         tocSection.style.display = 'block';
