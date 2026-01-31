@@ -192,7 +192,13 @@ function copyToClipboard() {
 document.addEventListener('DOMContentLoaded', function() {
     const tocContainer = document.getElementById('toc');
     const tocSection = document.getElementById('toc-section');
-    const headers = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    const allHeaders = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    const headers = Array.from(allHeaders).filter(header => 
+        header.closest('.post-content') && 
+        !header.closest('.post-footer') && 
+        !header.closest('.comments-section') && 
+        !header.closest('.author-box')
+    );
     
     if (headers.length > 0) {
         tocSection.style.display = 'block';
