@@ -4,6 +4,7 @@ description: Soluciones, ideas y proyectos de informática - Gonzalo Mondragón 
 url: "https://av4sin.github.io"
 baseurl: ""
 lang: es
+locale: "es"
 
 # No remote theme - using custom layouts
 # Previously: remote_theme: "jeffreytse/jekyll-theme-yat"
