@@ -2,72 +2,6 @@
 layout: default
 ---
 
-<style>
-.post-main {
-    display: flex;
-    gap: 2rem;
-}
-
-.post-content {
-    flex: 1;
-}
-
-.post-sidebar {
-    width: 200px;
-    height: fit-content;
-}
-
-.toc-container {
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    padding: 1rem;
-    font-size: 0.9rem;
-}
-
-.toc {
-    max-height: 400px;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-}
-
-.toc ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.toc li {
-    margin: 0.25rem 0;
-}
-
-.toc a {
-    color: #495057;
-    text-decoration: none;
-    font-size: 0.85rem;
-    line-height: 1.4;
-}
-
-.toc a:hover {
-    color: #007bff;
-}
-
-.toc ul ul {
-    margin-left: 1rem;
-}
-
-@media (max-width: 768px) {
-    .post-main {
-        flex-direction: column;
-    }
-    
-    .post-sidebar {
-        width: 100%;
-        position: static;
-    }
-}
-</style>
-
 <article class="post-single">
     <!-- Post Header -->
     <header class="post-header">
@@ -117,19 +51,10 @@ layout: default
     </header>
 
     <!-- Post Content -->
-    <div class="post-main">
+    <div class="post-content-wrapper">
         <div class="post-content">
             {{ content }}
         </div>
-        
-        <!-- Table of Contents Sidebar -->
-        <aside class="post-sidebar">
-            <div class="toc-container">
-                <h4>Índice</h4>
-                <nav class="toc" id="toc"></nav>
-            </div>
-        </aside>
-    </div>
         
     <!-- Post Footer -->
         <footer class="post-footer">
@@ -218,48 +143,4 @@ function copyToClipboard() {
         btn.innerHTML = '<i class="fas fa-link"></i>';
     }, 2000);
 }
-
-// Table of Contents functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const tocContainer = document.getElementById('toc');
-    const headers = document.querySelectorAll('.post-content h1, .post-content h2, .post-content h3, .post-content h4, .post-content h5, .post-content h6');
-    
-    if (headers.length > 0) {
-        const ul = document.createElement('ul');
-        let currentLevel = 1;
-        let currentUl = ul;
-        const ulStack = [ul];
-        
-        headers.forEach(header => {
-            const level = parseInt(header.tagName.charAt(1));
-            const li = document.createElement('li');
-            const a = document.createElement('a');
-            a.textContent = header.textContent;
-            a.href = '#' + header.id;
-            li.appendChild(a);
-            
-            if (level > currentLevel) {
-                const newUl = document.createElement('ul');
-                ulStack[ulStack.length - 1].lastElementChild.appendChild(newUl);
-                ulStack.push(newUl);
-                currentUl = newUl;
-            } else if (level < currentLevel) {
-                ulStack.splice(level - 1);
-                currentUl = ulStack[ulStack.length - 1];
-            }
-            
-            currentUl.appendChild(li);
-            currentLevel = level;
-            
-            // Add id to header if not present
-            if (!header.id) {
-                header.id = header.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-            }
-        });
-        
-        tocContainer.appendChild(ul);
-    } else {
-        document.querySelector('.toc-container').style.display = 'none';
-    }
-});
 </script>
