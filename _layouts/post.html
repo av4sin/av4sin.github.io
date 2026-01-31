@@ -2,6 +2,46 @@
 layout: default
 ---
 
+<style>
+.toc-section {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.toc-section h4 {
+    margin-top: 0;
+    color: #495057;
+    font-size: 1.1rem;
+}
+
+#toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#toc li {
+    margin: 0.5rem 0;
+}
+
+#toc a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+#toc a:hover {
+    text-decoration: underline;
+}
+
+#toc ul ul {
+    margin-left: 1.5rem;
+}
+</style>
+
 <article class="post-single">
     <!-- Post Header -->
     <header class="post-header">
@@ -51,8 +91,12 @@ layout: default
     </header>
 
     <!-- Post Content -->
-    <div class="post-content-wrapper">
-        <div class="post-content">
+    <div class="post-content-wrapper">        <!-- Table of Contents -->
+        <div class="toc-section" id="toc-section" style="display: none;">
+            <h4>Índice del artículo</h4>
+            <nav id="toc"></nav>
+        </div>
+                <div class="post-content">
             {{ content }}
         </div>
         
@@ -143,4 +187,48 @@ function copyToClipboard() {
         btn.innerHTML = '<i class="fas fa-link"></i>';
     }, 2000);
 }
+
+// Table of Contents functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const tocContainer = document.getElementById('toc');
+    const tocSection = document.getElementById('toc-section');
+    const headers = document.querySelectorAll('.post-content h1, .post-content h2, .post-content h3, .post-content h4, .post-content h5, .post-content h6');
+    
+    if (headers.length > 0) {
+        tocSection.style.display = 'block';
+        const ul = document.createElement('ul');
+        let currentLevel = 1;
+        let currentUl = ul;
+        const ulStack = [ul];
+        
+        headers.forEach(header => {
+            const level = parseInt(header.tagName.charAt(1));
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.textContent = header.textContent;
+            a.href = '#' + header.id;
+            li.appendChild(a);
+            
+            if (level > currentLevel) {
+                const newUl = document.createElement('ul');
+                ulStack[ulStack.length - 1].lastElementChild.appendChild(newUl);
+                ulStack.push(newUl);
+                currentUl = newUl;
+            } else if (level < currentLevel) {
+                ulStack.splice(level - 1);
+                currentUl = ulStack[ulStack.length - 1];
+            }
+            
+            currentUl.appendChild(li);
+            currentLevel = level;
+            
+            // Add id to header if not present
+            if (!header.id) {
+                header.id = header.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            }
+        });
+        
+        tocContainer.appendChild(ul);
+    }
+});
 </script>
