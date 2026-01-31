@@ -34,7 +34,7 @@
 }
 
 :root {
-    --font-body: Lora, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-body: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
     --font-heading: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
     --font-mono: 'Fira Mono', 'Consolas', 'Menlo', monospace;
 }
