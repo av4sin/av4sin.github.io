@@ -1,5 +1,5 @@
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: Lora, "Helvetica Neue", Helvetica, Arial, sans-serif;
     text-align: center;
     background-image: url('img/camouflage-pattern.jpg'); /* Updated to camouflage pattern */
     background-size: cover;
@@ -42,7 +42,7 @@ body {
 }
 
 h1, h2 {
-    font-family: 'Oswald', sans-serif;
+    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #A67B5B; /* Coyote brown */
     text-shadow: 2px 2px 5px #000;
 }

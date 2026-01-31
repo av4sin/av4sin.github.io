@@ -1,5 +1,5 @@
 .typed-block {
-    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    font-family: var(--font-mono);
     font-size: 18px;
     color: #16a085;
     background: #23272e;
@@ -32,6 +32,13 @@
     0%, 50% { opacity: 1; }
     51%, 100% { opacity: 0; }
 }
+
+:root {
+    --font-body: Lora, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-heading: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-mono: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+}
+
 /*!
  * Grayscale Theme - Adapted for personal site
  * Based on Start Bootstrap - Grayscale Bootstrap Theme
@@ -44,7 +51,7 @@
 body {
     width: 100%;
     height: 100%;
-    font-family: Lora, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: var(--font-body);
     color: #fff;
     background-color: #1a1a2e;
 }
@@ -57,7 +64,7 @@ html {
 h1, h2, h3, h4, h5, h6 {
     margin: 0 0 35px;
     text-transform: uppercase;
-    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: var(--font-heading);
     font-weight: 700;
     letter-spacing: 1px;
 }
@@ -232,7 +239,7 @@ a:focus {
     max-width: 480px;
     margin: 0 auto 20px auto;
     padding: 0;
-    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+    font-family: var(--font-mono);
     min-height: 120px;
     display: flex;
     flex-direction: column;
@@ -459,7 +466,7 @@ a:focus {
 .btn {
     border-radius: 0;
     text-transform: uppercase;
-    font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: var(--font-heading);
     font-weight: 400;
     -webkit-transition: all .3s ease-in-out;
     -moz-transition: all .3s ease-in-out;
@@ -769,7 +776,7 @@ body {
     font-size: 48px;
     font-weight: 700;
     color: #16a085;
-    font-family: Montserrat, sans-serif;
+    font-family: var(--font-heading);
 }
 
 .stat-label {
