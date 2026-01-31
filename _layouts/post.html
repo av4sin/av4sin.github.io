@@ -3,7 +3,7 @@ layout: default
 ---
 
 <style>
-.post-content-wrapper {
+.post-main {
     display: flex;
     gap: 2rem;
 }
@@ -13,9 +13,7 @@ layout: default
 }
 
 .post-sidebar {
-    width: 250px;
-    position: sticky;
-    top: 2rem;
+    width: 200px;
     height: fit-content;
 }
 
@@ -24,37 +22,19 @@ layout: default
     border: 1px solid #e9ecef;
     border-radius: 8px;
     padding: 1rem;
-}
-
-.toc-toggle {
-    width: 100%;
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 0.5rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.toc-toggle:hover {
-    background: #0056b3;
+    font-size: 0.9rem;
 }
 
 .toc {
-    max-height: 0;
+    max-height: 400px;
     overflow: hidden;
     transition: max-height 0.3s ease;
-}
-
-.toc.open {
-    max-height: 500px;
 }
 
 .toc ul {
     list-style: none;
     padding: 0;
-    margin: 0.5rem 0 0 0;
+    margin: 0;
 }
 
 .toc li {
@@ -64,7 +44,8 @@ layout: default
 .toc a {
     color: #495057;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
 }
 
 .toc a:hover {
@@ -76,7 +57,7 @@ layout: default
 }
 
 @media (max-width: 768px) {
-    .post-content-wrapper {
+    .post-main {
         flex-direction: column;
     }
     
@@ -136,7 +117,7 @@ layout: default
     </header>
 
     <!-- Post Content -->
-    <div class="post-content-wrapper">
+    <div class="post-main">
         <div class="post-content">
             {{ content }}
         </div>
@@ -144,12 +125,13 @@ layout: default
         <!-- Table of Contents Sidebar -->
         <aside class="post-sidebar">
             <div class="toc-container">
-                <button class="toc-toggle" id="toc-toggle">Índice</button>
+                <h4>Índice</h4>
                 <nav class="toc" id="toc"></nav>
             </div>
         </aside>
+    </div>
         
-        <!-- Post Footer -->
+    <!-- Post Footer -->
         <footer class="post-footer">
             <!-- Share Buttons -->
             <div class="share-section">
@@ -240,7 +222,6 @@ function copyToClipboard() {
 // Table of Contents functionality
 document.addEventListener('DOMContentLoaded', function() {
     const tocContainer = document.getElementById('toc');
-    const toggleButton = document.getElementById('toc-toggle');
     const headers = document.querySelectorAll('.post-content h1, .post-content h2, .post-content h3, .post-content h4, .post-content h5, .post-content h6');
     
     if (headers.length > 0) {
@@ -277,14 +258,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         tocContainer.appendChild(ul);
-        
-        // Toggle functionality
-        toggleButton.addEventListener('click', function() {
-            tocContainer.classList.toggle('open');
-        });
     } else {
-        tocContainer.style.display = 'none';
-        toggleButton.style.display = 'none';
+        document.querySelector('.toc-container').style.display = 'none';
     }
 });
 </script>
