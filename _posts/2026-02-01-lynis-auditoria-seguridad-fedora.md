@@ -16,13 +16,13 @@ Antes de lanzarme a la batalla, déjame contarte cómo me topé con Lynis, ese a
 
 ¿Qué hace exactamente? Lynis analiza todo: desde el kernel y los servicios de systemd hasta permisos de archivos, políticas de contraseñas y configuraciones de red. Te dice si tus servicios están "expuestos" o "protegidos", si hay malware potencial, y te da sugerencias específicas para mejorar. Es como un doctor forense que no cobra por hora, dándote un "Hardening Index" del 0 al 100, donde 100 es prácticamente inexpugnable.
 
-Lo mejor de todo: no hace falta instalarlo con dnf o apt, que en Fedora a veces dejan residuos raros. Lo bajas directamente de su sitio (https://cisofy.com/lynis/) como un tarball, lo descomprimes con `tar -xzf lynis-3.1.6.tar.gz`, entras en la carpeta y lanzas `./lynis audit system`. ¡Boom! Funciona en cualquier distro sin dejar huella, perfecto para paranoicos como yo que no quieren software extra en el sistema. Ideal para auditorías rápidas o en sistemas donde no quieres instalar software adicional.
+Lo mejor de todo: no hace falta instalarlo con dnf o apt, que en Fedora a veces dejan residuos raros. Lo bajas directamente de [su sitio](https://cisofy.com/lynis/) como un tarball, lo descomprimes con `tar -xzf lynis-3.1.6.tar.gz`, entras en la carpeta y lanzas `./lynis audit system`. ¡Boom! Funciona en cualquier distro sin dejar huella, perfecto para paranoicos que no quieren software extra en el sistema. Ideal para auditorías rápidas o en sistemas donde no quieres instalar software adicional.
 
 Ahora, con esta herramienta en mano, empecé mi aventura...
 
 ## El diagnóstico inicial: Lynis me abre los ojos
 
-Primero, lo básico. Lancé `./lynis audit system` y Lynis escaneó mi Fedora 43, dándome un Hardening Index de 70. No mal, pero con potencial para ser una bestia. Los puntos débiles: systemd-analyze security mostraba servicios como NetworkManager y avahi-daemon en "EXPUESTO" o "INSEGURO". El kernel tenía valores por defecto que eran como dejar la llave en la cerradura. Y no había auditoría de archivos ni escáneres de malware. Era hora de actuar.
+Primero, lo básico. Lancé `./lynis audit system` y Lynis escaneó mi Fedora 43, dándome un Hardening Index de 56. No mal, pero con potencial para ser explotado. Los puntos débiles: systemd-analyze security mostraba servicios como NetworkManager y avahi-daemon en "EXPUESTO" o "INSEGURO". El kernel tenía valores por defecto que eran como dejar la llave en la cerradura. Y no había auditoría de archivos ni escáneres de malware. Era hora de actuar.
 
 Empecé con los comandos que Lynis sugería.
 
@@ -50,7 +50,6 @@ El kernel de Linux es el corazón del sistema, y por defecto viene con configura
   - `net.ipv6.conf.all.accept_redirects = 0`: Lo mismo para IPv6.
 
 - `EOF`: Cierra el here document.
-- `# Aplicar los cambios`: Comentario.
 - `sudo sysctl -p /etc/sysctl.d/99-lynis-hardening.conf`: Carga los parámetros desde el archivo. `sysctl -p` aplica configuraciones de archivos en `/etc/sysctl.d/`.
 
 Recuerda: estos cambios se aplican inmediatamente, pero si algo sale mal, puedes revertir borrando el archivo y reiniciando. No toques `kernel.modules_disabled` aquí, como verás más adelante.
@@ -141,19 +140,19 @@ sudo aide --init
 sudo mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
 ```
 
-**AIDE, el paranoico que vigila tus archivos:** Mira, AIDE es como ese amigo desconfiado que anota todo lo que tienes en casa y te avisa si falta un calcetín. Funciona creando "huellas digitales" (hashes) de tus archivos importantes, y si un hacker o un virus los toca, te lo dice comparando. Lo instalé porque Lynis me gritó que no tenía nada para detectar intrusiones, y en mi Fedora, lo configuré manualmente para que no me moleste con actualizaciones legítimas. Lo corro cada semana con `sudo aide --check`, y si todo está bien, me deja en paz. Es gratis, efectivo, pero no lo dejes corriendo solo o te bombardeará con alertas falsas.
+**AIDE, el paranoico que vigila tus archivos:** Mira, AIDE es como ese amigo desconfiado que anota todo lo que tienes en casa y te avisa si falta un calcetín. Funciona creando "huellas digitales" (hashes) de tus archivos importantes, y si un hacker o un virus los toca, te lo dice comparando. Lo instalé porque Lynis me gritó que no tenía nada para detectar intrusiones, y en mi Fedora, lo configuré manualmente para que no me moleste con actualizaciones legítimas. Lo corro cada semana con `sudo aide --check`, y si todo está bien, me deja en paz. Es gratis, efectivo, pero no lo dejes ejecutándose solo o te bombardeará con alertas falsas.
 
 Cómo lo usé yo: Después de `sudo dnf install -y aide`, hice `sudo aide --init` para crear la base de hashes, moví el archivo a su sitio con `sudo mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz`, y listo. Me funciona porque actualizo la base solo cuando hago cambios intencionales, evitando dramas innecesarios.
 
 **Rkhunter, el cazador de bichos escondidos:** Este es como un sabueso barato que olfatea rootkits – esos programas malignos que se esconden como cucarachas bajo la nevera. No es un antivirus de verdad, solo un escáner que busca firmas conocidas y configuraciones raras. Lo metí en mi setup porque Lynis me dijo que estaba desnudo sin él, y en Fedora, lo corro manualmente después de instalar algo sospechoso. Tarda un rato, pero me da un reporte que dice "todo limpio" o "¡cuidado!". No me da falsos positivos si mantengo el sistema actualizado, y es perfecto para paranoicos como yo.
 
-Cómo lo usé yo: `sudo dnf install -y rkhunter`, luego `sudo rkhunter --propupd` para crear un perfil "limpio" de mi sistema, y `sudo rkhunter --check` para escanear. Funciona porque no lo dejo corriendo todo el día, solo cuando lo necesito.
+Cómo lo usé yo: `sudo dnf install -y rkhunter`, luego `sudo rkhunter --propupd` para crear un perfil "limpio" de mi sistema, y `sudo rkhunter --check` para escanear. Funciona porque no lo dejo ejecutándose todo el día, solo cuando lo necesito.
 
 Armado con estas herramientas, me sentía invencible. Pero el sistema, traicionero como siempre, tenía una sorpresa preparada...
 
 ## El giro dramático: el comando que rompió todo
 
-Todo iba bien. Lynis me dio un 70 inicial, apliqué los comandos, y subí a 75. Pero entonces, en un momento de euforia, añadí una línea que Lynis sugería: `kernel.modules_disabled = 1`. Era para "deshabilitar la carga de módulos después del arranque". Sonaba inofensivo, ¿verdad? Error. En Fedora, muchos drivers (como el del teclado USB, el controlador de disco NVMe o el módulo de red) se cargan dinámicamente durante el boot o al conectar dispositivos. Al bloquear la carga de nuevos módulos con ese parámetro, el kernel se quedó sin los drivers esenciales para interactuar con el hardware. Resultado: el sistema no podía acceder al disco, teclado o pantalla, y se quedaba en un loop de reinicio o directamente en la BIOS.
+Todo iba bien. Lynis me dio un 56 inicial, apliqué los comandos, y subí a 75. Pero entonces, en un momento de euforia, añadí una línea que Lynis sugería: `kernel.modules_disabled = 1`. Era para "deshabilitar la carga de módulos después del arranque". Sonaba inofensivo, ¿verdad? Error. En Fedora, muchos drivers (como el del teclado USB, el controlador de disco NVMe o el módulo de red) se cargan dinámicamente durante el boot o al conectar dispositivos. Al bloquear la carga de nuevos módulos con ese parámetro, el kernel se quedó sin los drivers esenciales para interactuar con el hardware. Resultado: el sistema no podía acceder al disco, teclado o pantalla, y se quedaba en un loop de reinicio o directamente en la BIOS.
 
 ¿Signos de que algo iba mal? Pantalla negra al encender, sin mensajes de GRUB. Intenté forzar el menú de GRUB pulsando Shift repetidamente desde el arranque, pero nada aparecía porque el kernel no podía cargar el módulo de framebuffer o USB. Fue un "kernel panic" silencioso, donde el sistema detecta que no puede continuar y se detiene.
 
@@ -186,6 +185,6 @@ sudo reboot  # Reiniciar y quitar el USB
 
 Después de la reparación, volví a ejecutar Lynis. Índice: 75. Servicios blindados, kernel endurecido, auditoría activa. SELinux en enforcing, firewall activo. Mi Fedora ahora es una fortaleza. No perfecta (el 100 sería paranoico extremo), pero segura para uso diario.
 
-Si tu Fedora te parece vulnerable, corre Lynis, pero ve con cuidado. Los comandos son poderosos, y a veces, como en mi caso, te dan un susto. Pero al final, vale la pena.
+Si tu Fedora te parece vulnerable, prueba Lynis, pero ve con cuidado. Los comandos son poderosos, y a veces, como en mi caso, te dan un susto. Pero al final, vale la pena.
 
 ¡Nos vemos en el próximo log!
