@@ -16,7 +16,7 @@ Antes de lanzarme a la batalla, déjame contarte cómo me topé con Lynis, ese a
 
 ¿Qué hace exactamente? Lynis analiza todo: desde el kernel y los servicios de systemd hasta permisos de archivos, políticas de contraseñas y configuraciones de red. Te dice si tus servicios están "expuestos" o "protegidos", si hay malware potencial, y te da sugerencias específicas para mejorar. Es como un doctor forense que no cobra por hora, dándote un "Hardening Index" del 0 al 100, donde 100 es prácticamente inexpugnable.
 
-Lo mejor de todo: no hace falta instalarlo con dnf o apt, que en Fedora a veces dejan residuos raros. Lo bajas directamente de su sitio (https://cisofy.com/lynis/) como un tarball, lo descomprimes con `tar -xzf lynis-3.1.6.tar.gz`, entras en la carpeta y lanzas `./lynis audit system`. ¡Boom! Funciona en cualquier distro sin dejar huella, perfecto para paranoicos como yo que no quieren software extra en el sistema. distribución Linux sin dejar residuos. Ideal para auditorías rápidas o en sistemas donde no quieres instalar software adicional.
+Lo mejor de todo: no hace falta instalarlo con dnf o apt, que en Fedora a veces dejan residuos raros. Lo bajas directamente de su sitio (https://cisofy.com/lynis/) como un tarball, lo descomprimes con `tar -xzf lynis-3.1.6.tar.gz`, entras en la carpeta y lanzas `./lynis audit system`. ¡Boom! Funciona en cualquier distro sin dejar huella, perfecto para paranoicos como yo que no quieren software extra en el sistema. Ideal para auditorías rápidas o en sistemas donde no quieres instalar software adicional.
 
 Ahora, con esta herramienta en mano, empecé mi aventura...
 
