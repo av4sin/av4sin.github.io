@@ -39,7 +39,7 @@ sudo alternatives --config java
 ```
 
 Pero en Fedora 43, el paquete exacto no estaba disponible. Busqué alternativas: `
-``bash
+```bash
 sudo dnf search openjdk | grep 17
 ``` 
 Tampoco dio resultados claros. Bueno directamente ninguno. Al final, recurrí a descargar Java 17 directamente de Oracle (openjdk-17.0.2):
