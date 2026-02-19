@@ -27,15 +27,40 @@ Estos elementos, heredados de la instalación anterior, pueden hacer que un sist
 
 ## Pruebas y falsas soluciones
 
-Empecé probando lo clásico: renombrar cachés y configs de KDE para forzar regeneración, reparar Flatpak con `flatpak repair`, reetiquetar SELinux con `sudo restorecon -Rv /home`, actualizar firmware con `sudo fwupdmgr refresh && sudo fwupdmgr update`, revisar indexadores con `top` y analizar el arranque con `systemd-analyze blame`. El sistema mejoró algo en fluidez, pero el arranque seguía siendo lento y las aplicaciones no respondían como deberían.
+Empecé probando lo clásico: renombrar cachés y configs de KDE para forzar regeneración.
 
-Luego, en `top`, apareció otro sospechoso: `gdb` consumiendo CPU, lanzado por ABRT (Automatic Bug Reporting Tool) analizando un crash heredado de la configuración anterior. Parar ABRT con `sudo systemctl stop abrtd && sudo systemctl disable abrtd`, enmascarar el applet con `systemctl --user mask abrt-applet.service` y limpiar reportes con `sudo rm -rf /var/spool/abrt/*` mejoró la fluidez general, pero no tocó el problema del arranque.
+```bash
+flatpak repair
+sudo restorecon -Rv /home
+sudo fwupdmgr refresh && sudo fwupdmgr update
+top
+systemd-analyze blame
+```
+
+El sistema mejoró algo en fluidez, pero el arranque seguía siendo lento y las aplicaciones no respondían como deberían.
+
+Al inspeccionar con `top` apareció otro sospechoso: `gdb` consumiendo CPU, lanzado por ABRT (Automatic Bug Reporting Tool). Para detener y limpiar ABRT ejecuté:
+
+```bash
+sudo systemctl stop abrtd && sudo systemctl disable abrtd
+systemctl --user mask abrt-applet.service
+sudo rm -rf /var/spool/abrt/*
+```
+
+Eso mejoró la fluidez general, pero no tocó el problema del arranque.
 
 Intenté también desactivar esperas de TPM y puertos serie en GRUB, blacklistear módulos y regenerar initramfs, pero nada cambió drásticamente. El cuello de botella persistía.
 
 ## El cuello de botella real: UEFI
 
-El punto clave llegó al analizar los tiempos de arranque con `systemd-analyze` y `systemd-analyze blame`. El sistema se quedaba esperando dispositivos que no existen (TPM, puertos serie, USB fantasma), pero sobre todo, el firmware UEFI estaba cinco versiones por detrás de lo que Asus ofrece para este modelo.
+El punto clave llegó al analizar los tiempos de arranque. Para ello ejecuté los siguientes comandos:
+
+```bash
+systemd-analyze
+systemd-analyze blame
+```
+
+El sistema se quedaba esperando dispositivos que no existen (TPM, puertos serie, USB fantasma), pero sobre todo, el firmware UEFI estaba cinco versiones por detrás de lo que Asus ofrece para este modelo.
 
 La salida exacta de `systemd-analyze` fue:
 
@@ -52,10 +77,71 @@ En mi caso, la solución fue buscar el modelo exacto en la web de Asus, descarga
 
 Tras actualizar el UEFI, el ZenBook arrancó como debe: rápido, sin esperas innecesarias, y con Fedora funcionando igual de fluido que en el otro equipo idéntico. Ninguna configuración de /home, ni cambios en GRUB, ni limpieza de servicios puede sustituir una actualización de firmware cuando el cuello de botella está ahí.
 
-## Conclusión
+---
 
-Si Fedora va lento en un equipo nuevo y has reutilizado /home, no te precipites. La mayoría de los problemas vienen de configuraciones heredadas, indexadores, servicios que no hacen falta y, en casos como este, un firmware UEFI que no está al día. Antes de reinstalar o borrar todo, revisa los puntos técnicos: analiza el arranque con `systemd-analyze`, revisa `top` por procesos sospechosos, actualiza firmware y, sobre todo, compara con un sistema similar.
+## Actualización (2026-01-31): el ZenBook vuelve a fallar
 
-En mi caso, esa fue la única solución que realmente marcó la diferencia. El ZenBook volvió a arrancar en segundos, sin perder ni un solo archivo ni configuración personal. Si te encuentras en una situación similar, empieza por lo técnico y no por lo drástico. La solución suele estar más cerca de lo que parece, y a menudo implica actualizar lo que parece obvio pero se olvida: el firmware.
+Tras la actualización de UEFI todo parecía solucionado, pero al día siguiente el equipo volvió a mostrar tirones y problemas de resolución. El diagnóstico apuntó a la GPU integrada (AMD) y al panel OLED: Fedora necesitaba un kernel más moderno y firmware de AMD para manejar correctamente la pantalla (resolución y 120Hz).
+
+Medidas aplicadas:
+- Actualizar el kernel y paquetes.
+
+```bash
+sudo dnf upgrade --refresh
+```
+
+- Instalar/controlar drivers `amdgpu` (paquete/firmware).
+
+```bash
+sudo dnf install xorg-x11-drv-amdgpu
+```
+
+- Desactivar PSR en casos problemáticos (añadir `amdgpu.dcdebugmask=0x10` a la línea de arranque) y regenerar GRUB.
+
+```bash
+# editar /etc/default/grub y añadir amdgpu.dcdebugmask=0x10 a GRUB_CMDLINE_LINUX
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+```
+
+Resultado: tras ajustar kernel/driver/GRUB la pantalla recuperó 120Hz y los tirones desaparecieron. Fue una solución parcial pero necesaria para estabilizar el sistema.
+
+---
+
+## Actualización (2026-02-03): tercera ronda y limpieza final
+
+El problema volvió a reaparecer con errores de `amdgpu` durante la inicialización (mensajes tipo "Fatal error during GPU init") y fallos secundarios (Snap, periféricos). Las acciones que ayudaron fueron:
+
+- Reinstalar firmware de AMD y regenerar initramfs.
+
+```bash
+sudo dnf reinstall <firmware-paquete>
+sudo dracut --force
+```
+- Eliminar snapd si no es necesario y usar flatpak como alternativa.
+
+```bash
+sudo dnf remove snapd
+sudo rm -rf /var/lib/snapd
+rm -rf ~/snap
+# instalar Spotify (ejemplo) vía Flatpak
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak install flathub com.spotify.Client
+```
+
+Esas operaciones dejaron el sistema usable, pero el fallo volvía de vez en cuando: indicio de un problema más profundo a nivel de firmware/firmware específico del fabricante.
+
+---
+
+## Resolución final (resultado definitivo)
+
+Después de probar todas las opciones anteriores sin éxito, y tras investigar a fondo, encontré que el problema real era el firmware de la tarjeta gráfica proporcionado por Asus. Curiosamente, la utilidad oficial de actualización de Asus solo permite instalar esos ficheros desde Windows; por eso tuve que **reinstalar Windows temporalmente** para ejecutar el actualizador de Asus y aplicar el firmware correcto.
+
+Tras instalar el firmware de GPU desde Windows, volví a borrar Windows y reinstalé **Fedora**. Desde entonces el portátil funciona correctamente: arranque rápido, pantalla a 120Hz y sin ningún problema.
+
+---
+
+## Recomendación final
+
+Si tienes un equipo moderno con GPU integrada (especialmente paneles OLED o hardware muy nuevo), considera que algunas actualizaciones críticas solo las facilita el fabricante y pueden requerir herramientas que no siempre están disponibles en Linux. Antes de decidirte por reinstalar todo, revisa firmware (UEFI y GPU) y, si es necesario, utiliza temporalmente las herramientas del fabricante para aplicar actualizaciones de bajo nivel.
 
 ¡Nos vemos en el siguiente log!
