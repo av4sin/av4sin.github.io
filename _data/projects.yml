@@ -2,18 +2,6 @@
 # Facilita la gestión y actualización de proyectos
 
 featured:
-  - name: "Juegos Militares Educativos"
-    description: "Suite de juegos educativos interactivos sobre rangos militares"
-    icon: "gamepad"
-    status: "completed"
-    url: "/juegos.html"
-    github: "https://github.com/av4sin/av4sin.github.io"
-    tags:
-      - JavaScript
-      - HTML5
-      - CSS3
-      - PWA
-
   - name: "Blog Personal"
     description: "Blog técnico con artículos sobre desarrollo y tecnología"
     icon: "pencil"
@@ -38,14 +26,13 @@ featured:
       - JavaScript
 
 upcoming:
-  - name: "API REST con Node.js"
-    description: "Backend para gestión de datos"
+  - name: "AcuASCII"
+    description: "Simulador de acuario interactivo para terminal escrito en Java con arte ASCII."
+    icon: "terminal"
     status: "in-progress"
-    
-  - name: "App Móvil React Native"
-    description: "Aplicación multiplataforma"
-    status: "planned"
-    
-  - name: "Dashboard Analytics"
-    description: "Visualización de datos en tiempo real"
-    status: "planned"
+    url: "https://github.com/av4sin/AcuASCII/"
+    github: "https://github.com/av4sin/AcuASCII/"
+    tags:
+      - Java
+      - ASCII Art
+      - CLI
