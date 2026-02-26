@@ -2,30 +2,6 @@
 # Facilita la gestión y actualización de proyectos
 
 featured:
-  - name: "Blog Personal"
-    description: "Blog técnico con artículos sobre desarrollo y tecnología"
-    icon: "pencil"
-    status: "completed"
-    url: "/blog/"
-    github: "https://github.com/av4sin/av4sin.github.io"
-    tags:
-      - Jekyll
-      - GitHub Pages
-      - Markdown
-
-  - name: "Sitio Web Personal"
-    description: "Página de inicio con diseño moderno estilo Grayscale"
-    icon: "rocket"
-    status: "completed"
-    url: "/"
-    github: "https://github.com/av4sin/av4sin.github.io"
-    tags:
-      - HTML5
-      - CSS3
-      - Bootstrap
-      - JavaScript
-
-upcoming:
   - name: "AcuASCII"
     description: "Simulador de acuario interactivo para terminal escrito en Java con arte ASCII."
     icon: "terminal"
@@ -36,3 +12,14 @@ upcoming:
       - Java
       - ASCII Art
       - CLI
+
+  - name: "Blog Personal"
+    description: "Blog técnico con artículos sobre desarrollo y tecnología"
+    icon: "pencil"
+    status: "completed"
+    url: "/blog/"
+    github: "https://github.com/av4sin/av4sin.github.io"
+    tags:
+      - Jekyll
+      - GitHub Pages
+      - Markdown

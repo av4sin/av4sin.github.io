@@ -663,6 +663,12 @@ body {
 
 .projects-grid {
     margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.projects-grid > [class*='col-'] {
+    display: flex;
 }
 
 .project-card {
