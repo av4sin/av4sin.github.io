@@ -1396,6 +1396,51 @@ img {
     color: var(--text-primary);
 }
 
+.lost-found-form {
+    margin-top: var(--space-md);
+}
+
+.lost-found-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-md);
+}
+
+.lost-found-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+}
+
+.lost-found-field label {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.lost-found-field input,
+.lost-found-field textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 0.7rem 0.85rem;
+    font: inherit;
+}
+
+.lost-found-field input:focus,
+.lost-found-field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(22, 160, 133, 0.18);
+}
+
+.lost-found-field textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
 .lost-found-actions {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -1447,6 +1492,10 @@ img {
 @media (max-width: 480px) {
     .lost-found-card {
         padding: var(--space-lg);
+    }
+
+    .lost-found-form-grid {
+        grid-template-columns: 1fr;
     }
 }
 
