@@ -1404,6 +1404,7 @@ img {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: var(--space-md);
+    align-items: start;
 }
 
 .lost-found-field {
@@ -1427,6 +1428,16 @@ img {
     color: var(--text-primary);
     padding: 0.7rem 0.85rem;
     font: inherit;
+    font-size: 1rem;
+    line-height: 1.35;
+    min-height: 46px;
+    transition: border-color var(--transition), box-shadow var(--transition), background-color var(--transition);
+}
+
+.lost-found-field input::placeholder,
+.lost-found-field textarea::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
 }
 
 .lost-found-field input:focus,
@@ -1438,7 +1449,7 @@ img {
 
 .lost-found-field textarea {
     resize: vertical;
-    min-height: 90px;
+    min-height: 108px;
 }
 
 .lost-found-actions {
@@ -1459,6 +1470,8 @@ img {
     color: white;
     font-weight: 600;
     border: 1px solid transparent;
+    width: 100%;
+    min-height: 46px;
 }
 
 .lost-found-btn:hover {
@@ -1489,13 +1502,35 @@ img {
     text-align: center;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     .lost-found-card {
         padding: var(--space-lg);
     }
 
     .lost-found-form-grid {
         grid-template-columns: 1fr;
+        gap: var(--space-sm);
+    }
+
+    .lost-found-field {
+        margin-bottom: var(--space-sm);
+    }
+
+    .lost-found-actions {
+        grid-template-columns: 1fr;
+        gap: var(--space-sm);
+        margin: var(--space-md) 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .lost-found-card {
+        padding: var(--space-md);
+    }
+
+    .lost-found-field input,
+    .lost-found-field textarea {
+        padding: 0.75rem 0.8rem;
     }
 }
 
