@@ -1365,6 +1365,92 @@ img {
 }
 
 /* ============================================
+   NFC Lost & Found Page
+   ============================================ */
+.lost-found-card {
+    margin-top: var(--space-lg);
+    padding: var(--space-xl);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+}
+
+.lost-found-lead {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.lost-found-lead i {
+    color: var(--accent);
+}
+
+.lost-found-item {
+    margin: var(--space-lg) 0;
+    padding: var(--space-md) var(--space-lg);
+    border-left: 4px solid var(--accent);
+    background: var(--bg-primary);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+}
+
+.lost-found-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-md);
+    margin: var(--space-lg) 0;
+}
+
+.lost-found-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md);
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+    border: 1px solid transparent;
+}
+
+.lost-found-btn:hover {
+    background: var(--accent-hover);
+    color: white;
+}
+
+.lost-found-btn.lost-found-btn-secondary {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-color: var(--border);
+}
+
+.lost-found-btn.lost-found-btn-secondary:hover {
+    background: var(--accent);
+    color: white;
+}
+
+.lost-found-steps {
+    margin-top: var(--space-xl);
+}
+
+.lost-found-note {
+    margin-top: var(--space-xl);
+    margin-bottom: 0;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    .lost-found-card {
+        padding: var(--space-lg);
+    }
+}
+
+/* ============================================
    Utility Classes
    ============================================ */
 .text-center { text-align: center; }
