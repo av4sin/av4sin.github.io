@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reloj Flip 24h</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --card-color: #12151c;
+            --digit-color: #f1f1f4;
+            --divider-color: #1f2026;
+            --top-shade: #cbcbce;
+            --bottom-shade: #f0f0f2;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: var(--bg-color);
+            color: var(--digit-color);
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .clock-app {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.1vw;
+            padding: 4vw;
+        }
+
+        .group {
+            position: relative;
+            width: min(37vw, 520px);
+            aspect-ratio: 1.25 / 1;
+            border-radius: 20px;
+            background: var(--card-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .group::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            transform: translateY(-50%);
+            background: var(--divider-color);
+            z-index: 2;
+        }
+
+        .value-top,
+        .value-bottom {
+            position: absolute;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            line-height: 1;
+            font-size: clamp(98px, 21vw, 300px);
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .value-top {
+            top: 0;
+            bottom: 0;
+            color: var(--top-shade);
+            clip-path: inset(0 0 50% 0);
+        }
+
+        .value-bottom {
+            top: 0;
+            bottom: 0;
+            color: var(--bottom-shade);
+            clip-path: inset(50% 0 0 0);
+        }
+
+        .flip-top,
+        .flip-bottom {
+            position: absolute;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            line-height: 1;
+            font-size: clamp(98px, 21vw, 300px);
+            pointer-events: none;
+            z-index: 3;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+        }
+
+        .flip-top {
+            top: 0;
+            bottom: 0;
+            color: var(--top-shade);
+            transform-origin: center 50%;
+            clip-path: inset(0 0 50% 0);
+            animation: topFlip 320ms ease-in forwards;
+        }
+
+        .flip-bottom {
+            top: 0;
+            bottom: 0;
+            color: var(--bottom-shade);
+            transform: rotateX(90deg);
+            transform-origin: center 50%;
+            clip-path: inset(50% 0 0 0);
+            animation: bottomFlip 320ms ease-out 320ms forwards;
+        }
+
+        @keyframes topFlip {
+            to {
+                transform: rotateX(-90deg);
+            }
+        }
+
+        @keyframes bottomFlip {
+            to {
+                transform: rotateX(0deg);
+            }
+        }
+
+        .ui-controls {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.72);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 10px;
+            backdrop-filter: blur(4px);
+            transition: opacity 0.28s ease;
+            opacity: 1;
+            z-index: 10;
+        }
+
+        .ui-controls.is-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .control-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .ui-btn {
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: #121217;
+            color: #f5f5f7;
+            font-size: 14px;
+            line-height: 1;
+            border-radius: 8px;
+            padding: 10px 12px;
+            cursor: pointer;
+        }
+
+        .ui-btn.icon-btn {
+            width: 40px;
+            padding: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ui-btn.icon-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .palette {
+            display: none;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .palette.is-open {
+            display: grid;
+        }
+
+        .color-line {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+            align-items: center;
+            font-size: 13px;
+            color: #e7e7eb;
+        }
+
+        .color-line input[type="color"] {
+            width: 38px;
+            height: 28px;
+            border: 0;
+            background: transparent;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        @media (max-width: 880px) {
+            .clock-app {
+                gap: 2vw;
+                padding: 3vw;
+            }
+
+            .group {
+                width: min(43vw, 410px);
+                border-radius: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="clock-app" aria-label="Reloj flip 24 horas">
+        <section class="group" id="hoursGroup" aria-label="Horas">
+            <span class="value-top" id="hoursTop">00</span>
+            <span class="value-bottom" id="hoursBottom">00</span>
+        </section>
+
+        <section class="group" id="minutesGroup" aria-label="Minutos">
+            <span class="value-top" id="minutesTop">00</span>
+            <span class="value-bottom" id="minutesBottom">00</span>
+        </section>
+    </main>
+
+    <aside class="ui-controls" id="controlsPanel" aria-label="Opciones de reloj">
+        <div class="control-row">
+            <button class="ui-btn icon-btn" id="homeBtn" type="button" aria-label="Ir al inicio" title="Inicio">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M12 3.2 3 10.6v10.2h6.2v-6.4h5.6v6.4H21V10.6L12 3.2zm7.8 16.4h-3.8v-6.4H8v6.4H4.2v-8.4L12 4.8l7.8 6.4v8.4z"/>
+                </svg>
+            </button>
+            <button class="ui-btn" id="fullscreenBtn" type="button">Pantalla completa</button>
+            <button class="ui-btn" id="colorsBtn" type="button">Colores</button>
+        </div>
+
+        <div class="palette" id="palettePanel">
+            <label class="color-line">Fondo <input type="color" id="bgColor" value="#000000"></label>
+            <label class="color-line">Tarjeta <input type="color" id="cardColor" value="#12151c"></label>
+            <label class="color-line">Número superior <input type="color" id="topDigitColor" value="#cbcbce"></label>
+            <label class="color-line">Número inferior <input type="color" id="bottomDigitColor" value="#f0f0f2"></label>
+        </div>
+    </aside>
+
+    <script>
+        const controlsPanel = document.getElementById('controlsPanel');
+        const palettePanel = document.getElementById('palettePanel');
+        const homeBtn = document.getElementById('homeBtn');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const colorsBtn = document.getElementById('colorsBtn');
+
+        const hoursGroup = document.getElementById('hoursGroup');
+        const minutesGroup = document.getElementById('minutesGroup');
+        const hoursTop = document.getElementById('hoursTop');
+        const hoursBottom = document.getElementById('hoursBottom');
+        const minutesTop = document.getElementById('minutesTop');
+        const minutesBottom = document.getElementById('minutesBottom');
+
+        const bgColor = document.getElementById('bgColor');
+        const cardColor = document.getElementById('cardColor');
+        const topDigitColor = document.getElementById('topDigitColor');
+        const bottomDigitColor = document.getElementById('bottomDigitColor');
+
+        const STORAGE_KEY = 'flip-clock-theme';
+        let hideTimer;
+        let previousHours = null;
+        let previousMinutes = null;
+
+        function pad(value) {
+            return String(value).padStart(2, '0');
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.style.setProperty('--bg-color', theme.bg);
+            document.documentElement.style.setProperty('--card-color', theme.card);
+            document.documentElement.style.setProperty('--top-shade', theme.top);
+            document.documentElement.style.setProperty('--bottom-shade', theme.bottom);
+            bgColor.value = theme.bg;
+            cardColor.value = theme.card;
+            topDigitColor.value = theme.top;
+            bottomDigitColor.value = theme.bottom;
+        }
+
+        function getTheme() {
+            return {
+                bg: bgColor.value,
+                card: cardColor.value,
+                top: topDigitColor.value,
+                bottom: bottomDigitColor.value
+            };
+        }
+
+        function saveTheme() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(getTheme()));
+        }
+
+        function loadTheme() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) {
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(raw);
+                if (parsed.bg && parsed.card && parsed.top && parsed.bottom) {
+                    applyTheme(parsed);
+                }
+            } catch {
+                localStorage.removeItem(STORAGE_KEY);
+            }
+        }
+
+        function createFlip(group, previousValue, nextValue) {
+            const flipTop = document.createElement('span');
+            flipTop.className = 'flip-top';
+            flipTop.textContent = previousValue;
+
+            const flipBottom = document.createElement('span');
+            flipBottom.className = 'flip-bottom';
+            flipBottom.textContent = nextValue;
+
+            group.appendChild(flipTop);
+            group.appendChild(flipBottom);
+
+            flipBottom.addEventListener('animationend', () => {
+                flipTop.remove();
+                flipBottom.remove();
+            }, { once: true });
+        }
+
+        function updateGroup(group, topNode, bottomNode, prevValue, nextValue) {
+            if (prevValue === null) {
+                topNode.textContent = nextValue;
+                bottomNode.textContent = nextValue;
+                return nextValue;
+            }
+
+            if (prevValue !== nextValue) {
+                createFlip(group, prevValue, nextValue);
+                topNode.textContent = nextValue;
+                bottomNode.textContent = nextValue;
+            }
+
+            return nextValue;
+        }
+
+        function tick() {
+            const now = new Date();
+            const currentHours = pad(now.getHours());
+            const currentMinutes = pad(now.getMinutes());
+
+            previousHours = updateGroup(hoursGroup, hoursTop, hoursBottom, previousHours, currentHours);
+            previousMinutes = updateGroup(minutesGroup, minutesTop, minutesBottom, previousMinutes, currentMinutes);
+        }
+
+        function showControls() {
+            controlsPanel.classList.remove('is-hidden');
+            clearTimeout(hideTimer);
+            hideTimer = setTimeout(() => {
+                controlsPanel.classList.add('is-hidden');
+            }, 2000);
+        }
+
+        function showControlsIfHidden() {
+            if (controlsPanel.classList.contains('is-hidden')) {
+                showControls();
+            }
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+                return;
+            }
+            document.exitFullscreen();
+        }
+
+        homeBtn.addEventListener('click', () => {
+            window.location.href = '/';
+        });
+
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
+        colorsBtn.addEventListener('click', () => {
+            palettePanel.classList.toggle('is-open');
+            showControls();
+        });
+
+        [bgColor, cardColor, topDigitColor, bottomDigitColor].forEach((input) => {
+            input.addEventListener('input', () => {
+                applyTheme(getTheme());
+                saveTheme();
+                showControls();
+            });
+        });
+
+        ['touchstart', 'keydown', 'click'].forEach((eventName) => {
+            window.addEventListener(eventName, showControls, { passive: true });
+        });
+
+        window.addEventListener('mousemove', showControlsIfHidden, { passive: true });
+
+        document.addEventListener('fullscreenchange', () => {
+            fullscreenBtn.textContent = document.fullscreenElement
+                ? 'Salir pantalla completa'
+                : 'Pantalla completa';
+        });
+
+        loadTheme();
+        tick();
+        setInterval(tick, 1000);
+        showControls();
+    </script>
+</body>
+</html>
