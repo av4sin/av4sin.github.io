@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reloj Flip 24h</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700;800&family=Montserrat:wght@700;800&family=Oswald:wght@700&display=swap');
+
         :root {
             --bg-color: #000000;
             --card-color: #12151c;
@@ -12,6 +14,7 @@
             --divider-color: #1f2026;
             --top-shade: #cbcbce;
             --bottom-shade: #f0f0f2;
+            --digit-font: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
         }
 
         * {
@@ -75,6 +78,7 @@
             letter-spacing: -0.01em;
             line-height: 1;
             font-size: clamp(98px, 21vw, 300px);
+            font-family: var(--digit-font);
             user-select: none;
             pointer-events: none;
         }
@@ -105,6 +109,7 @@
             letter-spacing: -0.01em;
             line-height: 1;
             font-size: clamp(98px, 21vw, 300px);
+            font-family: var(--digit-font);
             pointer-events: none;
             z-index: 3;
             transform-style: preserve-3d;
@@ -222,6 +227,15 @@
             cursor: pointer;
         }
 
+        .color-line select {
+            background: #121217;
+            color: #f5f5f7;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 6px;
+            padding: 4px 8px;
+            min-width: 140px;
+        }
+
         @media (max-width: 880px) {
             .clock-app {
                 gap: 2vw;
@@ -264,6 +278,15 @@
             <label class="color-line">Tarjeta <input type="color" id="cardColor" value="#12151c"></label>
             <label class="color-line">Número superior <input type="color" id="topDigitColor" value="#cbcbce"></label>
             <label class="color-line">Número inferior <input type="color" id="bottomDigitColor" value="#f0f0f2"></label>
+            <label class="color-line">Fuente números
+                <select id="digitFontSelect">
+                    <option value="inter">Inter</option>
+                    <option value="montserrat">Montserrat</option>
+                    <option value="oswald">Oswald</option>
+                    <option value="arial">Arial</option>
+                    <option value="courier">Courier New</option>
+                </select>
+            </label>
         </div>
     </aside>
 
@@ -285,8 +308,16 @@
         const cardColor = document.getElementById('cardColor');
         const topDigitColor = document.getElementById('topDigitColor');
         const bottomDigitColor = document.getElementById('bottomDigitColor');
+        const digitFontSelect = document.getElementById('digitFontSelect');
 
         const STORAGE_KEY = 'flip-clock-theme';
+        const DIGIT_FONTS = {
+            inter: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
+            montserrat: 'Montserrat, Inter, system-ui, sans-serif',
+            oswald: 'Oswald, Inter, system-ui, sans-serif',
+            arial: 'Arial, Helvetica, sans-serif',
+            courier: '"Courier New", Courier, monospace'
+        };
         let hideTimer;
         let previousHours = null;
         let previousMinutes = null;
@@ -296,14 +327,17 @@
         }
 
         function applyTheme(theme) {
+            const selectedFont = DIGIT_FONTS[theme.font] ? theme.font : 'inter';
             document.documentElement.style.setProperty('--bg-color', theme.bg);
             document.documentElement.style.setProperty('--card-color', theme.card);
             document.documentElement.style.setProperty('--top-shade', theme.top);
             document.documentElement.style.setProperty('--bottom-shade', theme.bottom);
+            document.documentElement.style.setProperty('--digit-font', DIGIT_FONTS[selectedFont]);
             bgColor.value = theme.bg;
             cardColor.value = theme.card;
             topDigitColor.value = theme.top;
             bottomDigitColor.value = theme.bottom;
+            digitFontSelect.value = selectedFont;
         }
 
         function getTheme() {
@@ -311,7 +345,8 @@
                 bg: bgColor.value,
                 card: cardColor.value,
                 top: topDigitColor.value,
-                bottom: bottomDigitColor.value
+                bottom: bottomDigitColor.value,
+                font: digitFontSelect.value
             };
         }
 
@@ -416,6 +451,12 @@
                 saveTheme();
                 showControls();
             });
+        });
+
+        digitFontSelect.addEventListener('change', () => {
+            applyTheme(getTheme());
+            saveTheme();
+            showControls();
         });
 
         ['touchstart', 'keydown', 'click'].forEach((eventName) => {
