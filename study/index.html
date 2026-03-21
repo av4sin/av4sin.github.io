@@ -497,13 +497,6 @@
                 : 'Pantalla completa';
         });
 
-        // Enable fullscreen mode by default
-        document.addEventListener('DOMContentLoaded', () => {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-            }
-        });
-
         loadTheme();
         tick();
         setInterval(tick, 1000);
