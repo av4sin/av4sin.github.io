@@ -24,6 +24,7 @@
             --top-shade: #cbcbce;
             --bottom-shade: #f0f0f2;
             --digit-font: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+            --digit-scale: 1;
         }
 
         * {
@@ -86,7 +87,7 @@
             font-weight: 800;
             letter-spacing: -0.01em;
             line-height: 1;
-            font-size: clamp(98px, 21vw, 300px);
+            font-size: calc(clamp(98px, 21vw, 300px) * var(--digit-scale));
             font-family: var(--digit-font);
             user-select: none;
             pointer-events: none;
@@ -117,7 +118,7 @@
             font-weight: 800;
             letter-spacing: -0.01em;
             line-height: 1;
-            font-size: clamp(98px, 21vw, 300px);
+            font-size: calc(clamp(98px, 21vw, 300px) * var(--digit-scale));
             font-family: var(--digit-font);
             pointer-events: none;
             z-index: 3;
@@ -339,11 +340,13 @@
 
         function applyTheme(theme) {
             const selectedFont = DIGIT_FONTS[theme.font] ? theme.font : 'inter';
+            const digitScale = selectedFont === 'gmb' ? 2.5 : 1;
             document.documentElement.style.setProperty('--bg-color', theme.bg);
             document.documentElement.style.setProperty('--card-color', theme.card);
             document.documentElement.style.setProperty('--top-shade', theme.top);
             document.documentElement.style.setProperty('--bottom-shade', theme.bottom);
             document.documentElement.style.setProperty('--digit-font', DIGIT_FONTS[selectedFont]);
+            document.documentElement.style.setProperty('--digit-scale', String(digitScale));
             bgColor.value = theme.bg;
             cardColor.value = theme.card;
             topDigitColor.value = theme.top;
