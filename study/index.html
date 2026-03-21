@@ -7,6 +7,15 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700;800&family=Montserrat:wght@700;800&family=Oswald:wght@700&display=swap');
 
+        @font-face {
+            font-family: 'MyFont GMB';
+            src: url('../assets/fonts/myfontGMB.ttf') format('truetype'),
+                 url('/assets/fonts/myfontGMB.ttf') format('truetype');
+            font-style: normal;
+            font-weight: 400 900;
+            font-display: swap;
+        }
+
         :root {
             --bg-color: #000000;
             --card-color: #12151c;
@@ -285,6 +294,7 @@
                     <option value="oswald">Oswald</option>
                     <option value="arial">Arial</option>
                     <option value="courier">Courier New</option>
+                    <option value="gmb">MyFont GMB</option>
                 </select>
             </label>
         </div>
@@ -316,7 +326,8 @@
             montserrat: 'Montserrat, Inter, system-ui, sans-serif',
             oswald: 'Oswald, Inter, system-ui, sans-serif',
             arial: 'Arial, Helvetica, sans-serif',
-            courier: '"Courier New", Courier, monospace'
+            courier: '"Courier New", Courier, monospace',
+            gmb: '"MyFont GMB", Inter, system-ui, sans-serif'
         };
         let hideTimer;
         let previousHours = null;
