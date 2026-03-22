@@ -153,6 +153,7 @@ function buildPdfHtml(options) {
                 author,
                 date,
                 sourceUrl,
+                baseHref,
                 content,
                 generatedAt,
                 licenseName,
@@ -166,6 +167,7 @@ function buildPdfHtml(options) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="${baseHref}">
     <title>${title}</title>
     <style>
         :root {
@@ -429,26 +431,19 @@ function exportPostToPDF(button) {
         const postDate = document.querySelector('.post-date')?.textContent?.trim() || '{{ page.date | date: "%d de %B, %Y" }}';
         const authorName = '{{ page.author | default: site.author.name | default: "Autor" | escape }}';
         const sourceUrl = window.location.href.split('#')[0];
+        const baseHref = `${window.location.origin}/`;
         const generatedAt = new Date().toLocaleString('es-ES');
         const licenseName = '{{ site.license | default: "MIT" | escape }}';
         const licenseBadgeUrl = 'https://img.shields.io/badge/Licencia-{{ site.license | default: "MIT" | uri_escape }}-16a085';
         const spdxBadgeUrl = 'https://img.shields.io/badge/SPDX-{{ site.license | default: "MIT" | uri_escape }}-3da639';
         const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(sourceUrl)}`;
 
-        const pdfWindow = window.open('', '_blank', 'noopener,noreferrer');
-
-        if (!pdfWindow) {
-                alert('No se pudo abrir la ventana para generar PDF. Revisa el bloqueador de ventanas emergentes.');
-                button.innerHTML = originalIcon;
-                button.disabled = false;
-                return;
-        }
-
         const pdfHtml = buildPdfHtml({
                 title: postTitle,
                 author: authorName,
                 date: postDate,
                 sourceUrl,
+                baseHref,
                 content: postContent,
                 generatedAt,
                 licenseName,
@@ -457,19 +452,61 @@ function exportPostToPDF(button) {
                 qrUrl
         });
 
-        pdfWindow.document.open();
-        pdfWindow.document.write(pdfHtml);
-        pdfWindow.document.close();
-
         const safeTitle = postTitle.replace(/[\\/:*?"<>|]/g, '').slice(0, 80) || 'articulo';
-        pdfWindow.document.title = `${safeTitle}.pdf`;
+            const pdfWindow = window.open('about:blank', '_blank');
 
-        pdfWindow.onload = () => {
+            if (pdfWindow) {
+                pdfWindow.document.open();
+                pdfWindow.document.write(pdfHtml);
+                pdfWindow.document.close();
+                pdfWindow.document.title = `${safeTitle}.pdf`;
+                pdfWindow.opener = null;
+
+                const tryPrint = () => {
+                    if (!pdfWindow || pdfWindow.closed) {
+                        return;
+                    }
+
+                    const state = pdfWindow.document && pdfWindow.document.readyState;
+                    if (state === 'complete' || state === 'interactive') {
+                        setTimeout(() => {
+                            try {
+                                pdfWindow.focus();
+                                pdfWindow.print();
+                            } catch (e) {
+                            }
+                        }, 450);
+                    } else {
+                        setTimeout(tryPrint, 120);
+                    }
+                };
+
+                tryPrint();
+            } else {
+                const iframe = document.createElement('iframe');
+                iframe.style.position = 'fixed';
+                iframe.style.right = '0';
+                iframe.style.bottom = '0';
+                iframe.style.width = '0';
+                iframe.style.height = '0';
+                iframe.style.border = '0';
+                iframe.setAttribute('aria-hidden', 'true');
+                document.body.appendChild(iframe);
+
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                iframeDoc.open();
+                iframeDoc.write(pdfHtml);
+                iframeDoc.close();
+                iframeDoc.title = `${safeTitle}.pdf`;
+
                 setTimeout(() => {
-                        pdfWindow.focus();
-                        pdfWindow.print();
-                }, 500);
-        };
+                    iframe.contentWindow.focus();
+                    iframe.contentWindow.print();
+                    setTimeout(() => {
+                        iframe.remove();
+                    }, 1500);
+                }, 700);
+            }
 
         setTimeout(() => {
                 button.innerHTML = '<i class="fas fa-check"></i>';
