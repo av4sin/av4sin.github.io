@@ -69,6 +69,10 @@
             overflow: hidden;
         }
 
+        .group.is-hidden {
+            display: none;
+        }
+
         .group::after {
             content: "";
             position: absolute;
@@ -110,6 +114,49 @@
             bottom: 0;
             color: var(--bottom-shade);
             clip-path: inset(50% 0 0 0);
+        }
+
+        #secondsGroup.is-analog::after,
+        #secondsGroup.is-analog .value-top,
+        #secondsGroup.is-analog .value-bottom {
+            display: none;
+        }
+
+        .seconds-analog {
+            display: none;
+            position: relative;
+            width: min(68%, 220px);
+            aspect-ratio: 1 / 1;
+            border: 2px solid var(--top-shade);
+            border-radius: 50%;
+        }
+
+        .seconds-analog::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--bottom-shade);
+            transform: translate(-50%, -50%);
+        }
+
+        .seconds-hand {
+            position: absolute;
+            left: 50%;
+            bottom: 50%;
+            width: 4px;
+            height: 40%;
+            border-radius: 4px;
+            background: var(--bottom-shade);
+            transform-origin: center 100%;
+            transform: translateX(-50%) rotate(0deg);
+        }
+
+        #secondsGroup.is-analog .seconds-analog {
+            display: block;
         }
 
         .flip-top,
@@ -253,6 +300,10 @@
             min-width: 140px;
         }
 
+        #secondsToggleBtn {
+            justify-self: end;
+        }
+
         @media (max-width: 880px) {
             .clock-app {
                 gap: 2vw;
@@ -277,6 +328,14 @@
             <span class="value-top" id="minutesTop">00</span>
             <span class="value-bottom" id="minutesBottom">00</span>
         </section>
+
+        <section class="group" id="secondsGroup" aria-label="Segundos">
+            <span class="value-top" id="secondsTop">00</span>
+            <span class="value-bottom" id="secondsBottom">00</span>
+            <div class="seconds-analog" id="secondsAnalog" aria-hidden="true">
+                <span class="seconds-hand" id="secondsHand"></span>
+            </div>
+        </section>
     </main>
 
     <aside class="ui-controls" id="controlsPanel" aria-label="Opciones de reloj">
@@ -286,8 +345,16 @@
                     <path d="M12 3.2 3 10.6v10.2h6.2v-6.4h5.6v6.4H21V10.6L12 3.2zm7.8 16.4h-3.8v-6.4H8v6.4H4.2v-8.4L12 4.8l7.8 6.4v8.4z"/>
                 </svg>
             </button>
-            <button class="ui-btn" id="fullscreenBtn" type="button">Pantalla completa</button>
-            <button class="ui-btn" id="colorsBtn" type="button">Colores</button>
+            <button class="ui-btn icon-btn" id="fullscreenBtn" type="button" aria-label="Pantalla completa" title="Pantalla completa">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M4 9V4h5v2H6v3H4zm10-5h5v5h-2V6h-3V4zM4 15h2v3h3v2H4v-5zm13 3v-3h2v5h-5v-2h3z"/>
+                </svg>
+            </button>
+            <button class="ui-btn icon-btn" id="colorsBtn" type="button" aria-label="Opciones" title="Opciones">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M3 17h6v2H3v-2zm0-6h10v2H3v-2zm0-6h14v2H3V5zm16 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm-4-6a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6-6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/>
+                </svg>
+            </button>
         </div>
 
         <div class="palette" id="palettePanel">
@@ -305,6 +372,11 @@
                     <option value="gmb">MyFont GMB</option>
                 </select>
             </label>
+            <button class="ui-btn icon-btn" id="secondsToggleBtn" type="button" aria-label="Activar segundos" title="Activar segundos">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2zm1 10.59 3.7 3.7-1.4 1.41L11 13V7h2z"/>
+                </svg>
+            </button>
         </div>
     </aside>
 
@@ -317,16 +389,21 @@
 
         const hoursGroup = document.getElementById('hoursGroup');
         const minutesGroup = document.getElementById('minutesGroup');
+        const secondsGroup = document.getElementById('secondsGroup');
         const hoursTop = document.getElementById('hoursTop');
         const hoursBottom = document.getElementById('hoursBottom');
         const minutesTop = document.getElementById('minutesTop');
         const minutesBottom = document.getElementById('minutesBottom');
+        const secondsTop = document.getElementById('secondsTop');
+        const secondsBottom = document.getElementById('secondsBottom');
 
         const bgColor = document.getElementById('bgColor');
         const cardColor = document.getElementById('cardColor');
         const topDigitColor = document.getElementById('topDigitColor');
         const bottomDigitColor = document.getElementById('bottomDigitColor');
         const digitFontSelect = document.getElementById('digitFontSelect');
+        const secondsToggleBtn = document.getElementById('secondsToggleBtn');
+        const secondsHand = document.getElementById('secondsHand');
 
         const STORAGE_KEY = 'flip-clock-theme';
         const DIGIT_FONTS = {
@@ -340,6 +417,11 @@
         let hideTimer;
         let previousHours = null;
         let previousMinutes = null;
+        let previousSeconds = null;
+        let secondsEnabled = false;
+        let analogSecondsUnlocked = false;
+        let keySequence = [];
+        const secretCombo = ['arrowup', 'arrowup', 'arrowdown', 'arrowdown', 'arrowleft', 'arrowright', 'arrowleft', 'arrowright', 'b', 'a'];
 
         function pad(value) {
             return String(value).padStart(2, '0');
@@ -432,9 +514,107 @@
             const now = new Date();
             const currentHours = pad(now.getHours());
             const currentMinutes = pad(now.getMinutes());
+            const currentSeconds = pad(now.getSeconds());
 
             previousHours = updateGroup(hoursGroup, hoursTop, hoursBottom, previousHours, currentHours);
             previousMinutes = updateGroup(minutesGroup, minutesTop, minutesBottom, previousMinutes, currentMinutes);
+
+            if (!secondsEnabled) {
+                return;
+            }
+
+            if (analogSecondsUnlocked) {
+                updateSecondsHand(Number(currentSeconds));
+                return;
+            }
+
+            if (previousSeconds !== currentSeconds) {
+                secondsTop.textContent = currentSeconds;
+                secondsBottom.textContent = currentSeconds;
+                previousSeconds = currentSeconds;
+            }
+        }
+
+        function updateSecondsHand(seconds) {
+            const angle = seconds * 6;
+            secondsHand.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+        }
+
+        function setFullscreenButtonState(isFullscreen) {
+            fullscreenBtn.setAttribute('aria-label', isFullscreen ? 'Salir de pantalla completa' : 'Pantalla completa');
+            fullscreenBtn.setAttribute('title', isFullscreen ? 'Salir de pantalla completa' : 'Pantalla completa');
+            fullscreenBtn.innerHTML = isFullscreen
+                ? '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4v2H6v3H4V4h5zm11 0v5h-2V6h-3V4h5zM4 15h2v3h3v2H4v-5zm14 0h2v5h-5v-2h3v-3z"/></svg>'
+                : '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9V4h5v2H6v3H4zm10-5h5v5h-2V6h-3V4zM4 15h2v3h3v2H4v-5zm13 3v-3h2v5h-5v-2h3z"/></svg>';
+        }
+
+        function setSecondsButtonState() {
+            if (!secondsEnabled) {
+                secondsToggleBtn.setAttribute('aria-label', 'Activar segundos');
+                secondsToggleBtn.setAttribute('title', 'Activar segundos');
+                secondsToggleBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2zm1 10.59 3.7 3.7-1.4 1.41L11 13V7h2z"/></svg>';
+                return;
+            }
+
+            if (analogSecondsUnlocked) {
+                secondsToggleBtn.setAttribute('aria-label', 'Segundos activos en manecillas');
+                secondsToggleBtn.setAttribute('title', 'Segundos activos en manecillas');
+                secondsToggleBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2zm0 2a8 8 0 0 1 8 8h-8V4zm0 16a8 8 0 0 1 0-16v8h8a8 8 0 0 1-8 8z"/></svg>';
+                return;
+            }
+
+            secondsToggleBtn.setAttribute('aria-label', 'Desactivar segundos');
+            secondsToggleBtn.setAttribute('title', 'Desactivar segundos');
+            secondsToggleBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2zm1 5v5h4v2h-6V7z"/></svg>';
+        }
+
+        function setSecondsEnabled(enabled) {
+            secondsEnabled = enabled;
+            secondsGroup.classList.toggle('is-hidden', !enabled);
+
+            if (!enabled) {
+                previousSeconds = null;
+                secondsGroup.classList.remove('is-analog');
+                setSecondsButtonState();
+                return;
+            }
+
+            const now = new Date();
+            const currentSeconds = pad(now.getSeconds());
+
+            if (analogSecondsUnlocked) {
+                secondsGroup.classList.add('is-analog');
+                setSecondsButtonState();
+                updateSecondsHand(Number(currentSeconds));
+                return;
+            }
+
+            secondsGroup.classList.remove('is-analog');
+            secondsTop.textContent = currentSeconds;
+            secondsBottom.textContent = currentSeconds;
+            previousSeconds = currentSeconds;
+            setSecondsButtonState();
+        }
+
+        function tryUnlockAnalogSeconds(event) {
+            keySequence.push(event.key.toLowerCase());
+
+            if (keySequence.length > secretCombo.length) {
+                keySequence.shift();
+            }
+
+            if (!secondsEnabled) {
+                return;
+            }
+
+            if (keySequence.join('') !== secretCombo.join('')) {
+                return;
+            }
+
+            analogSecondsUnlocked = true;
+            secondsGroup.classList.add('is-analog');
+            setSecondsButtonState();
+            updateSecondsHand(new Date().getSeconds());
         }
 
         function showControls() {
@@ -485,19 +665,25 @@
             showControls();
         });
 
+        secondsToggleBtn.addEventListener('click', () => {
+            setSecondsEnabled(!secondsEnabled);
+            showControls();
+        });
+
         ['touchstart', 'keydown', 'click'].forEach((eventName) => {
             window.addEventListener(eventName, showControls, { passive: true });
         });
 
         window.addEventListener('mousemove', showControlsIfHidden, { passive: true });
+        window.addEventListener('keydown', tryUnlockAnalogSeconds);
 
         document.addEventListener('fullscreenchange', () => {
-            fullscreenBtn.textContent = document.fullscreenElement
-                ? 'Salir pantalla completa'
-                : 'Pantalla completa';
+            setFullscreenButtonState(Boolean(document.fullscreenElement));
         });
 
         loadTheme();
+        setFullscreenButtonState(false);
+        setSecondsEnabled(false);
         tick();
         setInterval(tick, 1000);
         showControls();
