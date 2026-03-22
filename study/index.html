@@ -51,6 +51,9 @@
             <label class="color-line">Tarjeta <input type="color" id="cardColor" value="#34332F"></label>
             <label class="color-line">Número superior <input type="color" id="topDigitColor" value="#cbcbce"></label>
             <label class="color-line">Número inferior <input type="color" id="bottomDigitColor" value="#f0f0f2"></label>
+            <label class="color-line">Mantener pantalla activa
+                <input type="checkbox" id="wakeLockToggle" checked>
+            </label>
             <label class="color-line">Fuente números
                 <select id="digitFontSelect">
                     <option value="inter">Inter</option>
@@ -91,10 +94,12 @@
         const topDigitColor = document.getElementById('topDigitColor');
         const bottomDigitColor = document.getElementById('bottomDigitColor');
         const digitFontSelect = document.getElementById('digitFontSelect');
+        const wakeLockToggle = document.getElementById('wakeLockToggle');
         const secondsToggleBtn = document.getElementById('secondsToggleBtn');
         const secondsHand = document.getElementById('secondsHand');
 
         const STORAGE_KEY = 'flip-clock-theme';
+        const WAKE_LOCK_STORAGE_KEY = 'flip-clock-wake-lock-enabled';
         const DIGIT_FONTS = {
             inter: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
             montserrat: 'Montserrat, Inter, system-ui, sans-serif',
@@ -110,6 +115,8 @@
         let secondsEnabled = false;
         let analogSecondsUnlocked = false;
         let keySequence = [];
+        let wakeLockEnabled = true;
+        let wakeLockSentinel = null;
         const secretCombo = ['arrowup', 'arrowup', 'arrowdown', 'arrowdown', 'arrowleft', 'arrowright', 'arrowleft', 'arrowright', 'b', 'a'];
 
         function pad(value) {
@@ -162,10 +169,62 @@
             }
         }
 
+        async function requestWakeLock() {
+            if (!wakeLockEnabled || !('wakeLock' in navigator) || document.visibilityState !== 'visible') {
+                return;
+            }
+
+            try {
+                wakeLockSentinel = await navigator.wakeLock.request('screen');
+                wakeLockSentinel.addEventListener('release', () => {
+                    wakeLockSentinel = null;
+                });
+            } catch {
+                wakeLockSentinel = null;
+            }
+        }
+
+        async function releaseWakeLock() {
+            if (!wakeLockSentinel) {
+                return;
+            }
+
+            try {
+                await wakeLockSentinel.release();
+            } catch {
+                wakeLockSentinel = null;
+            }
+        }
+
+        function loadWakeLockPreference() {
+            const raw = localStorage.getItem(WAKE_LOCK_STORAGE_KEY);
+            wakeLockEnabled = raw === null ? true : raw === 'true';
+            wakeLockToggle.checked = wakeLockEnabled;
+        }
+
+        function saveWakeLockPreference() {
+            localStorage.setItem(WAKE_LOCK_STORAGE_KEY, String(wakeLockEnabled));
+        }
+
+        async function setWakeLockEnabled(enabled) {
+            wakeLockEnabled = enabled;
+            wakeLockToggle.checked = enabled;
+            saveWakeLockPreference();
+
+            if (enabled) {
+                await requestWakeLock();
+                return;
+            }
+
+            await releaseWakeLock();
+        }
+
         function createFlip(group, topNode, bottomNode, previousValue, nextValue) {
+            group.querySelectorAll('.flip-top, .flip-bottom').forEach((node) => node.remove());
+
             const flipTop = document.createElement('span');
             flipTop.className = 'flip-top';
-            flipTop.textContent = previousValue;
+            flipTop.textContent = nextValue;
 
             const flipBottom = document.createElement('span');
             flipBottom.className = 'flip-bottom';
@@ -174,13 +233,14 @@
             group.appendChild(flipTop);
             group.appendChild(flipBottom);
 
+            topNode.textContent = nextValue;
+
             flipTop.addEventListener('animationend', () => {
-                topNode.textContent = nextValue;
+                flipTop.remove();
             }, { once: true });
 
             flipBottom.addEventListener('animationend', () => {
                 bottomNode.textContent = nextValue;
-                flipTop.remove();
                 flipBottom.remove();
             }, { once: true });
         }
@@ -354,6 +414,11 @@
             showControls();
         });
 
+        wakeLockToggle.addEventListener('change', async () => {
+            await setWakeLockEnabled(wakeLockToggle.checked);
+            showControls();
+        });
+
         secondsToggleBtn.addEventListener('click', () => {
             setSecondsEnabled(!secondsEnabled);
             showControls();
@@ -370,9 +435,20 @@
             setFullscreenButtonState(Boolean(document.fullscreenElement));
         });
 
+        document.addEventListener('visibilitychange', async () => {
+            if (document.visibilityState === 'visible') {
+                await requestWakeLock();
+                return;
+            }
+
+            await releaseWakeLock();
+        });
+
         loadTheme();
+        loadWakeLockPreference();
         setFullscreenButtonState(false);
         setSecondsEnabled(false);
+        setWakeLockEnabled(wakeLockEnabled);
         tick();
         setInterval(tick, 1000);
         showControls();
