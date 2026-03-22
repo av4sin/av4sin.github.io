@@ -122,7 +122,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script>
         // Highlight.js
-        hljs.highlightAll();
+        hljs.configure({
+            ignoreUnescapedHTML: true,
+            throwUnescapedHTML: false
+        });
+
+        document.querySelectorAll('pre code').forEach((codeBlock) => {
+            if (codeBlock.querySelector('*')) {
+                codeBlock.textContent = codeBlock.textContent;
+            }
+            hljs.highlightElement(codeBlock);
+        });
         
         // Mobile nav toggle
         document.querySelector('.nav-toggle').addEventListener('click', function() {
