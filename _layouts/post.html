@@ -77,6 +77,9 @@ layout: default
                     <button class="share-btn copy" onclick="copyToClipboard()" aria-label="Copiar enlace">
                         <i class="fas fa-link"></i>
                     </button>
+                    <button class="share-btn pdf" onclick="exportPostToPDF(this)" aria-label="Guardar como PDF">
+                        <i class="fas fa-file-pdf"></i>
+                    </button>
                 </div>
             </div>
             
@@ -142,5 +145,339 @@ function copyToClipboard() {
     setTimeout(() => {
         btn.innerHTML = '<i class="fas fa-link"></i>';
     }, 2000);
+}
+
+function buildPdfHtml(options) {
+        const {
+                title,
+                author,
+                date,
+                sourceUrl,
+                content,
+                generatedAt,
+                licenseName,
+                licenseBadgeUrl,
+                spdxBadgeUrl,
+                qrUrl
+        } = options;
+
+        return `<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>${title}</title>
+    <style>
+        :root {
+            --text: #1f2937;
+            --muted: #6b7280;
+            --accent: #16a085;
+            --border: #e5e7eb;
+        }
+
+        @page {
+            size: A4;
+            margin: 20mm 16mm 24mm 16mm;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            color: var(--text);
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            line-height: 1.65;
+            font-size: 12pt;
+        }
+
+        .pdf-container {
+            max-width: 100%;
+        }
+
+        .pdf-header {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 14px;
+            margin-bottom: 18px;
+        }
+
+        .pdf-title {
+            margin: 0 0 8px;
+            font-size: 24px;
+            line-height: 1.25;
+            color: #111827;
+        }
+
+        .pdf-meta {
+            margin: 0;
+            color: var(--muted);
+            font-size: 10.5pt;
+        }
+
+        .pdf-meta strong {
+            color: #374151;
+        }
+
+        .pdf-body {
+            margin-bottom: 20px;
+        }
+
+        .pdf-body h1,
+        .pdf-body h2,
+        .pdf-body h3,
+        .pdf-body h4,
+        .pdf-body h5,
+        .pdf-body h6 {
+            color: #111827;
+            line-height: 1.3;
+            margin-top: 1.4em;
+            margin-bottom: 0.6em;
+            page-break-after: avoid;
+            break-after: avoid;
+        }
+
+        .pdf-body p,
+        .pdf-body li,
+        .pdf-body blockquote,
+        .pdf-body table,
+        .pdf-body pre {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .pdf-body a {
+            color: #0f766e;
+            text-decoration: none;
+            word-break: break-word;
+        }
+
+        .pdf-body img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            page-break-inside: avoid;
+        }
+
+        .pdf-body code {
+            font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+            background: #f3f4f6;
+            border-radius: 4px;
+            padding: 0.1em 0.35em;
+            font-size: 0.92em;
+        }
+
+        .pdf-body pre {
+            background: #111827;
+            color: #f9fafb;
+            border-radius: 8px;
+            padding: 12px;
+            overflow-x: auto;
+        }
+
+        .pdf-body pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        .pdf-body blockquote {
+            margin: 1em 0;
+            padding: 0.2em 1em;
+            border-left: 4px solid var(--accent);
+            color: #374151;
+            background: #f9fafb;
+        }
+
+        .pdf-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1em 0;
+            font-size: 10pt;
+        }
+
+        .pdf-body th,
+        .pdf-body td {
+            border: 1px solid var(--border);
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .pdf-body th {
+            background: #f3f4f6;
+            font-weight: 600;
+        }
+
+        .pdf-assets {
+            margin-top: 26px;
+            border-top: 1px solid var(--border);
+            padding-top: 14px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 18px;
+            align-items: start;
+        }
+
+        .pdf-license h4,
+        .pdf-qr h4 {
+            margin: 0 0 8px;
+            font-size: 12pt;
+            color: #111827;
+        }
+
+        .pdf-license p,
+        .pdf-qr p {
+            margin: 0 0 8px;
+            color: var(--muted);
+            font-size: 10pt;
+        }
+
+        .pdf-license-logos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .pdf-license-logos img {
+            height: 22px;
+            width: auto;
+            border-radius: 4px;
+        }
+
+        .pdf-qr {
+            text-align: center;
+        }
+
+        .pdf-qr img {
+            width: 132px;
+            height: 132px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px;
+            background: #fff;
+        }
+
+        .pdf-print-footer {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: -10mm;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            padding-top: 6px;
+            font-size: 9.5pt;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pdf-page-number::after {
+            content: "Página " counter(page);
+        }
+
+        @media print {
+            .pdf-container {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="pdf-container">
+        <header class="pdf-header">
+            <h1 class="pdf-title">${title}</h1>
+            <p class="pdf-meta"><strong>Autor:</strong> ${author} · <strong>Fecha:</strong> ${date}</p>
+            <p class="pdf-meta"><strong>Origen:</strong> <a href="${sourceUrl}">${sourceUrl}</a></p>
+            <p class="pdf-meta"><strong>Generado:</strong> ${generatedAt}</p>
+        </header>
+
+        <main class="pdf-body">${content}</main>
+
+        <section class="pdf-assets">
+            <div class="pdf-license">
+                <h4>Licencia</h4>
+                <p>Este contenido se distribuye bajo ${licenseName}. Se incluyen los logotipos de referencia.</p>
+                <div class="pdf-license-logos">
+                    <img src="${licenseBadgeUrl}" alt="Logotipo licencia ${licenseName}">
+                    <img src="${spdxBadgeUrl}" alt="Logotipo SPDX ${licenseName}">
+                </div>
+            </div>
+
+            <div class="pdf-qr">
+                <h4>QR del artículo</h4>
+                <p>Escanea para abrir la página original</p>
+                <img src="${qrUrl}" alt="Código QR del artículo">
+            </div>
+        </section>
+    </div>
+
+    <footer class="pdf-print-footer">
+        <span>${title}</span>
+        <span class="pdf-page-number"></span>
+    </footer>
+</body>
+</html>`;
+}
+
+function exportPostToPDF(button) {
+        const originalIcon = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        button.disabled = true;
+
+        const postTitle = document.querySelector('.post-title')?.textContent?.trim() || document.title;
+        const postContent = document.querySelector('.post-content')?.innerHTML || '';
+        const postDate = document.querySelector('.post-date')?.textContent?.trim() || '{{ page.date | date: "%d de %B, %Y" }}';
+        const authorName = '{{ page.author | default: site.author.name | default: "Autor" | escape }}';
+        const sourceUrl = window.location.href.split('#')[0];
+        const generatedAt = new Date().toLocaleString('es-ES');
+        const licenseName = '{{ site.license | default: "MIT" | escape }}';
+        const licenseBadgeUrl = 'https://img.shields.io/badge/Licencia-{{ site.license | default: "MIT" | uri_escape }}-16a085';
+        const spdxBadgeUrl = 'https://img.shields.io/badge/SPDX-{{ site.license | default: "MIT" | uri_escape }}-3da639';
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(sourceUrl)}`;
+
+        const pdfWindow = window.open('', '_blank', 'noopener,noreferrer');
+
+        if (!pdfWindow) {
+                alert('No se pudo abrir la ventana para generar PDF. Revisa el bloqueador de ventanas emergentes.');
+                button.innerHTML = originalIcon;
+                button.disabled = false;
+                return;
+        }
+
+        const pdfHtml = buildPdfHtml({
+                title: postTitle,
+                author: authorName,
+                date: postDate,
+                sourceUrl,
+                content: postContent,
+                generatedAt,
+                licenseName,
+                licenseBadgeUrl,
+                spdxBadgeUrl,
+                qrUrl
+        });
+
+        pdfWindow.document.open();
+        pdfWindow.document.write(pdfHtml);
+        pdfWindow.document.close();
+
+        const safeTitle = postTitle.replace(/[\\/:*?"<>|]/g, '').slice(0, 80) || 'articulo';
+        pdfWindow.document.title = `${safeTitle}.pdf`;
+
+        pdfWindow.onload = () => {
+                setTimeout(() => {
+                        pdfWindow.focus();
+                        pdfWindow.print();
+                }, 500);
+        };
+
+        setTimeout(() => {
+                button.innerHTML = '<i class="fas fa-check"></i>';
+        }, 400);
+
+        setTimeout(() => {
+                button.innerHTML = originalIcon;
+                button.disabled = false;
+        }, 2200);
 }
 </script>

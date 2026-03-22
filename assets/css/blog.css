@@ -778,6 +778,7 @@ img {
 .share-btn.linkedin { background: #0077b5; }
 .share-btn.facebook { background: #1877f2; }
 .share-btn.copy { background: var(--bg-tertiary); color: var(--text-primary); }
+.share-btn.pdf { background: #dc2626; }
 
 .share-btn:hover {
     transform: translateY(-3px);
