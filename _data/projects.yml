@@ -2,6 +2,17 @@
 # Facilita la gestión y actualización de proyectos ya que al acutalizar este fichero se adjunta automáticamente en la página ppal.
 
 featured:
+  - name: "RZDRadio"
+    description: "Emisora de radio funcional compuesta por una RPi y un hilo como antena."
+    icon: "bullhorn"
+    status: "in-progress"
+    url: "https://github.com/av4sin/rzdRadio"
+    github: "https://github.com/av4sin/rzdRadio"
+    tags:
+      - Python
+      - Raspberry Pi
+      - Radio
+
   - name: "LearnMWPi"
     description: "Juego educativo para aprender código Morse con Raspberry Pi o Arduino usando matriz LED, buzzer y botón."
     icon: "book"
@@ -15,7 +26,7 @@ featured:
 
   - name: "Reloj \"Study\""
     description: "Reloj sencillo con formato 24h para facilitar las sesiones de estudio."
-    icon: "clock"
+    icon: "clock-o"
     status: "in-progress"
     url: "/study/"
     github: "https://github.com/av4sin/av4sin.github.io/study"

@@ -130,6 +130,7 @@
             </div>
             <div id="projects-rotator" class="row projects-grid">
                 {% if site.data.projects.featured and site.data.projects.featured.size > 0 %}
+                {% assign featured_count = site.data.projects.featured.size %}
                 {% for project in site.data.projects.featured %}
                 <div class="col-md-4 col-sm-6 project-col">
                     <div class="project-card">
@@ -139,7 +140,7 @@
                         <h3>{{ project.name }}</h3>
                         <p>{{ project.description }}</p>
                         <div class="project-tags">
-                            {% for tag in project.tags limit:2 %}
+                            {% for tag in project.tags %}
                             <span class="tag">{{ tag }}</span>
                             {% endfor %}
                         </div>
@@ -147,6 +148,24 @@
                     </div>
                 </div>
                 {% endfor %}
+                {% if featured_count < 5 %}
+                {% assign missing_projects = 5 | minus: featured_count %}
+                {% for i in (1..missing_projects) %}
+                <div class="col-md-4 col-sm-6 project-col">
+                    <div class="project-card">
+                        <div class="project-icon">
+                            <i class="fa fa-rocket"></i>
+                        </div>
+                        <h3>Próximamente</h3>
+                        <p>Nuevos proyectos en desarrollo. Mantente atento.</p>
+                        <div class="project-tags">
+                            <span class="tag">En progreso</span>
+                        </div>
+                        <a href="#contact" class="project-link page-scroll">Contáctame <i class="fa fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
                 {% else %}
                 <div class="col-md-4 col-sm-6 project-col">
                     <div class="project-card">

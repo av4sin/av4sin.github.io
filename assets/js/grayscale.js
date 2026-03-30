@@ -144,9 +144,9 @@ function initProjectsRotation() {
     const rotationIntervalMs = 2000;
     const positionSlotsByCount = {
         1: [2],
-        2: [1, 3],
+        2: [1, 2],
         3: [1, 2, 3],
-        4: [0, 1, 3, 4],
+        4: [0, 1, 2, 3],
         5: [0, 1, 2, 3, 4]
     };
 
@@ -191,7 +191,7 @@ function initProjectsRotation() {
     }
 
     function startAutoRotation() {
-        if (projectCols.length <= maxVisibleProjects) {
+        if (projectCols.length <= 1) {
             return;
         }
 
