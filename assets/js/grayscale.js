@@ -126,7 +126,48 @@ $(document).ready(function() {
     
     // Add animation on scroll
     animateOnScroll();
+
+    // Rotate featured projects when there are many
+    initProjectsRotation();
 });
+
+function initProjectsRotation() {
+    const rotator = document.getElementById('projects-rotator');
+    if (!rotator) {
+        return;
+    }
+
+    const projectCols = Array.from(rotator.querySelectorAll('.project-col'));
+    const minVisibleProjects = 3;
+    const rotationThreshold = 5;
+    const rotationIntervalMs = 1500;
+
+    if (projectCols.length <= rotationThreshold) {
+        projectCols.forEach((projectCol) => {
+            projectCol.style.display = '';
+        });
+        return;
+    }
+
+    let startIndex = 0;
+
+    function updateVisibleProjects() {
+        const totalProjects = projectCols.length;
+
+        projectCols.forEach((projectCol, index) => {
+            const normalizedIndex = (index - startIndex + totalProjects) % totalProjects;
+            const isVisible = normalizedIndex < minVisibleProjects;
+            projectCol.style.display = isVisible ? '' : 'none';
+        });
+    }
+
+    updateVisibleProjects();
+
+    setInterval(() => {
+        startIndex = (startIndex + 1) % projectCols.length;
+        updateVisibleProjects();
+    }, rotationIntervalMs);
+}
 
 // ============================================
 // ANIMATE ON SCROLL
