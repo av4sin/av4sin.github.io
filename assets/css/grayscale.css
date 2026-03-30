@@ -666,69 +666,79 @@ body {
 }
 
 #projects-rotator {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: stretch;
-    gap: 0;
+    position: relative;
+    height: 560px;
+    perspective: 1200px;
     overflow: hidden;
 }
 
 #projects-rotator .project-col {
+    position: absolute;
+    top: 0;
+    left: 50%;
     float: none;
     display: flex;
-    flex: 0 0 34%;
-    max-width: 34%;
-    margin: 0 -6.5%;
+    width: 30%;
+    max-width: 420px;
+    min-width: 240px;
+    height: 100%;
+    margin: 0;
     padding-left: 0;
     padding-right: 0;
     transition: transform 0.75s ease-in-out, opacity 0.75s ease-in-out, filter 0.75s ease-in-out;
     transform-origin: center center;
+    transform: translateX(-50%) scale(0.7);
+    opacity: 0;
+    pointer-events: none;
 }
 
 #projects-rotator .project-col.project-pos-0,
 #projects-rotator .project-col.project-pos-4 {
-    transform: translateX(0) scale(0.72);
+    transform: translateX(-50%) scale(0.72);
     opacity: 0.42;
     filter: saturate(0.7);
     z-index: 1;
 }
 
 #projects-rotator .project-col.project-pos-0 {
-    transform: translateX(-118%) scale(0.72);
+    left: 15%;
 }
 
 #projects-rotator .project-col.project-pos-4 {
-    transform: translateX(118%) scale(0.72);
+    left: 85%;
 }
 
 #projects-rotator .project-col.project-pos-1,
 #projects-rotator .project-col.project-pos-3 {
+    transform: translateX(-50%) scale(0.86);
     opacity: 0.78;
     filter: saturate(0.9);
     z-index: 2;
+    pointer-events: auto;
 }
 
 #projects-rotator .project-col.project-pos-1 {
-    transform: translateX(-58%) scale(0.86);
+    left: 32.5%;
 }
 
 #projects-rotator .project-col.project-pos-3 {
-    transform: translateX(58%) scale(0.86);
+    left: 67.5%;
 }
 
 #projects-rotator .project-col.project-pos-2 {
-    transform: translateX(0) scale(1);
+    left: 50%;
+    transform: translateX(-50%) scale(1);
     opacity: 1;
     filter: none;
     z-index: 4;
+    pointer-events: auto;
 }
 
 .project-card {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 15px;
     padding: 40px 30px;
-    margin-bottom: 30px;
+    margin-bottom: 0;
     transition: all 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
     height: 100%;
@@ -1010,29 +1020,38 @@ body {
     }
 
     #projects-rotator {
-        gap: 0;
+        height: 520px;
     }
 
     #projects-rotator .project-col {
-        flex-basis: 56%;
-        max-width: 56%;
-        margin: 0 -22%;
+        width: 52%;
+        min-width: 0;
+        max-width: none;
     }
 
     #projects-rotator .project-col.project-pos-0 {
-        transform: translateX(-94%) scale(0.7);
+        left: 8%;
+        transform: translateX(-50%) scale(0.65);
     }
 
     #projects-rotator .project-col.project-pos-1 {
-        transform: translateX(-46%) scale(0.84);
+        left: 29%;
+        transform: translateX(-50%) scale(0.8);
+    }
+
+    #projects-rotator .project-col.project-pos-2 {
+        left: 50%;
+        transform: translateX(-50%) scale(0.96);
     }
 
     #projects-rotator .project-col.project-pos-3 {
-        transform: translateX(46%) scale(0.84);
+        left: 71%;
+        transform: translateX(-50%) scale(0.8);
     }
 
     #projects-rotator .project-col.project-pos-4 {
-        transform: translateX(94%) scale(0.7);
+        left: 92%;
+        transform: translateX(-50%) scale(0.65);
     }
     
     .blog-stats {
