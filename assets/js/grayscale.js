@@ -166,17 +166,38 @@ function initProjectsRotation() {
         const visibleCount = Math.min(maxVisibleProjects, totalProjects);
         const visibleSlots = getVisibleSlots(visibleCount);
 
-        projectCols.forEach((projectCol) => {
-            projectCol.style.display = 'none';
-            projectCol.classList.remove('project-pos-0', 'project-pos-1', 'project-pos-2', 'project-pos-3', 'project-pos-4');
-        });
+        const nextPositionByIndex = new Map();
 
         for (let slotIndex = 0; slotIndex < visibleCount; slotIndex++) {
             const projectIndex = (startIndex + slotIndex) % totalProjects;
-            const projectCol = projectCols[projectIndex];
-            const slotClass = `project-pos-${visibleSlots[slotIndex]}`;
+            nextPositionByIndex.set(projectIndex, visibleSlots[slotIndex]);
+        }
+
+        projectCols.forEach((projectCol, index) => {
+            const existingPositionClass = Array.from(projectCol.classList).find((className) => className.indexOf('project-pos-') === 0);
+
+            if (!nextPositionByIndex.has(index)) {
+                projectCol.style.display = 'none';
+                if (existingPositionClass) {
+                    projectCol.classList.remove(existingPositionClass);
+                }
+                return;
+            }
+
+            const nextPositionClass = `project-pos-${nextPositionByIndex.get(index)}`;
             projectCol.style.display = '';
-            projectCol.classList.add(slotClass);
+
+            if (!existingPositionClass) {
+                projectCol.classList.add(nextPositionClass);
+            } else if (existingPositionClass !== nextPositionClass) {
+                projectCol.classList.replace(existingPositionClass, nextPositionClass);
+            }
+        });
+
+        if (visibleCount === 5) {
+            rotator.classList.add('is-five-visible');
+        } else {
+            rotator.classList.remove('is-five-visible');
         }
     }
 

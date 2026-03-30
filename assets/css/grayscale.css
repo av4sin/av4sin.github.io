@@ -682,7 +682,7 @@ body {
     margin: 0 -6.5%;
     padding-left: 0;
     padding-right: 0;
-    transition: transform 0.45s ease, opacity 0.45s ease, filter 0.45s ease;
+    transition: transform 0.75s ease-in-out, opacity 0.75s ease-in-out, filter 0.75s ease-in-out;
     transform-origin: center center;
 }
 
