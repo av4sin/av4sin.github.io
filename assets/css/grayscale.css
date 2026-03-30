@@ -663,12 +663,48 @@ body {
 
 .projects-grid {
     margin-top: 30px;
-    display: flex;
-    flex-wrap: wrap;
 }
 
-.projects-grid > [class*='col-'] {
+#projects-rotator {
     display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 18px;
+    overflow: hidden;
+}
+
+#projects-rotator .project-col {
+    float: none;
+    display: flex;
+    flex: 0 0 20%;
+    max-width: 20%;
+    padding-left: 0;
+    padding-right: 0;
+    transition: transform 0.45s ease, opacity 0.45s ease, filter 0.45s ease;
+}
+
+#projects-rotator .project-col.project-pos-0,
+#projects-rotator .project-col.project-pos-4 {
+    transform: scale(0.78);
+    opacity: 0.5;
+    filter: saturate(0.75);
+    z-index: 1;
+}
+
+#projects-rotator .project-col.project-pos-1,
+#projects-rotator .project-col.project-pos-3 {
+    transform: scale(0.9);
+    opacity: 0.78;
+    filter: saturate(0.9);
+    z-index: 2;
+}
+
+#projects-rotator .project-col.project-pos-2 {
+    transform: scale(1.02);
+    opacity: 1;
+    filter: none;
+    z-index: 3;
 }
 
 .project-card {
@@ -756,6 +792,31 @@ body {
 
 .project-link:hover i {
     transform: translateX(5px);
+}
+
+.projects-controls {
+    margin-top: 18px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.projects-control-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgba(22, 160, 133, 0.7);
+    background: rgba(255, 255, 255, 0.06);
+    color: #16a085;
+    transition: all 0.25s ease;
+}
+
+.projects-control-btn:hover,
+.projects-control-btn:focus {
+    color: #fff;
+    background: #16a085;
+    border-color: #16a085;
+    outline: none;
 }
 
 /* ============================================
@@ -929,6 +990,15 @@ body {
     
     .project-card {
         padding: 30px 20px;
+    }
+
+    #projects-rotator {
+        gap: 10px;
+    }
+
+    #projects-rotator .project-col {
+        flex-basis: 20%;
+        max-width: 20%;
     }
     
     .blog-stats {

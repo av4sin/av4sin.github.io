@@ -138,35 +138,99 @@ function initProjectsRotation() {
     }
 
     const projectCols = Array.from(rotator.querySelectorAll('.project-col'));
-    const minVisibleProjects = 3;
-    const rotationThreshold = 5;
-    const rotationIntervalMs = 1500;
+    const prevButton = document.getElementById('projects-prev');
+    const nextButton = document.getElementById('projects-next');
+    const maxVisibleProjects = 5;
+    const rotationIntervalMs = 2000;
+    const positionSlotsByCount = {
+        1: [2],
+        2: [1, 3],
+        3: [1, 2, 3],
+        4: [0, 1, 3, 4],
+        5: [0, 1, 2, 3, 4]
+    };
 
-    if (projectCols.length <= rotationThreshold) {
-        projectCols.forEach((projectCol) => {
-            projectCol.style.display = '';
-        });
+    if (projectCols.length === 0) {
         return;
     }
 
     let startIndex = 0;
+    let autoRotationId = null;
 
-    function updateVisibleProjects() {
+    function getVisibleSlots(visibleCount) {
+        return positionSlotsByCount[visibleCount] || [0, 1, 2, 3, 4].slice(0, visibleCount);
+    }
+
+    function renderProjects() {
         const totalProjects = projectCols.length;
+        const visibleCount = Math.min(maxVisibleProjects, totalProjects);
+        const visibleSlots = getVisibleSlots(visibleCount);
 
-        projectCols.forEach((projectCol, index) => {
-            const normalizedIndex = (index - startIndex + totalProjects) % totalProjects;
-            const isVisible = normalizedIndex < minVisibleProjects;
-            projectCol.style.display = isVisible ? '' : 'none';
+        projectCols.forEach((projectCol) => {
+            projectCol.style.display = 'none';
+            projectCol.classList.remove('project-pos-0', 'project-pos-1', 'project-pos-2', 'project-pos-3', 'project-pos-4');
+        });
+
+        for (let slotIndex = 0; slotIndex < visibleCount; slotIndex++) {
+            const projectIndex = (startIndex + slotIndex) % totalProjects;
+            const projectCol = projectCols[projectIndex];
+            const slotClass = `project-pos-${visibleSlots[slotIndex]}`;
+            projectCol.style.display = '';
+            projectCol.classList.add(slotClass);
+        }
+    }
+
+    function showNextProject() {
+        startIndex = (startIndex + 1) % projectCols.length;
+        renderProjects();
+    }
+
+    function showPreviousProject() {
+        startIndex = (startIndex - 1 + projectCols.length) % projectCols.length;
+        renderProjects();
+    }
+
+    function startAutoRotation() {
+        if (projectCols.length <= maxVisibleProjects) {
+            return;
+        }
+
+        autoRotationId = setInterval(() => {
+            showNextProject();
+        }, rotationIntervalMs);
+    }
+
+    function resetAutoRotation() {
+        if (autoRotationId) {
+            clearInterval(autoRotationId);
+            autoRotationId = null;
+        }
+        startAutoRotation();
+    }
+
+    if (prevButton) {
+        prevButton.addEventListener('click', () => {
+            showPreviousProject();
+            resetAutoRotation();
         });
     }
 
-    updateVisibleProjects();
+    if (nextButton) {
+        nextButton.addEventListener('click', () => {
+            showNextProject();
+            resetAutoRotation();
+        });
+    }
 
-    setInterval(() => {
-        startIndex = (startIndex + 1) % projectCols.length;
-        updateVisibleProjects();
-    }, rotationIntervalMs);
+    renderProjects();
+
+    if (projectCols.length <= 1) {
+        if (prevButton) prevButton.style.display = 'none';
+        if (nextButton) nextButton.style.display = 'none';
+        return;
+    }
+
+    startAutoRotation();
 }
 
 // ============================================
