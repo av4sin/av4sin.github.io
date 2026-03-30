@@ -140,8 +140,9 @@ function initProjectsRotation() {
     const projectCols = Array.from(rotator.querySelectorAll('.project-col'));
     const prevButton = document.getElementById('projects-prev');
     const nextButton = document.getElementById('projects-next');
-    const maxVisibleProjects = 5;
+    const desktopMaxVisibleProjects = 5;
     const rotationIntervalMs = 4000;
+    const mobileMediaQuery = window.matchMedia('(max-width: 768px)');
     const positionSlotsByCount = {
         1: [2],
         2: [1, 2],
@@ -157,13 +158,17 @@ function initProjectsRotation() {
     let startIndex = 0;
     let autoRotationId = null;
 
+    function getMaxVisibleProjects() {
+        return mobileMediaQuery.matches ? 1 : desktopMaxVisibleProjects;
+    }
+
     function getVisibleSlots(visibleCount) {
         return positionSlotsByCount[visibleCount] || [0, 1, 2, 3, 4].slice(0, visibleCount);
     }
 
     function renderProjects() {
         const totalProjects = projectCols.length;
-        const visibleCount = Math.min(maxVisibleProjects, totalProjects);
+        const visibleCount = Math.min(getMaxVisibleProjects(), totalProjects);
         const visibleSlots = getVisibleSlots(visibleCount);
 
         const nextPositionByIndex = new Map();
@@ -221,6 +226,11 @@ function initProjectsRotation() {
         }, rotationIntervalMs);
     }
 
+    function onViewportChange() {
+        renderProjects();
+        resetAutoRotation();
+    }
+
     function resetAutoRotation() {
         if (autoRotationId) {
             clearInterval(autoRotationId);
@@ -241,6 +251,12 @@ function initProjectsRotation() {
             showNextProject();
             resetAutoRotation();
         });
+    }
+
+    if (typeof mobileMediaQuery.addEventListener === 'function') {
+        mobileMediaQuery.addEventListener('change', onViewportChange);
+    } else if (typeof mobileMediaQuery.addListener === 'function') {
+        mobileMediaQuery.addListener(onViewportChange);
     }
 
     renderProjects();
