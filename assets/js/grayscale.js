@@ -141,7 +141,7 @@ function initProjectsRotation() {
     const prevButton = document.getElementById('projects-prev');
     const nextButton = document.getElementById('projects-next');
     const maxVisibleProjects = 5;
-    const rotationIntervalMs = 2000;
+    const rotationIntervalMs = 4000;
     const positionSlotsByCount = {
         1: [2],
         2: [1, 2],
