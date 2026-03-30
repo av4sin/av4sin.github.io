@@ -2,6 +2,28 @@
 # Facilita la gestión y actualización de proyectos ya que al acutalizar este fichero se adjunta automáticamente en la página ppal.
 
 featured:
+  - name: "LearnMWPi"
+    description: "Juego educativo para aprender código Morse con Raspberry Pi o Arduino usando matriz LED, buzzer y botón."
+    icon: "book"
+    status: "in-progress"
+    url: "https://github.com/av4sin/LearnMWPi"
+    github: "https://github.com/av4sin/LearnMWPi"
+    tags:
+      - Python
+      - Raspberry Pi
+      - Morse
+
+  - name: "Reloj \"Study\""
+    description: "Reloj sencillo con formato 24h para facilitar las sesiones de estudio."
+    icon: "clock"
+    status: "in-progress"
+    url: "/study/"
+    github: "https://github.com/av4sin/av4sin.github.io/study"
+    tags:
+      - HTML
+      - CSS
+      - Clock
+
   - name: "AcuASCII"
     description: "Simulador de acuario interactivo para terminal escrito en Java con arte ASCII."
     icon: "terminal"
