@@ -31,7 +31,7 @@
         <div class="nav-container">
             <a href="{{ site.baseurl }}/" class="nav-brand">
                 <i class="fas fa-terminal"></i>
-                <span>av4sin</span>
+                <span>{{ site.title }}</span>
             </a>
             
             <button class="nav-toggle" aria-label="Toggle navigation">
@@ -110,9 +110,9 @@
             <div class="footer-bottom">
                 <p>
                     <a href="https://opensource.org/licenses/MIT" target="_blank" title="Licencia MIT">
-                        <i class="fas fa-unlock-alt"></i> MIT License
+                        <i class="fas fa-unlock-alt"></i> {{ site.license }} License
                     </a> · {{ site.time | date: '%Y' }} · 
-                    <strong>av4sin</strong> (Gonzalo Mondragón Báscones)
+                    <strong>{{ site.author.alias }}</strong> ({{ site.author.name }})
                 </p>
             </div>
         </div>

@@ -6,6 +6,7 @@ technical:
     icon: "code"
     skills:
       - C
+      - C++
       - Python
       - Java
       - Bash
