@@ -670,6 +670,8 @@ body {
     height: 560px;
     perspective: 1200px;
     overflow: hidden;
+    --slot-near: clamp(180px, 18vw, 300px);
+    --slot-far: clamp(300px, 33vw, 520px);
 }
 
 #projects-rotator .project-col {
@@ -694,18 +696,18 @@ body {
 
 #projects-rotator .project-col.project-pos-0,
 #projects-rotator .project-col.project-pos-4 {
-    transform: translateX(-50%) scale(0.72);
+    transform: translateX(calc(-50% - var(--slot-far))) scale(0.72);
     opacity: 0.42;
     filter: saturate(0.7);
     z-index: 1;
 }
 
 #projects-rotator .project-col.project-pos-0 {
-    left: 15%;
+    transform: translateX(calc(-50% - var(--slot-far))) scale(0.72);
 }
 
 #projects-rotator .project-col.project-pos-4 {
-    left: 85%;
+    transform: translateX(calc(-50% + var(--slot-far))) scale(0.72);
 }
 
 #projects-rotator .project-col.project-pos-1,
@@ -718,15 +720,14 @@ body {
 }
 
 #projects-rotator .project-col.project-pos-1 {
-    left: 32.5%;
+    transform: translateX(calc(-50% - var(--slot-near))) scale(0.86);
 }
 
 #projects-rotator .project-col.project-pos-3 {
-    left: 67.5%;
+    transform: translateX(calc(-50% + var(--slot-near))) scale(0.86);
 }
 
 #projects-rotator .project-col.project-pos-2 {
-    left: 50%;
     transform: translateX(-50%) scale(1);
     opacity: 1;
     filter: none;
@@ -1021,6 +1022,8 @@ body {
 
     #projects-rotator {
         height: 520px;
+        --slot-near: clamp(110px, 22vw, 180px);
+        --slot-far: clamp(180px, 34vw, 280px);
     }
 
     #projects-rotator .project-col {
@@ -1030,28 +1033,23 @@ body {
     }
 
     #projects-rotator .project-col.project-pos-0 {
-        left: 8%;
-        transform: translateX(-50%) scale(0.65);
+        transform: translateX(calc(-50% - var(--slot-far))) scale(0.65);
     }
 
     #projects-rotator .project-col.project-pos-1 {
-        left: 29%;
-        transform: translateX(-50%) scale(0.8);
+        transform: translateX(calc(-50% - var(--slot-near))) scale(0.8);
     }
 
     #projects-rotator .project-col.project-pos-2 {
-        left: 50%;
         transform: translateX(-50%) scale(0.96);
     }
 
     #projects-rotator .project-col.project-pos-3 {
-        left: 71%;
-        transform: translateX(-50%) scale(0.8);
+        transform: translateX(calc(-50% + var(--slot-near))) scale(0.8);
     }
 
     #projects-rotator .project-col.project-pos-4 {
-        left: 92%;
-        transform: translateX(-50%) scale(0.65);
+        transform: translateX(calc(-50% + var(--slot-far))) scale(0.65);
     }
     
     .blog-stats {
