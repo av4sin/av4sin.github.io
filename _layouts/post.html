@@ -165,15 +165,20 @@ function copyCodeBlock(button, codeBlock) {
 
     const resetButton = () => {
         button.disabled = false;
+        button.classList.remove('is-success', 'is-error');
         button.innerHTML = originalLabel;
     };
 
     const markSuccess = () => {
+        button.classList.add('is-success');
+        button.classList.remove('is-error');
         button.innerHTML = '<i class="fas fa-check"></i><span>Copiado</span>';
         setTimeout(resetButton, 1600);
     };
 
     const markError = () => {
+        button.classList.add('is-error');
+        button.classList.remove('is-success');
         button.innerHTML = '<i class="fas fa-triangle-exclamation"></i><span>Error</span>';
         setTimeout(resetButton, 2000);
     };
@@ -212,7 +217,7 @@ function initCodeCopyButtons() {
         const copyButton = document.createElement('button');
         copyButton.type = 'button';
         copyButton.className = 'code-copy-btn';
-        copyButton.innerHTML = '<i class="far fa-copy"></i><span>Copiar</span>';
+        copyButton.innerHTML = '<i class="far fa-copy"></i>';
         copyButton.setAttribute('aria-label', 'Copiar código');
         copyButton.addEventListener('click', () => copyCodeBlock(copyButton, codeBlock));
 
