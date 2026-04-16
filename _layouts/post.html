@@ -147,6 +147,79 @@ function copyToClipboard() {
     }, 2000);
 }
 
+function fallbackCopyText(text) {
+    const tempTextArea = document.createElement('textarea');
+    tempTextArea.value = text;
+    tempTextArea.setAttribute('readonly', '');
+    tempTextArea.style.position = 'absolute';
+    tempTextArea.style.left = '-9999px';
+    document.body.appendChild(tempTextArea);
+    tempTextArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempTextArea);
+}
+
+function copyCodeBlock(button, codeBlock) {
+    const text = codeBlock.textContent.trimEnd();
+    const originalLabel = button.innerHTML;
+
+    const resetButton = () => {
+        button.disabled = false;
+        button.innerHTML = originalLabel;
+    };
+
+    const markSuccess = () => {
+        button.innerHTML = '<i class="fas fa-check"></i><span>Copiado</span>';
+        setTimeout(resetButton, 1600);
+    };
+
+    const markError = () => {
+        button.innerHTML = '<i class="fas fa-triangle-exclamation"></i><span>Error</span>';
+        setTimeout(resetButton, 2000);
+    };
+
+    button.disabled = true;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text)
+            .then(markSuccess)
+            .catch(() => {
+                try {
+                    fallbackCopyText(text);
+                    markSuccess();
+                } catch (error) {
+                    markError();
+                }
+            });
+        return;
+    }
+
+    try {
+        fallbackCopyText(text);
+        markSuccess();
+    } catch (error) {
+        markError();
+    }
+}
+
+function initCodeCopyButtons() {
+    document.querySelectorAll('.post-content pre').forEach((pre) => {
+        const codeBlock = pre.querySelector('code');
+        if (!codeBlock || pre.querySelector('.code-copy-btn')) {
+            return;
+        }
+
+        const copyButton = document.createElement('button');
+        copyButton.type = 'button';
+        copyButton.className = 'code-copy-btn';
+        copyButton.innerHTML = '<i class="far fa-copy"></i><span>Copiar</span>';
+        copyButton.setAttribute('aria-label', 'Copiar código');
+        copyButton.addEventListener('click', () => copyCodeBlock(copyButton, codeBlock));
+
+        pre.appendChild(copyButton);
+    });
+}
+
 function buildPdfHtml(options) {
         const {
                 title,
@@ -421,13 +494,20 @@ function buildPdfHtml(options) {
 </html>`;
 }
 
+initCodeCopyButtons();
+
 function exportPostToPDF(button) {
         const originalIcon = button.innerHTML;
         button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
         button.disabled = true;
 
         const postTitle = document.querySelector('.post-title')?.textContent?.trim() || document.title;
-        const postContent = document.querySelector('.post-content')?.innerHTML || '';
+        const postContentElement = document.querySelector('.post-content');
+        const postContentClone = postContentElement ? postContentElement.cloneNode(true) : null;
+        if (postContentClone) {
+            postContentClone.querySelectorAll('.code-copy-btn').forEach((copyButton) => copyButton.remove());
+        }
+        const postContent = postContentClone?.innerHTML || '';
         const postDate = document.querySelector('.post-date')?.textContent?.trim() || '{{ page.date | date: "%d de %B, %Y" }}';
         const authorName = '{{ page.author | default: site.author.name | default: "Autor" | escape }}';
         const sourceUrl = window.location.href.split('#')[0];
