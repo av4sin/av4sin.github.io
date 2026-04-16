@@ -172,14 +172,14 @@ function copyCodeBlock(button, codeBlock) {
     const markSuccess = () => {
         button.classList.add('is-success');
         button.classList.remove('is-error');
-        button.innerHTML = '<i class="fas fa-check"></i><span>Copiado</span>';
+        button.innerHTML = '<i class="fas fa-check"></i>';
         setTimeout(resetButton, 1600);
     };
 
     const markError = () => {
         button.classList.add('is-error');
         button.classList.remove('is-success');
-        button.innerHTML = '<i class="fas fa-triangle-exclamation"></i><span>Error</span>';
+        button.innerHTML = '<i class="fas fa-triangle-exclamation"></i>';
         setTimeout(resetButton, 2000);
     };
 

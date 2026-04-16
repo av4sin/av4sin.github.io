@@ -693,10 +693,16 @@ img {
     font-size: 0.9em;
 }
 
+.post-content :not(pre) > code {
+    color: var(--accent);
+    font-weight: 600;
+    border: 1px solid rgba(22, 160, 133, 0.15);
+}
+
 .post-content pre {
-    background: #282c34;
+    background: #1f232b;
     border-radius: var(--radius-md);
-    padding: calc(var(--space-lg) + 2.25rem) var(--space-lg) var(--space-lg);
+    padding: var(--space-lg);
     overflow-x: auto;
     margin: var(--space-lg) 0;
     position: relative;
@@ -706,7 +712,59 @@ img {
     background: none;
     padding: 0;
     font-size: 0.9rem;
-    color: #abb2bf;
+    color: #e5e7eb;
+}
+
+.post-content pre code.hljs,
+.post-content pre .hljs {
+    background: transparent;
+    color: #e5e7eb;
+}
+
+.post-content pre .hljs-comment,
+.post-content pre .hljs-quote {
+    color: #8b949e;
+    font-style: italic;
+}
+
+.post-content pre .hljs-keyword,
+.post-content pre .hljs-selector-tag,
+.post-content pre .hljs-literal,
+.post-content pre .hljs-name,
+.post-content pre .hljs-built_in {
+    color: #8ab4f8;
+}
+
+.post-content pre .hljs-string,
+.post-content pre .hljs-title,
+.post-content pre .hljs-section,
+.post-content pre .hljs-attribute {
+    color: #7dd3a7;
+}
+
+.post-content pre .hljs-number,
+.post-content pre .hljs-symbol,
+.post-content pre .hljs-bullet {
+    color: #fbbf24;
+}
+
+.post-content pre .hljs-variable,
+.post-content pre .hljs-template-variable,
+.post-content pre .hljs-params,
+.post-content pre .hljs-type,
+.post-content pre .hljs-tag {
+    color: #f472b6;
+}
+
+.post-content pre .hljs-meta,
+.post-content pre .hljs-regexp,
+.post-content pre .hljs-link {
+    color: #60a5fa;
+}
+
+.post-content pre .hljs-function,
+.post-content pre .hljs-title.function_ {
+    color: #c084fc;
 }
 
 .code-copy-btn {
