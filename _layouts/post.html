@@ -52,9 +52,20 @@ layout: default
 
     <!-- Post Content -->
     <div class="post-content-wrapper">
-        <div class="post-content">
-            {{ content }}
-        </div>
+        <aside class="post-toc" aria-label="Indice del articulo">
+            <div class="post-toc-card" id="post-toc-card">
+                <button type="button" class="post-toc-mobile-toggle" id="post-toc-mobile-toggle" aria-expanded="false" aria-controls="post-toc-nav">
+                    <span><i class="fas fa-list"></i> Indice</span>
+                    <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                </button>
+                <nav class="post-toc-nav" id="post-toc-nav" aria-label="Indice de secciones"></nav>
+            </div>
+        </aside>
+
+        <div class="post-main-column">
+            <div class="post-content">
+                {{ content }}
+            </div>
         
     <!-- Post Footer -->
         <footer class="post-footer">
@@ -134,6 +145,7 @@ layout: default
             </script>
         </section>
         {% endif %}
+        </div>
     </div>
 </article>
 
@@ -223,6 +235,161 @@ function initCodeCopyButtons() {
 
         pre.appendChild(copyButton);
     });
+}
+
+function slugifyHeading(text, fallbackIndex) {
+    const base = (text || `seccion-${fallbackIndex}`)
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9\s-]/g, '')
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+
+    return base || `seccion-${fallbackIndex}`;
+}
+
+function ensureHeadingIds(headings) {
+    const used = new Set();
+
+    headings.forEach((heading, index) => {
+        let id = heading.id ? heading.id.trim() : '';
+
+        if (!id) {
+            id = slugifyHeading(heading.textContent, index + 1);
+        }
+
+        let uniqueId = id;
+        let suffix = 2;
+        while (used.has(uniqueId) || document.getElementById(uniqueId) !== heading) {
+            uniqueId = `${id}-${suffix}`;
+            suffix += 1;
+        }
+
+        heading.id = uniqueId;
+        used.add(uniqueId);
+    });
+}
+
+function initPostToc() {
+    const content = document.querySelector('.post-content');
+    const tocNav = document.getElementById('post-toc-nav');
+    const tocCard = document.getElementById('post-toc-card');
+    const mobileToggle = document.getElementById('post-toc-mobile-toggle');
+
+    if (!content || !tocNav || !tocCard) {
+        return;
+    }
+
+    const headings = Array.from(content.querySelectorAll('h2, h3'));
+    if (!headings.length) {
+        tocCard.classList.add('is-empty');
+        return;
+    }
+
+    ensureHeadingIds(headings);
+
+    const tocList = document.createElement('ul');
+    tocList.className = 'post-toc-list';
+
+    let currentH2Item = null;
+    let currentChildrenList = null;
+
+    headings.forEach((heading) => {
+        const level = heading.tagName.toLowerCase();
+        const link = document.createElement('a');
+        link.className = `post-toc-link level-${level}`;
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent.trim();
+        link.dataset.target = heading.id;
+
+        if (level === 'h2') {
+            const item = document.createElement('li');
+            item.className = 'post-toc-item level-h2';
+            item.appendChild(link);
+
+            const children = document.createElement('ul');
+            children.className = 'post-toc-children';
+            item.appendChild(children);
+
+            tocList.appendChild(item);
+            currentH2Item = item;
+            currentChildrenList = children;
+            return;
+        }
+
+        const childItem = document.createElement('li');
+        childItem.className = 'post-toc-item level-h3';
+        childItem.appendChild(link);
+
+        if (currentChildrenList) {
+            currentChildrenList.appendChild(childItem);
+            if (currentH2Item) {
+                currentH2Item.classList.add('has-children');
+            }
+        } else {
+            tocList.appendChild(childItem);
+        }
+    });
+
+    tocList.querySelectorAll('.post-toc-item.level-h2.has-children').forEach((item) => {
+        const parentLink = item.querySelector(':scope > .post-toc-link.level-h2');
+        const children = item.querySelector(':scope > .post-toc-children');
+        if (!parentLink || !children || !children.children.length) {
+            return;
+        }
+
+        item.classList.add('is-expanded');
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'post-toc-item-toggle';
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.setAttribute('aria-label', `Mostrar u ocultar subapartados de ${parentLink.textContent.trim()}`);
+        toggle.innerHTML = '<i class="fas fa-chevron-down" aria-hidden="true"></i>';
+        toggle.addEventListener('click', () => {
+            const expanded = item.classList.toggle('is-expanded');
+            toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        });
+
+        parentLink.insertAdjacentElement('afterend', toggle);
+    });
+
+    tocNav.appendChild(tocList);
+
+    const tocLinks = Array.from(tocNav.querySelectorAll('.post-toc-link'));
+    const setActiveLink = (id) => {
+        tocLinks.forEach((link) => {
+            const isActive = link.dataset.target === id;
+            link.classList.toggle('is-active', isActive);
+        });
+    };
+
+    let activeId = headings[0].id;
+    setActiveLink(activeId);
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) {
+                return;
+            }
+
+            activeId = entry.target.id;
+            setActiveLink(activeId);
+        });
+    }, {
+        rootMargin: '-28% 0px -62% 0px',
+        threshold: [0, 1]
+    });
+
+    headings.forEach((heading) => observer.observe(heading));
+
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', () => {
+            const expanded = tocCard.classList.toggle('is-open');
+            mobileToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        });
+    }
 }
 
 function buildPdfHtml(options) {
@@ -500,6 +667,7 @@ function buildPdfHtml(options) {
 }
 
 initCodeCopyButtons();
+initPostToc();
 
 function exportPostToPDF(button) {
         const originalIcon = button.innerHTML;
