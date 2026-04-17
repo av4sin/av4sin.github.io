@@ -798,13 +798,14 @@ img {
 
     .post-main-column {
         max-width: 800px;
-        margin-left: 338px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .post-toc {
         position: fixed;
         top: calc(70px + var(--space-lg));
-        left: calc(50% - 560px + var(--space-lg));
+        left: max(var(--space-md), calc(50% - 722px));
         width: 298px;
         z-index: 20;
     }
