@@ -2,7 +2,7 @@
 layout: post
 title: "El factor invisible: antenas LoRa, cálculos y por qué no todo es software"
 date: 2026-04-17
-categories: [técnico, hardware, meshtastic]
+categories: [tecnico, hardware, meshtastic]
 tags: [meshtastic, heltec, lora, antena, rf, radiofrecuencia, cálculos, diy]
 ---
 
