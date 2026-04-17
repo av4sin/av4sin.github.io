@@ -67,8 +67,10 @@
                         <h1 class="brand-heading">Hola, soy {{ site.author.name | split: ' ' | first }}</h1>
                         <div class="terminal-sim">
                             <div class="terminal-bar">
-                                <div class="terminal-title-wrap">
-                                    <i class="fa fa-linux terminal-app-icon" aria-hidden="true"></i>
+                                <div class="terminal-left" aria-hidden="true">
+                                    <i class="fa fa-linux terminal-app-icon"></i>
+                                </div>
+                                <div class="terminal-center" aria-hidden="true">
                                     <span class="terminal-title">{{ site.author.alias }}@linux:~$</span>
                                 </div>
                                 <div class="terminal-window-controls" aria-hidden="true">

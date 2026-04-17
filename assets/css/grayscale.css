@@ -250,14 +250,26 @@ a:focus {
     padding: 7px 12px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     border-bottom: 1px solid rgba(0, 0, 0, 0.45);
+    position: relative;
 }
 
-.terminal-title-wrap {
+.terminal-left {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    justify-content: flex-start;
+    min-width: 24px;
+    z-index: 1;
+}
+
+.terminal-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: calc(100% - 150px);
+    text-align: center;
+    pointer-events: none;
 }
 
 .terminal-app-icon {
@@ -271,12 +283,18 @@ a:focus {
     font-size: 12px;
     letter-spacing: 0.02em;
     font-family: inherit;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .terminal-window-controls {
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    margin-left: auto;
+    z-index: 1;
 }
 
 .terminal-btn {
