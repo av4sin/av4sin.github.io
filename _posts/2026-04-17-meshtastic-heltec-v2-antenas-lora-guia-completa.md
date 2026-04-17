@@ -185,7 +185,7 @@ En resumen: funciona, pero no es lo mejor que puedes hacer.
 
 Cuando empecé a buscar herramientas para predecir alcances de RF, encontré esto:
 
-https://www.ve2dbe.com/rmonline_s.asp
+[https://www.ve2dbe.com/rmonline_s.asp](https://www.ve2dbe.com/rmonline_s.asp)
 
 Es una página hecha por **VE2DBE** (un radioaficionado, asumo). Tiene una calculadora de **radio de cobertura** que es increíblemente útil para entender qué alcance puedes esperar. Metes:
 
@@ -308,5 +308,7 @@ Ignorarla es como tener un megáfono roto.
 Así que la próxima vez que alguien te diga "cambié el firmware y de repente tengo mejor alcance", pregunta también por la antena. Apuesto a que hay una historia ahí.
 
 En el siguiente log quiero hacer pruebas de campo real: medir RSSI a diferentes distancias, cambiar antenas, y documentar los resultados. Porque todo esto es bonito en teoría, pero lo interesante viene en la práctica.
+
+P.d.: Estoy iniciandome en el mundo de la tecnología LoRa, las radiofrecuencias y similar, si he cometido algún error ponte en contacto conmigo y buscamos una solución. Intento compartir todo lo que voy aprendiendo tal cual lo aprendo, por ello puede contener errores. No obstante disculpas de antemano.
 
 ¡Nos vemos en el próximo log!
