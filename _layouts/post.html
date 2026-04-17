@@ -277,6 +277,9 @@ function initPostToc() {
     const tocNav = document.getElementById('post-toc-nav');
     const tocCard = document.getElementById('post-toc-card');
     const mobileToggle = document.getElementById('post-toc-mobile-toggle');
+    const tocContainer = document.querySelector('.post-toc');
+    const postHeader = document.querySelector('.post-header');
+    const topNav = document.querySelector('.blog-nav');
 
     if (!content || !tocNav || !tocCard) {
         return;
@@ -286,6 +289,11 @@ function initPostToc() {
     if (!headings.length) {
         tocCard.classList.add('is-empty');
         return;
+    }
+
+    tocCard.classList.add('is-open');
+    if (mobileToggle) {
+        mobileToggle.setAttribute('aria-expanded', 'true');
     }
 
     ensureHeadingIds(headings);
@@ -383,6 +391,28 @@ function initPostToc() {
     });
 
     headings.forEach((heading) => observer.observe(heading));
+
+    const syncDesktopTocTop = () => {
+        if (!tocContainer) {
+            return;
+        }
+
+        if (window.innerWidth <= 1200) {
+            tocContainer.style.removeProperty('top');
+            return;
+        }
+
+        const navHeight = topNav ? topNav.getBoundingClientRect().height : 70;
+        const minTop = navHeight + 16;
+        const headerBottom = postHeader ? postHeader.getBoundingClientRect().bottom : minTop;
+        const computedTop = Math.max(minTop, headerBottom + 12);
+
+        tocContainer.style.top = `${computedTop}px`;
+    };
+
+    syncDesktopTocTop();
+    window.addEventListener('scroll', syncDesktopTocTop, { passive: true });
+    window.addEventListener('resize', syncDesktopTocTop);
 
     if (mobileToggle) {
         mobileToggle.addEventListener('click', () => {
