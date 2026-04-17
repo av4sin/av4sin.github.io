@@ -56,3 +56,13 @@ featured:
       - Jekyll
       - GitHub Pages
       - Markdown
+
+  - name: "Meshtastic con Heltec V2"
+    description: "Serie práctica de pruebas y aprendizaje con Meshtastic en EU868 empleando un Heltec_32_v2.1"
+    icon: "rss"
+    status: "in-progress"
+    url: "/blog/categories.html#meshtastic"
+    tags:
+      - Meshtastic
+      - LoRa
+      - Heltec V2
