@@ -67,10 +67,15 @@
                         <h1 class="brand-heading">Hola, soy {{ site.author.name | split: ' ' | first }}</h1>
                         <div class="terminal-sim">
                             <div class="terminal-bar">
-                                <span class="terminal-dot red"></span>
-                                <span class="terminal-dot yellow"></span>
-                                <span class="terminal-dot green"></span>
-                                <span class="terminal-title">{{ site.title }}@linux:~$</span>
+                                <div class="terminal-title-wrap">
+                                    <i class="fa fa-linux terminal-app-icon" aria-hidden="true"></i>
+                                    <span class="terminal-title">{{ site.author.alias }}@linux:~$</span>
+                                </div>
+                                <div class="terminal-window-controls" aria-hidden="true">
+                                    <span class="terminal-btn linux-minimize"><i class="fa fa-minus"></i></span>
+                                    <span class="terminal-btn linux-maximize"><i class="fa fa-square-o"></i></span>
+                                    <span class="terminal-btn linux-close"><i class="fa fa-times"></i></span>
+                                </div>
                             </div>
                             <div class="terminal-body">
                                 <span id="typed-output" data-words='["$ whoami", "$ echo \"Programador C/Python/Java\"", "$ cat proyectos.txt", "$ python3 script.py", "$ sudo apt update", "$ clear", "$ echo \"Bienvenido a mi web\""]' data-wait="2000"></span>

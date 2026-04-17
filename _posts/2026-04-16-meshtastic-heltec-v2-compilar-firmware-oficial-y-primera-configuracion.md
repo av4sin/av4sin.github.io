@@ -4,6 +4,8 @@ title: "Heltec V2 y Meshtastic, segunda vuelta: compilar firmware oficial y conf
 date: 2026-04-16
 categories: [tecnico, linux, hardware, meshtastic]
 tags: [meshtastic, heltec, lora, esp32, platformio, firmware, bluetooth, android]
+featured: true
+pin: true
 ---
 
 ## Volver al principio (para hacerlo mejor)
