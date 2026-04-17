@@ -334,6 +334,11 @@ a:focus {
 .terminal-btn.linux-close i {
     font-size: 10px;
 }
+
+.terminal-btn.linux-maximize i {
+    font-size: 9px;
+    transform: rotate(45deg) scale(0.95);
+}
 .terminal-body {
     padding: 18px 18px 10px 18px;
     min-height: 140px;
