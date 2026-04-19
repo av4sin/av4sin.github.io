@@ -646,6 +646,7 @@ img {
 .post-main-column {
     width: 100%;
     max-width: 100%;
+    min-width: 0;
 }
 
 .post-toc {
@@ -818,7 +819,7 @@ img {
     }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 992px) {
     .post-content-wrapper {
         grid-template-columns: 1fr;
         gap: var(--space-lg);
@@ -831,9 +832,15 @@ img {
     .post-toc {
         position: static;
         order: -1;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .post-toc-card {
+        width: min(100%, 680px);
+        margin-left: auto;
+        margin-right: auto;
         max-height: none;
     }
 }
@@ -864,6 +871,21 @@ img {
 
 .post-content p {
     margin-bottom: var(--space-lg);
+}
+
+.post-content p,
+.post-content li,
+.post-content blockquote,
+.post-content th,
+.post-content td,
+.post-content a,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-toc-link,
+.nav-title {
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .post-content ul,
@@ -1052,6 +1074,9 @@ img {
 
 .post-content table {
     width: 100%;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     border-collapse: collapse;
     margin: var(--space-lg) 0;
 }
@@ -1221,6 +1246,14 @@ img {
 @media (max-width: 600px) {
     .post-navigation {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .post-content pre {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 }
 

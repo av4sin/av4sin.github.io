@@ -34,7 +34,7 @@ Lo primero que descubrí es que una buena antena para LoRa no es cosa trivial. N
 - Afecta directamente al alcance y a la calidad de la señal.
 - Tiene que estar ajustada a la frecuencia que usas.
 
-Sí había trabajado anteriormente con RF pero era en el proyecto rpiTx, es decir transmitir con una raspberry. Cosa la cual se hacía enganchando un hilo a uno de los pines GPIO. Por consiguiente, antena antena no era.
+Sí había tocado antes algo de RF, pero en el contexto de rpiTx: transmitir con una Raspberry y un hilo en un GPIO. Eso sirve para aprender conceptos, pero no te obliga a entender una antena de verdad.
 
 En mi caso, España usa la banda **EU868** para LoRa. Eso significa que la frecuencia central anda en torno a **868 MHz** (técnicamente, el rango es 863–870 MHz, pero digamos 868 de referencia).
 
@@ -71,7 +71,7 @@ En la práctica, para cortar una antena de cuarto de onda no se usa exactamente 
 
 $$L = \left(\frac{\lambda}{4}\right) \times k$$
 
-Donde $k$ es el **factor de acortamiento**. Para cobre en aire, suele estar entre **0,95 y 0,98**.
+Donde $k$ es el **factor de acortamiento**. Para cobre en aire, suele estar entre **0,95 y 0,98**. Hablo de él un poco más tarde.
 
 Eso deja la longitud real de corte para 868 MHz aproximadamente entre:
 
@@ -90,7 +90,7 @@ Navegando por el mundo LoRa, encontré que hay esencialmente algunos tipos princ
 
 *Ilustración 1. Comparativa visual simplificada de patrones y geometrías típicas en LoRa (elaboración propia).* 
 
-### 1) **Antena dipolo de cuarta onda (Monopolo)**
+### 1) **Antena monopolo de cuarta onda**
 
 Es lo más simple: un trozo de alambre (o cable) de unos 8,65 cm perpendicular a la placa.
 
@@ -104,7 +104,7 @@ Es lo más simple: un trozo de alambre (o cable) de unos 8,65 cm perpendicular a
 - Patrón de radiación omnidireccional pero con nulos (puntos donde no irradia).
 - Si no está exactamente a 90°, pierde eficiencia.
 
-### 2) **Antena Dipolo de media onda (Dipolo simétrico)**
+### 2) **Antena dipolo de media onda (dipolo simétrico)**
 
 Dos brazos de ~8,65 cm cada uno, separados 180°, alimentados en el centro.
 
@@ -181,13 +181,13 @@ En resumen: funciona, pero no es lo mejor que puedes hacer.
 
 ---
 
-## Calculadora de cobertura (y mi descubrimiento del día)
+## Calculadoras que me ayudaron a aterrizar todo
 
-Cuando empecé a buscar herramientas para predecir alcances de RF, encontré esto:
+Cuando empecé a buscar herramientas para no ir a ojo, encontré primero esta:
 
 [https://www.ve2dbe.com/rmonline_s.asp](https://www.ve2dbe.com/rmonline_s.asp)
 
-Es una página hecha por **VE2DBE** (un radioaficionado, asumo). Tiene una calculadora de **radio de cobertura** que es increíblemente útil para entender qué alcance puedes esperar. Metes:
+Es una página hecha por **VE2DBE** (radioaficionado). Tiene una calculadora de **radio de cobertura** muy útil para estimar alcance. Metes:
 
 - Frecuencia (MHz).
 - Potencia de transmisión (dBm o watts).
@@ -195,22 +195,143 @@ Es una página hecha por **VE2DBE** (un radioaficionado, asumo). Tiene una calcu
 - Sensibilidad del receptor.
 - Pérdidas en cables y conectores.
 
-Y te da una estimación del **radio de cobertura** potencial en kilómetros, teniendo en cuenta los modelos de propagación de RF.
+Y te devuelve una estimación del **radio de cobertura** potencial en kilómetros, considerando pérdidas y modelo de propagación.
 
-Esa herramienta es muy buena para entender qué esperar de tu nodo. Puedes meter diferentes valores de ganancia de antena (2 dBi para la que viene de serie, vs. 5 dBi si haces una mejor) y ver cómo cambia el alcance teórico.
+Esta herramienta ayuda mucho a fijar expectativas. Puedes probar distintos valores de ganancia (por ejemplo, 2 dBi frente a 5 dBi) y ver cómo cambia el alcance teórico.
 
-Para calcular las **dimensiones exactas** de una antena para EU868 (868,5 MHz), necesitas hacer los cálculos que expliqué antes:
+Y para pasar de "alcance teórico" a "antena concreta", también me sirvió una segunda calculadora:
+
+[https://www.omnicalculator.com/physics/j-pole-antenna](https://www.omnicalculator.com/physics/j-pole-antenna)
+
+Esta calcula dimensiones base de una J-Pole/Slim-Jim para una frecuencia dada. No sustituye medir, pero sí te da un punto de partida realista.
+
+Como referencia para 869 MHz con factor de velocidad cercano a 0,96, un arranque típico queda en torno a:
+
+- Longitud total (A): ~24,9 cm
+- Tramo de media onda (B): ~16,6 cm
+- Tramo de cuarto de onda (C): ~8,3 cm
+- Punto de alimentación inicial (D): ~0,8 cm
+- Gap (E): ~0,3 cm
+
+En paralelo, para una antena simple de EU868 (868,5 MHz), puedes tirar de los cálculos base que vimos antes:
 
 - **Cuarta onda**: 8,62 cm.
-- **Media onda dipolo**: 17,25 cm (total).
+- **Media onda dipolo**: 17,25 cm (total)
 
-Pero la herramienta de VE2DBE te ayuda a ver el **impacto real** que tendrán esas antenas mejores en tu cobertura.
+Importante: estas medidas son de arranque, no la verdad absoluta. El resultado final cambia por diámetro del conductor, entorno, cableado y montaje.
+
+---
+
+## Factor de acortamiento (la trampa típica)
+
+Si enrollas la antena, la metes en un tubo o la rodeas de dieléctrico, la longitud de onda efectiva se acorta.
+
+Eso se llama **factor de acortamiento** o **velocity factor**. Para cobre desnudo en aire suele rondar 0,95 (aprox. 5% más corta). En PVC puede bajar hacia 0,85-0,90.
+
+Muchas calculadoras ya lo ajustan automáticamente, y por eso son tan útiles como punto de partida.
+
+Si quieres hacer una antena enrollada (helicoidal/espiral), este factor manda. Si lo ignoras, puedes acabar construyendo "para 868" algo que resuena mucho más abajo.
+
+---
+
+## Ganancia y directividad (los términos que suenan raro)
+
+Cuando lees sobre antenas, ves números como "2 dBi" o "5 dBd". Eso es **ganancia**.
+
+- **dBi** = decibelios respecto a una antena isotrópica (teórica, que radia igual en todas direcciones).
+- **dBd** = decibelios respecto a un dipolo.
+
+Una **cuarta onda monopolo** típicamente tiene una ganancia de ~2–3 dBi.
+Una **media onda dipolo** anda por los 2–2,15 dBi.
+
+No parece mucho, pero en RF, **3 dB = el doble de potencia** (aproximadamente). Eso no se traduce en el doble de distancia: en condiciones ideales, el alcance suele crecer en torno a **$\sqrt{2}$**, es decir, aproximadamente **1,4x** (un 30-40% más).
+
+---
+
+## dB, dBi, dBm y VSWR sin liarse
+
+Mientras investigaba antenas me di cuenta de que mucha gente (yo incluido, al principio) mezcla estos terminos como si fueran lo mismo. Y no lo son.
+
+- **dB**: es una relacion. Solo dice ganancia o perdida entre dos niveles.
+- **dBi**: ganancia de antena comparada con una isotropica teorica.
+- **dBm**: potencia absoluta, referida a 1 mW.
+- **VSWR**: mide lo bien o mal adaptada esta la impedancia entre radio, cable y antena.
+
+Una forma rapida de recordarlo:
+
+- dBm te dice **cuanta potencia sale**.
+- dBi te dice **como la reparte la antena**.
+- VSWR te dice **cuanta de esa potencia no sale y vuelve hacia atras**.
+
+Y un detalle importante: una antena con mas dBi **no crea energia**. Solo la concentra mejor en ciertas direcciones. Por eso, cuando subes ganancia normalmente estrechas el haz: ganas alcance en una zona concreta, pero pierdes cobertura en otras.
+
+Tambien conviene evitar una confusion tipica: no hay conversion directa "magica" entre dBi y vatios. Son magnitudes distintas.
+
+### Mini tabla mental de dBm
+
+Para tener referencia rapida cuando leas especificaciones:
+
+| dBm | Potencia |
+| --- | --- |
+| 0 dBm | 1 mW |
+| 10 dBm | 10 mW |
+| 20 dBm | 100 mW |
+| 30 dBm | 1 W |
+
+Con eso ya puedes interpretar casi cualquier ficha tecnica de radio en segundos.
+
+### VSWR: el gran olvidado
+
+Si solo miras dBi y te olvidas del ajuste, te puedes llevar un susto.
+
+Una antena con mucha ganancia pero mala adaptacion (VSWR alto) puede rendir peor que otra "mas modesta" pero bien ajustada. En la practica, prefiero una antena correcta y estable antes que una supuestamente espectacular mal montada.
+
+---
+
+## Lo que cambié (y lo que observé)
+
+Hice una antena casera de cuarta onda, bien soldada, con una longitud inicial dentro del rango práctico (~8,2 a 8,5 cm para 868 MHz en cobre al aire). La conecté al Heltec.
+
+Resultado:
+
+- Señal RSSI mejora unos 2–3 dBm con nodos cercanos (no es gigantesco, pero es notable).
+- El alcance se sintió más estable (menos "saltos" en la calidad).
+- Algunos nodos que antes apenas se oían, ahora vienen más claros.
+
+No transformó mi nodo en una antena de largo alcance. Pero sí le dio un empujón. Y lo más importante: **aprendí que hay margen de mejora**, que no es solo software ni configuración de radio.
+
+---
+
+## Recomendaciones finales
+
+Si estás empezando con Meshtastic y Heltec V2 como yo:
+
+1. **Prueba primero con la antena de serie.** No gastes dinero aún. Mira qué alcance tienes.
+
+2. **Si tienes acceso a una herramienta de medición (como un analizador de espectro o un SWR meter), úsala.** Eso te dice si tu antena resuena en la frecuencia correcta. Pero entiendo que no todos tenemos esas herramientas. Yo mismo no la tengo.
+
+3. **Haz una antena casera de cuarta onda.** Es barata, funciona y es un buen punto de partida.
+
+4. **Si luego te sientes aventurero**, intenta una **media onda dipolo** o incluso una **Yagi** si tienes paciencia y quieres optimizar una dirección específica.
+
+5. **Usa calculadoras, pero valida en campo.** VE2DBE para cobertura y OmniCalculator para J-Pole me ayudaron mucho a no ir a ciegas.
+
+6. **No descuides el montaje físico.** En RF real, cable, conectores y soporte importan mucho más de lo que parece:
+
+- Usa cable coaxial lo más corto posible (cada metro extra mete pérdidas).
+- Evita adaptadores en cadena si no son necesarios.
+- Asegura bien los conectores (sin forzarlos) y protege uniones en exterior.
+- Si va en tejado o intemperie, usa caja estanca y antena preparada para clima.
+
+7. **Documenta.** Mide tu antena, anota las frecuencias, prueba. Eso es lo que quiero hacer yo en próximos logs.
+
+8. **Si quieres ampliar teoría de base**, me resultó útil esta lectura sobre dB/dBi/dBm: [https://www.data-alliance.net/es/dbi-db-dbm-dbmw-definido-y-explicado](https://www.data-alliance.net/es/dbi-db-dbm-dbmw-definido-y-explicado)
 
 ---
 
 ## Haciendo una antena casera (la parte divertida)
 
-Después de trastear un poco, decidí probar hacer una antena casera. Nada complicado, solo una de cuarta onda para sustituir la antena de serie.
+Después de trastear un poco, decidí empezar por algo simple: una antena casera de cuarta onda para sustituir la de serie.
 
 ### Materiales:
 
@@ -234,64 +355,6 @@ Después de trastear un poco, decidí probar hacer una antena casera. Nada compl
 6. **(Opcional) Envuelve el cable en tubo PVC** si quieres protegerlo de la lluvia o el polvo. Pero sabe que añade una capa dieléctrica que puede cambiar la resonancia ligeramente.
 
 7. **Prueba**. Conecta al Heltec, mira si el RSSI (Received Signal Strength Indicator) mejora con nodos cercanos.
-
----
-
-## Factor de acortamiento (la trampa que te puede tender)
-
-Si enrollas la antena, o la pones dentro de un tubo de plástico, o la rodea de material dieléctrico (aislante), la longitud de onda "efectiva" se acorta.
-
-Eso se llama **factor de acortamiento o velocity factor**. Para cable de cobre desnudo en el aire es ~0,95 (es decir, 5% más corta). Para tubo PVC, puede ser más (0,85–0,90).
-
-Alguna calculadora **ya te lo ajusta automáticamente**. Es uno de los detalles que las hace tan útiles.
-
-Si quieres hacer una antena enrollada (helicoidal o espiral), el factor es importante. De lo contrario, construyes una antena para 868 MHz y en realidad resuena en 750 MHz.
-
----
-
-## Ganancia y directividad (los términos que suenan raro)
-
-Cuando lees sobre antenas, ves números como "2 dBi" o "5 dBd". Eso es **ganancia**.
-
-- **dBi** = decibelios respecto a una antena isotrópica (teórica, que radia igual en todas direcciones).
-- **dBd** = decibelios respecto a un dipolo.
-
-Una **cuarta onda monopolo** típicamente tiene una ganancia de ~2–3 dBi.
-Una **media onda dipolo** anda por los 2–2,15 dBi.
-
-No parece mucho, pero en RF, **3 dB = el doble de potencia** (aproximadamente). Eso no se traduce en el doble de distancia: en condiciones ideales, el alcance suele crecer en torno a **$\sqrt{2}$**, es decir, aproximadamente **1,4x** (un 30-40% más).
-
----
-
-## Lo que cambié (y qué observé)
-
-Hice una antena casera de cuarta onda, bien soldada, con una longitud inicial dentro del rango práctico (~8,2 a 8,5 cm para 868 MHz en cobre al aire). La conecté al Heltec.
-
-Resultado:
-
-- Señal RSSI mejora unos 2–3 dBm con nodos cercanos (no es gigantesco, pero es notable).
-- El alcance se sintió más estable (menos "saltos" en la calidad).
-- Algunos nodos que antes apenas se oían, ahora vienen más claros.
-
-No transformó mi nodo en una antena de largo alcance. Pero sí le dio un empujón. Y lo más importante: **aprendí que hay margen de mejora**, que no es solo software ni configuración de radio.
-
----
-
-## Recomendaciones (sin ser experto, pero siendo honesto)
-
-Si estás empezando con Meshtastic y Heltec V2 como yo:
-
-1. **Prueba primero con la antena de serie.** No gastes dinero aún. Mira qué alcance tienes.
-
-2. **Si tienes acceso a una herramienta de medición (como un analizador de espectro o un SWR meter), úsala.** Eso te dice si tu antena resuena en la frecuencia correcta. Pero entiendo que no todos tenemos esas herramientas. Yo mismo no la tengo.
-
-3. **Haz una antena casera de cuarta onda.** Es barata, funciona y es un buen punto de partida.
-
-4. **Si luego te sientes aventurero**, intenta una **media onda dipolo** o incluso una **Yagi** si tienes paciencia y quieres optimizar una dirección específica.
-
-5. **Usa la calculadora online** de VE2DBE. No hay excusa para no conocer hasta donde llega realmente.
-
-6. **Documenta.** Mide tu antena, anota las frecuencias, prueba. Eso es lo que quiero hacer yo en próximos logs.
 
 ---
 
