@@ -1,66 +1,8 @@
 const csvPaths = {
-  members: ['./public/members.csv', '/members.csv', './members.csv'],
-  medals: ['./public/medals.csv', '/medals.csv', './medals.csv'],
-  material: ['./public/material.csv', '/material.csv', './material.csv'],
-  privileges: ['./public/privileges.csv', '/privileges.csv', './privileges.csv'],
-};
-
-const fallbackCsvText = {
-  members: `usuario,medallas
-av4sin,"A01;A02;A03;A04;A05;A06;P01"
-bruno,"A02;A04;A05;A06;P02"
-carla,"A01;A02;A03;P03"
-diego,"A01;A02;A03;A04;A05;A06;P04"
-elena,"A01;A03;A05;P05"
-fernando,"A01;A02;A03;A04;A05;A06;EP01"
-gloria,"A02;A03;A04;A05;EP02"
-henry,"A01;A02;A03"
-iris,"A01;A04"
-javier,"A01;A02;A03;A04;A05"
-karina,"A01;A02;A03;A04;A05;A06"
-luis,"A02;A05;A06"
-maria,"A01;A06"
-nora,"A01;A02;A03;A04"
-oscar,"A03;A04;A05"
-paula,"A01;A02;A04;A05;A06"`,
-  medals: `id,evento,puntos,tipo,cargo,descripcion
-A01,Presentacion inicial,10,normal,,Asistencia a la primera sesion de ADS
-A02,Taller de red,10,normal,,Asistencia al laboratorio de red con router y switch
-A03,Practica Flipper,10,normal,,Asistencia al reto guiado con Flipper Zero
-A04,Meshtastic base,10,normal,,Asistencia a la sesion de nodos Meshtastic
-A05,Arduino y RPi,10,normal,,Asistencia al taller de electronica y automatizacion
-A06,Demo final,10,normal,,Asistencia a la demostracion de cierre
-P01,Presidente,0,cargo,presidente,Cargo de presidente en la junta directiva
-EP01,Expresidente,0,ex-cargo,presidente,Expresidente de ADS (historico)
-P02,Tesorero,0,cargo,tesorero,Cargo de tesorero en la junta directiva
-EP02,Exptesorero,0,ex-cargo,tesorero,Exptesorero de ADS (historico)
-P03,Secretario,0,cargo,secretario,Cargo de secretario en la junta directiva
-EP03,Exsecretario,0,ex-cargo,secretario,Exsecretario de ADS (historico)
-P04,Vocal,0,cargo,vocal,Cargo de vocal en la junta directiva
-EP04,Exvocal,0,ex-cargo,vocal,Exvocal de ADS (historico)
-P05,Vicepresidente,0,cargo,vicepresidente,Cargo de vicepresidente en la junta directiva
-EP05,Exvicepresidente,0,ex-cargo,vicepresidente,Exvicepresidente de ADS (historico)`,
-  material: `id,material,estado,ubicacion,notas
-M01,PC,Disponible,Sala principal,Equipo de trabajo general
-M02,Flipper Zero,Disponible,Armero tecnico,Usar con autorizacion
-M03,Tarjeta Wi-Fi para Flipper Zero,Disponible,Armero tecnico,Complemento del Flipper
-M04,Router,Disponible,Laboratorio de red,Para pruebas de red local
-M05,Switch,Disponible,Laboratorio de red,Para practicas de conmutacion
-M06,AP,Disponible,Laboratorio de red,Para cobertura y pruebas
-M07,RPi4b x2,Disponible,Estanteria tecnica,Para practicas y laboratorios
-M08,Monitor HDMI,Disponible,Sala principal,Apoyo de visualizacion
-M09,Kit electronica RPi y Arduino,Disponible,Caja de componentes,Practicas de hardware
-M10,3 nodos Meshtastic,Disponible,Caja mesh,Para cobertura y telemetria
-M11,2 antenas extra Meshtastic,Disponible,Caja mesh,Para comparativas de señal
-M12,Arduino Nanos,Disponible,Caja de componentes,Desarrollo rapido
-M13,Webcam,Disponible,Sala principal,Grabacion y demostraciones`,
-  privileges: `id,privilegio,condicion,detalle
-P01,Prioridad de reserva,40 puntos,Reservar antes el material compartido
-P02,Turno preferente,90 puntos,Escoger turno en sesiones practicas
-P03,Voto de retos,90 puntos,Participar en la eleccion de los retos del mes
-P04,Medalla propia,150 puntos,Proponer una medalla o mision nueva
-P05,Presentacion prioritaria,150 puntos,Presentar antes proyectos en demo
-P06,Rol coordinador,240 puntos,Acceso a funciones de coordinacion interna`,
+  members: ['./members.csv', '/members.csv'],
+  medals: ['./medals.csv', '/medals.csv'],
+  material: ['./material.csv', '/material.csv'],
+  privileges: ['./privileges.csv', '/privileges.csv'],
 };
 
 const roleRules = [
@@ -77,6 +19,7 @@ const cargoLabels = {
   tesorero: 'Tesorero',
   secretario: 'Secretario',
   vocal: 'Vocal',
+  socio: 'Socio',
 };
 
 const pointRules = [
@@ -329,25 +272,7 @@ async function loadCsv(paths) {
     }
   }
 
-  const key = getCsvKey(candidates[0]);
-  const fallbackText = fallbackCsvText[key];
-
-  if (!fallbackText) {
-    throw new Error(`No se pudo leer ${candidates[0]}`);
-  }
-
-  return parseCsv(fallbackText);
-}
-
-function getCsvKey(path) {
-  const pathName = path instanceof URL ? path.pathname : String(path);
-
-  if (pathName.includes('members.csv')) return 'members';
-  if (pathName.includes('medals.csv')) return 'medals';
-  if (pathName.includes('material.csv')) return 'material';
-  if (pathName.includes('privileges.csv')) return 'privileges';
-
-  return '';
+  throw new Error(`No se pudo leer ${candidates[0]}`);
 }
 
 function parseCsv(text) {
