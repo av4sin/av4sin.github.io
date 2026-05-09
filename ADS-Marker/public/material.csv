@@ -1,0 +1,14 @@
+id,material,estado,ubicacion,notas
+M01,PC,Disponible,Sala principal,Equipo de trabajo general
+M02,Flipper Zero,Disponible,Armero tecnico,Usar con autorizacion
+M03,Tarjeta Wi-Fi para Flipper Zero,Disponible,Armero tecnico,Complemento del Flipper
+M04,Router,Disponible,Laboratorio de red,Para pruebas de red local
+M05,Switch,Disponible,Laboratorio de red,Para practicas de conmutacion
+M06,AP,Disponible,Laboratorio de red,Para cobertura y pruebas
+M07,RPi4b x2,Disponible,Estanteria tecnica,Para practicas y laboratorios
+M08,Monitor HDMI,Disponible,Sala principal,Apoyo de visualizacion
+M09,Kit electronica RPi y Arduino,Disponible,Caja de componentes,Practicas de hardware
+M10,3 nodos Meshtastic,Disponible,Caja mesh,Para cobertura y telemetria
+M11,2 antenas extra Meshtastic,Disponible,Caja mesh,Para comparativas de señal
+M12,Arduino Nanos,Disponible,Caja de componentes,Desarrollo rapido
+M13,Webcam,Disponible,Sala principal,Grabacion y demostraciones

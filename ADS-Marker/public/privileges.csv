@@ -1,0 +1,7 @@
+id,privilegio,condicion,detalle
+P01,Prioridad de reserva,40 puntos,Reservar antes el material compartido
+P02,Turno preferente,90 puntos,Escoger turno en sesiones practicas
+P03,Voto de retos,90 puntos,Participar en la eleccion de los retos del mes
+P04,Medalla propia,150 puntos,Proponer una medalla o mision nueva
+P05,Presentacion prioritaria,150 puntos,Presentar antes proyectos en demo
+P06,Rol coordinador,240 puntos,Acceso a funciones de coordinacion interna

@@ -1,0 +1,17 @@
+id,evento,puntos,tipo,cargo,descripcion
+A01,Presentacion inicial,10,normal,,Asistencia a la primera sesion de ADS-Socios
+A02,Taller de red,10,normal,,Asistencia al laboratorio de red con router y switch
+A03,Practica Flipper,10,normal,,Asistencia al reto guiado con Flipper Zero
+A04,Meshtastic base,10,normal,,Asistencia a la sesion de nodos Meshtastic
+A05,Arduino y RPi,10,normal,,Asistencia al taller de electronica y automatizacion
+A06,Demo final,10,normal,,Asistencia a la demostracion de cierre
+P01,Presidente,0,cargo,presidente,Cargo de presidente en la junta directiva
+EP01,Expresidente,0,ex-cargo,presidente,Expresidente de ADS (historico)
+P02,Tesorero,0,cargo,tesorero,Cargo de tesorero en la junta directiva
+EP02,Exptesorero,0,ex-cargo,tesorero,Exptesorero de ADS (historico)
+P03,Secretario,0,cargo,secretario,Cargo de secretario en la junta directiva
+EP03,Exsecretario,0,ex-cargo,secretario,Exsecretario de ADS (historico)
+P04,Vocal,0,cargo,vocal,Cargo de vocal en la junta directiva
+EP04,Exvocal,0,ex-cargo,vocal,Exvocal de ADS (historico)
+P05,Vicepresidente,0,cargo,vicepresidente,Cargo de vicepresidente en la junta directiva
+EP05,Exvicepresidente,0,ex-cargo,vicepresidente,Exvicepresidente de ADS (historico)
