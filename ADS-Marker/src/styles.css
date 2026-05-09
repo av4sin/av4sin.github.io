@@ -47,42 +47,6 @@ a {
   min-height: 100vh;
 }
 
-.header {
-  text-align: center;
-  padding: 28px 20px;
-  border-bottom: 1px solid rgba(40, 170, 150, 0.2);
-  background: linear-gradient(180deg, rgba(9, 18, 32, 0.6), rgba(9, 18, 32, 0.3));
-  backdrop-filter: blur(8px);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.logo-container {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.logo-container svg {
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(0 8px 24px rgba(40, 170, 150, 0.15));
-}
-
-.header h1 {
-  font-size: 1.8rem;
-  margin: 0;
-  letter-spacing: 0.08em;
-  background: linear-gradient(135deg, #28AA96, #3DD5C8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
 .page {
   width: min(1200px, calc(100% - 32px));
   margin: 0 auto;
@@ -90,7 +54,7 @@ a {
 }
 
 .hero {
-  padding: 40px;
+  padding: 34px 40px 40px;
   border: 1px solid rgba(40, 170, 150, 0.15);
   border-radius: 32px;
   background: linear-gradient(135deg, rgba(9, 18, 32, 0.95), rgba(15, 28, 48, 0.85));
@@ -108,6 +72,22 @@ a {
   bottom: 0;
   background: radial-gradient(circle at 20% 50%, rgba(40, 170, 150, 0.08), transparent 50%);
   pointer-events: none;
+}
+
+.hero-brand {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-logo {
+  display: block;
+  width: min(100%, 220px);
+  max-width: 220px;
+  height: auto;
+  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.35));
 }
 
 .eyebrow {
@@ -141,6 +121,55 @@ h1 {
   margin: 18px 0 0;
   position: relative;
   z-index: 1;
+}
+
+.section-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+  position: relative;
+  z-index: 1;
+}
+
+.section-tab {
+  border: 1px solid rgba(40, 170, 150, 0.22);
+  background: rgba(7, 13, 22, 0.7);
+  color: #d5ffef;
+  padding: 11px 16px;
+  border-radius: 999px;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+}
+
+.section-tab:hover {
+  transform: translateY(-2px);
+  border-color: rgba(127, 213, 199, 0.6);
+  background: rgba(10, 19, 32, 0.92);
+}
+
+.section-tab.is-active {
+  border-color: rgba(127, 213, 199, 0.85);
+  background: linear-gradient(135deg, rgba(40, 170, 150, 0.22), rgba(40, 170, 150, 0.08));
+  color: #f2fffb;
+}
+
+.page-home .home-hero {
+  min-height: calc(100vh - 56px);
+  justify-content: center;
+}
+
+.hero-brand-home {
+  margin-bottom: 24px;
+}
+
+.hero-logo-home {
+  width: min(100%, 280px);
+  max-width: 280px;
 }
 
 .hero-grid {
@@ -370,22 +399,379 @@ h1 {
   padding: 18px 14px;
 }
 
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.section-heading h2 {
+  margin-top: 4px;
+}
+
+.section-heading p {
+  max-width: 520px;
+  color: #b7c7d8;
+  margin: 0;
+}
+
+.podium-stage {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1fr;
+  gap: 14px;
+  align-items: end;
+}
+
+.podium-card {
+  border: 0;
+  border-radius: 28px;
+  padding: 22px 18px;
+  color: #f4fbff;
+  background: linear-gradient(180deg, rgba(18, 28, 45, 0.95), rgba(8, 14, 24, 0.92));
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  border: 1px solid rgba(40, 170, 150, 0.16);
+}
+
+.podium-card:hover,
+.quick-member:hover,
+.ranking-card:hover,
+.medal-button:hover,
+.profile-action:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 42px rgba(40, 170, 150, 0.12);
+}
+
+.podium-card strong,
+.podium-card p,
+.podium-card span {
+  text-align: center;
+}
+
+.podium-card strong {
+  font-size: 1.08rem;
+}
+
+.podium-card p {
+  margin: 0;
+  color: #9eb4c6;
+}
+
+.podium-card-1 {
+  min-height: 250px;
+  background: linear-gradient(180deg, rgba(30, 139, 122, 0.95), rgba(10, 20, 32, 0.96));
+}
+
+.podium-card-2,
+.podium-card-3 {
+  min-height: 210px;
+}
+
+.podium-rank {
+  align-self: start;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+}
+
+.podium-avatar,
+.profile-avatar {
+  width: 76px;
+  height: 76px;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 1.35rem;
+  color: #e9fffb;
+  background: linear-gradient(135deg, rgba(40, 170, 150, 0.22), rgba(255, 255, 255, 0.06));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.podium-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  color: #7fd5c7;
+  font-size: 0.86rem;
+}
+
+.podium-base {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.quick-member,
+.ranking-card,
+.profile-action {
+  border: 1px solid rgba(40, 170, 150, 0.14);
+  background: rgba(9, 18, 32, 0.78);
+  color: inherit;
+  border-radius: 18px;
+  cursor: pointer;
+}
+
+.quick-member {
+  padding: 14px 12px;
+  display: grid;
+  gap: 4px;
+  justify-items: start;
+}
+
+.quick-member span,
+.ranking-position {
+  font-size: 0.75rem;
+  color: #7fd5c7;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.quick-member small,
+.ranking-card p,
+.muted {
+  color: #9fb3c6;
+}
+
+.profile-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.profile-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 18px;
+  align-items: center;
+}
+
+.profile-header h2,
+.profile-header p,
+.detail-copy h3,
+.detail-copy p {
+  margin: 0;
+}
+
+.profile-action {
+  padding: 12px 16px;
+  font-weight: 700;
+  color: #d9fff4;
+}
+
+.profile-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.profile-body {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 18px;
+}
+
+.medal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.medal-button {
+  padding: 12px 10px 14px;
+  border-radius: 20px;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  text-align: center;
+  color: inherit;
+  cursor: pointer;
+}
+
+.medal-button.is-selected {
+  border-color: rgba(127, 213, 199, 0.75);
+  box-shadow: 0 0 0 1px rgba(127, 213, 199, 0.2), 0 16px 36px rgba(40, 170, 150, 0.16);
+}
+
+.medal-name {
+  font-size: 0.9rem;
+  line-height: 1.2;
+}
+
+.medal-button small,
+.detail-tags span {
+  color: #90a4b8;
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.medal-svg {
+  width: 90px;
+  height: 100px;
+}
+
+.medal-svg.large {
+  width: 140px;
+  height: 154px;
+}
+
+.medal-detail {
+  padding: 18px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(10, 18, 30, 0.95), rgba(8, 14, 24, 0.86));
+  border: 1px solid rgba(40, 170, 150, 0.14);
+}
+
+.detail-card {
+  display: grid;
+  gap: 14px;
+  align-items: start;
+}
+
+.detail-preview {
+  display: grid;
+  place-items: center;
+}
+
+.detail-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.detail-tags span {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(40, 170, 150, 0.08);
+  border: 1px solid rgba(40, 170, 150, 0.18);
+}
+
+.ranking-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.ranking-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 16px 18px;
+}
+
+.ranking-card strong,
+.ranking-score {
+  font-size: 1.02rem;
+}
+
+.ranking-score {
+  color: #7fd5c7;
+  font-weight: 700;
+}
+
+.archive-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.medal-catalog-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.medal-catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.medal-catalog-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: center;
+  padding: 16px 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(40, 170, 150, 0.14);
+  background: rgba(8, 15, 28, 0.72);
+}
+
+.medal-catalog-icon {
+  width: 108px;
+  display: grid;
+  place-items: center;
+}
+
+.medal-catalog-copy h3 {
+  margin: 0;
+}
+
+.medal-catalog-copy p {
+  margin: 8px 0 0;
+  color: #c0cedd;
+}
+
+.medal-catalog-copy .detail-tags {
+  margin-top: 10px;
+}
+
+.compact-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.compact-item {
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  color: #dbe8f5;
+}
+
+.profile-panel h2,
+.ranking-panel h2,
+.podium-panel h2,
+.compact-panel h2 {
+  font-size: clamp(1.45rem, 3vw, 2.1rem);
+}
+
+.medal-button:hover,
+.ranking-card:hover,
+.quick-member:hover,
+.profile-action:hover {
+  border-color: rgba(40, 170, 150, 0.35);
+}
+
+.panel:hover {
+  border-color: rgba(40, 170, 150, 0.2);
+  box-shadow: 0 16px 48px rgba(40, 170, 150, 0.1);
+}
+
 @media (max-width: 960px) {
   .hero-grid,
   .two-column,
   .card-grid,
-  .stats-row {
+  .stats-row,
+  .podium-stage,
+  .profile-metrics,
+  .profile-body,
+  .archive-grid,
+  .medal-catalog-grid {
     grid-template-columns: 1fr 1fr;
-  }
-
-  .logo-container {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 10px;
-  }
-
-  .header h1 {
-    font-size: 1.5rem;
   }
 }
 
@@ -393,10 +779,6 @@ h1 {
   .page {
     width: min(100% - 20px, 1200px);
     padding-top: 16px;
-  }
-
-  .header {
-    padding: 16px 12px;
   }
 
   .hero,
@@ -408,8 +790,34 @@ h1 {
   .hero-grid,
   .two-column,
   .card-grid,
-  .stats-row {
+  .stats-row,
+  .podium-stage,
+  .profile-metrics,
+  .profile-body,
+  .archive-grid,
+  .podium-base,
+  .medal-catalog-grid {
     grid-template-columns: 1fr;
+  }
+
+  .section-heading,
+  .profile-header {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .hero-brand {
+    margin-bottom: 14px;
+  }
+
+  .hero-logo {
+    max-width: 170px;
+  }
+
+  .podium-card-1,
+  .podium-card-2,
+  .podium-card-3 {
+    min-height: auto;
   }
 
   h1 {

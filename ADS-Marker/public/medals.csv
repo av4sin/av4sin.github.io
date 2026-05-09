@@ -1,5 +1,5 @@
 id,evento,puntos,tipo,cargo,descripcion
-A01,Presentacion inicial,10,normal,,Asistencia a la primera sesion de ADS-Socios
+A01,Presentacion inicial,10,normal,,Asistencia a la primera sesion de ADS
 A02,Taller de red,10,normal,,Asistencia al laboratorio de red con router y switch
 A03,Practica Flipper,10,normal,,Asistencia al reto guiado con Flipper Zero
 A04,Meshtastic base,10,normal,,Asistencia a la sesion de nodos Meshtastic
