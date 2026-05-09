@@ -1,3 +1,5 @@
+import './styles.css';
+
 const csvPaths = {
   members: './members.csv',
   medals: './medals.csv',
