@@ -33,10 +33,10 @@ technical:
   - category: "Maker & IoT"
     icon: "cogs"
     skills:
+      - Meshtastic
       - Domótica
       - Automatización
       - Impresión 3D
-      - Proyectos DIY
 
 soft:
   - "Resolución de problemas"
