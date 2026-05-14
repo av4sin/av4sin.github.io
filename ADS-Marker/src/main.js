@@ -136,7 +136,12 @@ async function main() {
       .filter((medal) => medal.tipo !== 'ex-cargo')
       .reduce((memberSum, medal) => memberSum + toNumber(medal.puntos), 0);
     const cargoMedal = member.medalsData.find((medal) => medal.tipo === 'cargo');
-    const role = cargoMedal ? cargoLabels[cargoMedal.cargo] : roleFromPoints(points);
+    let role = '';
+    if (cargoMedal && cargoLabels[cargoMedal.cargo]) {
+      role = cargoLabels[cargoMedal.cargo];
+    } else {
+      role = 'Socio';
+    }
 
     return {
       ...member,
