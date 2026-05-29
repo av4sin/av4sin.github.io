@@ -70,6 +70,12 @@ body.cursor-hidden * {
     perspective: 1400px;
 }
 
+/* Card shadow toggle: applied when `.cards-shadow` is present on <html> */
+.cards-shadow .group {
+    box-shadow: 0 18px 40px rgba(0,0,0,0.55), 0 6px 12px rgba(0,0,0,0.35);
+    transition: box-shadow 220ms ease;
+}
+
 .group.is-hidden {
     display: none;
 }

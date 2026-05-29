@@ -82,6 +82,9 @@
             <label class="color-line">Ocultar líneas divisorias
                 <input type="checkbox" id="hideDividersToggle">
             </label>
+            <label class="color-line">Sombreado tarjetas
+                <input type="checkbox" id="cardShadowToggle" checked>
+            </label>
         </div>
     </aside>
 
@@ -112,6 +115,8 @@
         const secondsHand = document.getElementById('secondsHand');
 
         const hideDividersToggle = document.getElementById('hideDividersToggle');
+        const cardShadowToggle = document.getElementById('cardShadowToggle');
+        const CARD_SHADOW_KEY = 'flip-clock-card-shadow';
         const HIDE_DIVIDERS_KEY = 'flip-clock-hide-dividers';
         let hideDividersEnabled = false;
 
@@ -376,6 +381,21 @@
             document.documentElement.classList.toggle('hide-dividers', enabled);
         }
 
+        function applyCardShadow(enabled) {
+            if (cardShadowToggle) cardShadowToggle.checked = enabled;
+            document.documentElement.classList.toggle('cards-shadow', enabled);
+        }
+
+        function saveCardShadowPreference() {
+            localStorage.setItem(CARD_SHADOW_KEY, String(document.documentElement.classList.contains('cards-shadow')));
+        }
+
+        function loadCardShadowPreference() {
+            const raw = localStorage.getItem(CARD_SHADOW_KEY);
+            const enabled = raw === null ? true : raw === 'true';
+            applyCardShadow(enabled);
+        }
+
         function saveHideDividersPreference() {
             localStorage.setItem(HIDE_DIVIDERS_KEY, String(hideDividersEnabled));
         }
@@ -469,6 +489,14 @@
             });
         }
 
+        if (cardShadowToggle) {
+            cardShadowToggle.addEventListener('change', () => {
+                applyCardShadow(cardShadowToggle.checked);
+                saveCardShadowPreference();
+                showControls();
+            });
+        }
+
         secondsToggleBtn.addEventListener('click', () => {
             setSecondsEnabled(!secondsEnabled);
             showControls();
@@ -497,6 +525,7 @@
         loadTheme();
         loadWakeLockPreference();
         loadHideDividersPreference();
+        loadCardShadowPreference();
         setFullscreenButtonState(false);
         setSecondsEnabled(false);
         setWakeLockEnabled(wakeLockEnabled);
