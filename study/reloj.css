@@ -16,7 +16,7 @@
     --divider-color: #1f2026;
     --top-shade: #cbcbce;
     --bottom-shade: #f0f0f2;
-    --digit-font: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    --digit-font: Inter, Montserrat, Oswald, system-ui, -apple-system, sans-serif;
     --digit-scale: 1;
     --flip-duration: 220ms;
     --flip-overlap: 180ms;
@@ -36,7 +36,7 @@ body {
     overflow: hidden;
     background: var(--bg-color);
     color: var(--digit-color);
-    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    font-family: Inter, Montserrat, Oswald, system-ui, -apple-system, sans-serif;
 }
 
 body.cursor-hidden,
@@ -180,8 +180,9 @@ body.cursor-hidden * {
     top: 0;
     bottom: 0;
     color: var(--top-shade);
-    transform-origin: center 50%;
+    transform-origin: center bottom;
     clip-path: inset(0 0 50% 0);
+    z-index: 4;
     animation: topFlip var(--flip-duration) var(--flip-top-ease) forwards;
 }
 
@@ -190,20 +191,32 @@ body.cursor-hidden * {
     bottom: 0;
     color: var(--bottom-shade);
     transform: rotateX(90deg);
-    transform-origin: center 50%;
+    transform-origin: center top;
     clip-path: inset(50% 0 0 0);
-    animation: bottomFlip var(--flip-duration) var(--flip-bottom-ease) var(--flip-duration) forwards;
+    z-index: 2;
+    opacity: 0;
+    animation: bottomFlip var(--flip-duration) var(--flip-bottom-ease) calc(var(--flip-duration) - var(--flip-overlap)) forwards;
 }
 
 @keyframes topFlip {
+    from {
+        opacity: 1;
+        transform: rotateX(0deg);
+    }
     to {
         transform: rotateX(-90deg);
+        opacity: 0;
     }
 }
 
 @keyframes bottomFlip {
+    from {
+        transform: rotateX(90deg);
+        opacity: 0;
+    }
     to {
         transform: rotateX(0deg);
+        opacity: 1;
     }
 }
 

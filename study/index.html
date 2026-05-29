@@ -53,7 +53,12 @@
             </button>
             <button class="ui-btn icon-btn" id="colorsBtn" type="button" aria-label="Opciones" title="Opciones">
                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M3 17h6v2H3v-2zm0-6h10v2H3v-2zm0-6h14v2H3V5zm16 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm-4-6a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6-6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/>
+                    <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.03 7.03 0 00-1.6-.94l-.36-2.54A.5.5 0 0014.5 2h-5a.5.5 0 00-.5.42l-.36 2.54c-.57.22-1.1.52-1.6.94l-2.39-.96a.5.5 0 00-.6.22L2 8.88c-.14.24-.07.54.17.7l2.03 1.58c-.04.31-.06.62-.06.94s.02.63.06.94L2.17 14.62a.5.5 0 00-.12.64l1.92 3.32c.17.29.52.4.8.28l2.39-.96c.49.42 1.03.75 1.6.94l.36 2.54c.05.28.28.42.5.42h5c.22 0 .45-.14.5-.42l.36-2.54c.57-.22 1.1-.52 1.6-.94l2.39.96c.29.12.63.01.8-.28l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1112 8.5a3.5 3.5 0 010 7z"/>
+                </svg>
+            </button>
+            <button class="ui-btn icon-btn" id="secondsToggleBtn" type="button" aria-label="Activar segundos" title="Activar segundos">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2zm1 10.59 3.7 3.7-1.4 1.41L11 13V7h2z"/>
                 </svg>
             </button>
         </div>
@@ -71,19 +76,12 @@
                     <option value="inter">Inter</option>
                     <option value="montserrat">Montserrat</option>
                     <option value="oswald">Oswald</option>
-                    <option value="arial">Arial</option>
-                    <option value="courier">Courier New</option>
                     <option value="gmb">MyFont GMB</option>
                 </select>
             </label>
             <label class="color-line">Ocultar líneas divisorias
                 <input type="checkbox" id="hideDividersToggle">
             </label>
-            <button class="ui-btn icon-btn" id="secondsToggleBtn" type="button" aria-label="Activar segundos" title="Activar segundos">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2zm1 10.59 3.7 3.7-1.4 1.41L11 13V7h2z"/>
-                </svg>
-            </button>
         </div>
     </aside>
 
@@ -120,11 +118,9 @@
         const STORAGE_KEY = 'flip-clock-theme';
         const WAKE_LOCK_STORAGE_KEY = 'flip-clock-wake-lock-enabled';
         const DIGIT_FONTS = {
-            inter: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif',
+            inter: 'Inter, system-ui, -apple-system, sans-serif',
             montserrat: 'Montserrat, Inter, system-ui, sans-serif',
             oswald: 'Oswald, Inter, system-ui, sans-serif',
-            arial: 'Arial, Helvetica, sans-serif',
-            courier: '"Courier New", Courier, monospace',
             gmb: '"MyFont GMB", Inter, system-ui, sans-serif'
         };
         let hideTimer;
@@ -243,21 +239,24 @@
 
             const flipTop = document.createElement('span');
             flipTop.className = 'flip-top';
-            flipTop.textContent = nextValue;
+            // show the previous value on the top flipping piece
+            flipTop.textContent = previousValue;
 
             const flipBottom = document.createElement('span');
             flipBottom.className = 'flip-bottom';
+            // show the next value on the bottom flipping piece
             flipBottom.textContent = nextValue;
 
             group.appendChild(flipTop);
             group.appendChild(flipBottom);
 
-            topNode.textContent = nextValue;
-
+            // update the visible top value only after the top flip completes
             flipTop.addEventListener('animationend', () => {
+                topNode.textContent = nextValue;
                 flipTop.remove();
             }, { once: true });
 
+            // update the visible bottom value after the bottom flip completes
             flipBottom.addEventListener('animationend', () => {
                 bottomNode.textContent = nextValue;
                 flipBottom.remove();
