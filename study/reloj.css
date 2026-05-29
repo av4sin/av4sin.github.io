@@ -22,6 +22,9 @@
     --flip-overlap: 180ms;
     --flip-top-ease: cubic-bezier(0.37, 0, 0.63, 1);
     --flip-bottom-ease: cubic-bezier(0.22, 1, 0.36, 1);
+        /* card sizing variables (original) */
+        --clock-card-width: min(37vw, 520px);
+    --clock-card-height: calc(var(--clock-card-width) / 1.25);
 }
 
 * {
@@ -50,13 +53,13 @@ body.cursor-hidden * {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1.1vw;
-    padding: 4vw;
+        gap: 1.1vw;
+        padding: 4vw;
 }
 
 .group {
     position: relative;
-    width: min(37vw, 520px);
+        width: min(37vw, 520px);
     aspect-ratio: 1.25 / 1;
     border-radius: 20px;
     background: var(--card-color);
@@ -69,6 +72,14 @@ body.cursor-hidden * {
 
 .group.is-hidden {
     display: none;
+}
+
+.flip-top,
+.flip-bottom {
+    background: var(--card-color);
+    border-radius: inherit;
+    box-sizing: border-box;
+    padding: 0;
 }
 
 .group::after {
@@ -98,6 +109,19 @@ body.cursor-hidden * {
     font-family: var(--digit-font);
     user-select: none;
     pointer-events: none;
+    /* Ensure digits use fixed-width (tabular) figures to avoid shifting */
+    font-variant-numeric: tabular-nums;
+    -webkit-font-feature-settings: "tnum" 1;
+    -moz-font-feature-settings: "tnum" 1;
+    font-feature-settings: "tnum" 1;
+    font-kerning: none;
+    white-space: nowrap;
+}
+
+.digit {
+    display: inline-block;
+    min-width: 2ch;
+    text-align: center;
 }
 
 .value-top {
@@ -174,15 +198,23 @@ body.cursor-hidden * {
     z-index: 3;
     transform-style: preserve-3d;
     backface-visibility: hidden;
+    /* Same digit rendering rules for flip pieces */
+    font-variant-numeric: tabular-nums;
+    -webkit-font-feature-settings: "tnum" 1;
+    -moz-font-feature-settings: "tnum" 1;
+    font-feature-settings: "tnum" 1;
+    font-kerning: none;
+    white-space: nowrap;
+    will-change: transform, opacity;
+    contain: layout style;
 }
 
 .flip-top {
     top: 0;
     bottom: 0;
     color: var(--top-shade);
-    transform-origin: center bottom;
+    transform-origin: center 50%;
     clip-path: inset(0 0 50% 0);
-    z-index: 4;
     animation: topFlip var(--flip-duration) var(--flip-top-ease) forwards;
 }
 
@@ -191,32 +223,20 @@ body.cursor-hidden * {
     bottom: 0;
     color: var(--bottom-shade);
     transform: rotateX(90deg);
-    transform-origin: center top;
+    transform-origin: center 50%;
     clip-path: inset(50% 0 0 0);
-    z-index: 2;
-    opacity: 0;
-    animation: bottomFlip var(--flip-duration) var(--flip-bottom-ease) calc(var(--flip-duration) - var(--flip-overlap)) forwards;
+    animation: bottomFlip var(--flip-duration) var(--flip-bottom-ease) var(--flip-duration) forwards;
 }
 
 @keyframes topFlip {
-    from {
-        opacity: 1;
-        transform: rotateX(0deg);
-    }
     to {
         transform: rotateX(-90deg);
-        opacity: 0;
     }
 }
 
 @keyframes bottomFlip {
-    from {
-        transform: rotateX(90deg);
-        opacity: 0;
-    }
     to {
         transform: rotateX(0deg);
-        opacity: 1;
     }
 }
 
