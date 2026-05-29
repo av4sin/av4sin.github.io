@@ -6,6 +6,17 @@
     <title>Reloj Flip 24h</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23111111'/%3E%3Ccircle cx='32' cy='32' r='24' fill='%23ffffff'/%3E%3Cpath d='M32 18v14l10 6' fill='none' stroke='%23000000' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='32' cy='32' r='2.8' fill='%23000000'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="./reloj.css">
+    <style>
+        /* Ocultar líneas divisorias entre tarjetas cuando se activa la clase */
+        .hide-dividers .group {
+            border: none !important;
+            box-shadow: none !important;
+        }
+        .hide-dividers .group::before,
+        .hide-dividers .group::after {
+            display: none !important;
+        }
+    </style>
 </head>
 <body>
     <main class="clock-app" aria-label="Reloj flip 24 horas">
@@ -65,6 +76,9 @@
                     <option value="gmb">MyFont GMB</option>
                 </select>
             </label>
+            <label class="color-line">Ocultar líneas divisorias
+                <input type="checkbox" id="hideDividersToggle">
+            </label>
             <button class="ui-btn icon-btn" id="secondsToggleBtn" type="button" aria-label="Activar segundos" title="Activar segundos">
                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                     <path d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2zm1 10.59 3.7 3.7-1.4 1.41L11 13V7h2z"/>
@@ -98,6 +112,10 @@
         const wakeLockToggle = document.getElementById('wakeLockToggle');
         const secondsToggleBtn = document.getElementById('secondsToggleBtn');
         const secondsHand = document.getElementById('secondsHand');
+
+        const hideDividersToggle = document.getElementById('hideDividersToggle');
+        const HIDE_DIVIDERS_KEY = 'flip-clock-hide-dividers';
+        let hideDividersEnabled = false;
 
         const STORAGE_KEY = 'flip-clock-theme';
         const WAKE_LOCK_STORAGE_KEY = 'flip-clock-wake-lock-enabled';
@@ -346,6 +364,23 @@
             setSecondsButtonState();
         }
 
+        function applyHideDividers(enabled) {
+            hideDividersEnabled = enabled;
+            if (hideDividersToggle) hideDividersToggle.checked = enabled;
+            document.documentElement.classList.toggle('hide-dividers', enabled);
+        }
+
+        function saveHideDividersPreference() {
+            localStorage.setItem(HIDE_DIVIDERS_KEY, String(hideDividersEnabled));
+        }
+
+        function loadHideDividersPreference() {
+            const raw = localStorage.getItem(HIDE_DIVIDERS_KEY);
+            hideDividersEnabled = raw === 'true';
+            if (hideDividersToggle) hideDividersToggle.checked = hideDividersEnabled;
+            applyHideDividers(hideDividersEnabled);
+        }
+
         function tryUnlockAnalogSeconds(event) {
             keySequence.push(event.key.toLowerCase());
 
@@ -420,6 +455,14 @@
             showControls();
         });
 
+        if (hideDividersToggle) {
+            hideDividersToggle.addEventListener('change', () => {
+                applyHideDividers(hideDividersToggle.checked);
+                saveHideDividersPreference();
+                showControls();
+            });
+        }
+
         secondsToggleBtn.addEventListener('click', () => {
             setSecondsEnabled(!secondsEnabled);
             showControls();
@@ -447,6 +490,7 @@
 
         loadTheme();
         loadWakeLockPreference();
+        loadHideDividersPreference();
         setFullscreenButtonState(false);
         setSecondsEnabled(false);
         setWakeLockEnabled(wakeLockEnabled);
