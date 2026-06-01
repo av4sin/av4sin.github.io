@@ -76,7 +76,8 @@
                     <option value="inter">Inter</option>
                     <option value="montserrat">Montserrat</option>
                     <option value="oswald">Oswald</option>
-                    <option value="gmb">MyFont GMB</option>
+                    <option value="eustaquia">Eustaquia</option>
+                    <option value="cantarell">Cantarell</option>
                 </select>
             </label>
             <label class="color-line">Ocultar líneas divisorias
@@ -126,7 +127,8 @@
             inter: 'Inter, system-ui, -apple-system, sans-serif',
             montserrat: 'Montserrat, Inter, system-ui, sans-serif',
             oswald: 'Oswald, Inter, system-ui, sans-serif',
-            gmb: '"MyFont GMB", Inter, system-ui, sans-serif'
+            eustaquia: '"Eustaquia", Inter, system-ui, sans-serif',
+            cantarell: 'Cantarell, Inter, system-ui, sans-serif'
         };
         let hideTimer;
         let previousHours = null;
@@ -151,8 +153,9 @@
         }
 
         function applyTheme(theme) {
-            const selectedFont = DIGIT_FONTS[theme.font] ? theme.font : 'inter';
-            const digitScale = selectedFont === 'gmb' ? 2.5 : 1;
+            const legacyFont = theme.font === 'gmb' ? 'eustaquia' : theme.font;
+            const selectedFont = DIGIT_FONTS[legacyFont] ? legacyFont : 'inter';
+            const digitScale = selectedFont === 'eustaquia' ? 2.5 : 1;
             document.documentElement.style.setProperty('--bg-color', theme.bg);
             document.documentElement.style.setProperty('--card-color', theme.card);
             document.documentElement.style.setProperty('--top-shade', theme.top);

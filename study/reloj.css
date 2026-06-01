@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@700;800&family=Montserrat:wght@700;800&family=Oswald:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cantarell:wght@700;800&family=Inter:wght@700;800&family=Montserrat:wght@700;800&family=Oswald:wght@700&display=swap');
 
 @font-face {
-    font-family: 'MyFont GMB';
-    src: url('../assets/fonts/myfontGMB.ttf') format('truetype'),
-            url('/assets/fonts/myfontGMB.ttf') format('truetype');
+    font-family: 'Eustaquia';
+    src: url('../assets/fonts/Eustaquia.ttf') format('truetype'),
+            url('/assets/fonts/Eustaquia.ttf') format('truetype');
     font-style: normal;
     font-weight: 400 900;
     font-display: swap;
